@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/andrewgari/strongholds-and-followers.git"
+    "url": "https://github.com/andrewgari/foundryvtt-strongholds.git"
   },
   "keywords": [
     "foundryvtt",
@@ -25,9 +25,9 @@
   "author": "Andrew Gari",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/andrewgari/strongholds-and-followers/issues"
+    "url": "https://github.com/andrewgari/foundryvtt-strongholds/issues"
   },
-  "homepage": "https://github.com/andrewgari/strongholds-and-followers#readme",
+  "homepage": "https://github.com/andrewgari/foundryvtt-strongholds#readme",
   "foundry": {
     "id": "strongholds-and-followers",
     "title": "Strongholds & Followers",

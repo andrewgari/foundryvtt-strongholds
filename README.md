@@ -16,11 +16,11 @@ A comprehensive FoundryVTT module for managing strongholds and their bonuses fro
 ### Automatic Installation (Recommended)
 1. In FoundryVTT, go to "Add-on Modules"
 2. Click "Install Module"  
-3. Paste this manifest URL: `https://github.com/andrewgari/strongholds-and-followers/releases/latest/download/module.json`
+3. Paste this manifest URL: `https://github.com/andrewgari/foundryvtt-strongholds/releases/latest/download/module.json`
 4. Click "Install" and enable in your world
 
 ### Manual Installation
-1. Download the latest release from [GitHub Releases](https://github.com/andrewgari/strongholds-and-followers/releases)
+1. Download the latest release from [GitHub Releases](https://github.com/andrewgari/foundryvtt-strongholds/releases)
 2. Extract to your FoundryVTT `Data/modules/` directory
 3. Enable the module in your world's module settings
 
