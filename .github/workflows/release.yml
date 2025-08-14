@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Update module.json for release
+        run: |
+          # Update version in module.json to match tag
+          jq --arg version "${{ steps.get_version.outputs.VERSION }}" '.version = $version' module.json > tmp.json && mv tmp.json module.json
+          
+          # Update URLs for release
+          REPO_URL="https://github.com/${{ github.repository }}"
+          jq --arg manifest "${REPO_URL}/releases/latest/download/module.json" '.manifest = $manifest' module.json > tmp.json && mv tmp.json module.json
+          jq --arg download "${REPO_URL}/releases/download/v${{ steps.get_version.outputs.VERSION }}/strongholds-and-followers-v${{ steps.get_version.outputs.VERSION }}.zip" '.download = $download' module.json > tmp.json && mv tmp.json module.json
+
+      - name: Create release package
+        run: |
+          # Remove files that shouldn't be in the release
+          rm -rf .git .github test-module.html
+          rm -f "Strongholds & Followers v1.12.pdf"
+          
+          # Create zip file
+          zip -r "strongholds-and-followers-v${{ steps.get_version.outputs.VERSION }}.zip" . -x "*.git*" "test-module.html" "*.pdf"
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Extract changelog for this version from README
+          VERSION_SECTION=$(sed -n "/### Version ${{ steps.get_version.outputs.VERSION }}/,/### Version /p" README.md | sed '$d')
+          if [ -z "$VERSION_SECTION" ]; then
+            VERSION_SECTION="Release version ${{ steps.get_version.outputs.VERSION }}"
+          fi
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          echo "$VERSION_SECTION" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.get_version.outputs.VERSION }}
+          name: "Strongholds & Followers v${{ steps.get_version.outputs.VERSION }}"
+          body: |
+            ${{ steps.changelog.outputs.CHANGELOG }}
+            
+            ## Installation
+            
+            ### Automatic (Recommended)
+            1. In FoundryVTT, go to "Add-on Modules" 
+            2. Click "Install Module"
+            3. Paste this manifest URL: `https://github.com/${{ github.repository }}/releases/latest/download/module.json`
+            
+            ### Manual
+            1. Download the zip file below
+            2. Extract to your FoundryVTT `Data/modules/` directory
+            3. Enable in your world's module settings
+            
+            ## Compatibility
+            - FoundryVTT: v11+
+            - D&D 5e System: Recommended for full functionality
+          files: |
+            strongholds-and-followers-v${{ steps.get_version.outputs.VERSION }}.zip
+            module.json
+          draft: false
+          prerelease: false
+
+      - name: Update latest release manifest
+        run: |
+          # This ensures the manifest URL always points to the latest version
+          echo "Latest release manifest updated"

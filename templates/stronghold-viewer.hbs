@@ -1,0 +1,104 @@
+<div class="stronghold-viewer">
+    <div class="viewer-header">
+        <h2><i class="fas fa-castle"></i> Party Strongholds</h2>
+        <button class="refresh-bonuses" title="Refresh stronghold data">
+            <i class="fas fa-sync-alt"></i>
+        </button>
+    </div>
+
+    {{#if hasStrongholds}}
+    <div class="character-info">
+        <p><strong>Character:</strong> {{characterName}}</p>
+        <p><em>Showing bonuses applicable to your character during extended rests</em></p>
+    </div>
+
+    <div class="strongholds-list">
+        {{#each strongholds}}
+        <div class="stronghold-item">
+            <div class="stronghold-header">
+                <div class="stronghold-title">
+                    <h3>{{name}}</h3>
+                    <div class="stronghold-meta">
+                        <span class="stronghold-type">{{capitalize type}}</span>
+                        {{#if classFlavor}}
+                        <span class="stronghold-class">({{capitalize classFlavor}})</span>
+                        {{/if}}
+                        <span class="stronghold-level">Level {{level}}</span>
+                    </div>
+                </div>
+                
+                <button class="bonus-toggle" data-stronghold-id="{{id}}">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+
+            <div class="stronghold-summary">
+                <div class="stronghold-level-cost">
+                    <span class="level-display">Level {{level}}/5</span>
+                    {{#if totalCostPaid}}
+                    <span class="cost-display">Total Value: {{totalCostPaid}} gp</span>
+                    {{/if}}
+                </div>
+                {{#if description}}
+                <p class="stronghold-desc">{{description}}</p>
+                {{/if}}
+            </div>
+
+            <div class="bonus-summary">
+                {{#if customBonuses}}
+                <p><strong>{{customBonuses.length}} custom bonus{{#unless (eq customBonuses.length 1)}}es{{/unless}} available</strong></p>
+                {{#if hasClassBonuses}}
+                <p class="class-bonus-note"><i class="fas fa-star"></i> Includes class-flavored stronghold</p>
+                {{/if}}
+                {{else}}
+                <p class="no-bonuses">No custom bonuses have been added yet</p>
+                {{/if}}
+            </div>
+
+            <div class="bonus-details" style="display: none;">
+                {{#if customBonuses}}
+                <h4>Available Bonuses:</h4>
+                <ul class="bonus-list">
+                    {{#each customBonuses}}
+                    <li class="bonus-item">
+                        <div class="bonus-header">
+                            <strong>{{name}}</strong>
+                        </div>
+                        <p class="bonus-description">{{description}}</p>
+                        <div class="bonus-type">
+                            {{#if partyWide}}
+                            <span class="party-bonus"><i class="fas fa-users"></i> Party-wide</span>
+                            {{else}}
+                            <span class="class-bonus"><i class="fas fa-user"></i> Character-specific</span>
+                            {{/if}}
+                        </div>
+                    </li>
+                    {{/each}}
+                </ul>
+                {{else}}
+                <p class="no-custom-bonuses">No custom bonuses have been added by the GM yet.</p>
+                {{/if}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+    <div class="extended-rest-info">
+        <div class="info-box">
+            <h4><i class="fas fa-bed"></i> Extended Rest Bonuses</h4>
+            <p>These bonuses are applied automatically when you complete an extended rest (if auto-apply is enabled).</p>
+            <p><strong>Party-wide bonuses</strong> apply to all characters, while <strong>class-specific bonuses</strong> only apply to matching classes.</p>
+        </div>
+    </div>
+
+    {{else}}
+    <div class="no-strongholds">
+        <div class="empty-state">
+            <i class="fas fa-castle fa-3x"></i>
+            <h3>No Active Strongholds</h3>
+            <p>Your party doesn't have any active strongholds yet.</p>
+            <p>Ask your GM to create and activate strongholds to gain bonuses during extended rests.</p>
+        </div>
+    </div>
+    {{/if}}
+</div>

@@ -1,0 +1,529 @@
+/* Strongholds & Followers Module Styles */
+
+.stronghold-manager,
+.stronghold-viewer {
+    font-family: 'Signika', sans-serif;
+}
+
+/* Manager Styles */
+.stronghold-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-border-dark);
+}
+
+.stronghold-header h2 {
+    margin: 0;
+    color: var(--color-text-dark-primary);
+}
+
+.create-stronghold {
+    background: var(--color-button-primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.create-stronghold:hover {
+    background: var(--color-button-primary-hover);
+}
+
+.stronghold-list {
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.stronghold-item {
+    background: var(--color-bg-option);
+    border: 1px solid var(--color-border-light);
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    transition: all 0.2s;
+}
+
+.stronghold-item.inactive {
+    opacity: 0.6;
+    background: var(--color-bg-option-inactive);
+}
+
+.stronghold-item:hover {
+    border-color: var(--color-border-highlight);
+}
+
+.stronghold-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.stronghold-name {
+    margin: 0;
+    color: var(--color-text-dark-primary);
+    flex-grow: 1;
+}
+
+.stronghold-controls {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.stronghold-controls button {
+    background: none;
+    border: 1px solid var(--color-border-light);
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    cursor: pointer;
+    color: var(--color-text-dark-secondary);
+    transition: all 0.2s;
+}
+
+.stronghold-controls button:hover {
+    background: var(--color-bg-option);
+    border-color: var(--color-border-highlight);
+}
+
+.stronghold-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.stronghold-details {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.stronghold-type {
+    background: var(--color-bg-secondary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.stronghold-class {
+    color: var(--color-text-highlight);
+    font-style: italic;
+}
+
+.stronghold-level {
+    background: var(--color-button-secondary);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+.stronghold-cost {
+    background: var(--color-bg-secondary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-weight: bold;
+    color: var(--color-text-dark-secondary);
+}
+
+.stronghold-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+.stronghold-status.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.stronghold-status.inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.stronghold-bonuses {
+    border-top: 1px solid var(--color-border-light);
+    padding-top: 1rem;
+}
+
+.stronghold-bonuses h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--color-text-dark-primary);
+}
+
+.bonus-item {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background: var(--color-bg-option-light);
+    border-left: 3px solid var(--color-border-highlight);
+    border-radius: 3px;
+}
+
+.bonus-item.bonus-base {
+    border-left-color: #007bff;
+}
+
+.bonus-item.bonus-class {
+    border-left-color: #28a745;
+}
+
+/* New Stronghold Management Styles */
+.stronghold-description {
+    margin: 0.5rem 0;
+    font-style: italic;
+    color: var(--color-text-dark-secondary);
+    border-left: 3px solid var(--color-border-light);
+    padding-left: 0.5rem;
+}
+
+.stronghold-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.upgrade-stronghold,
+.add-bonus {
+    background: var(--color-button-primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.upgrade-stronghold:hover,
+.add-bonus:hover {
+    background: var(--color-button-primary-hover);
+}
+
+.remove-bonus {
+    background: var(--color-button-danger, #dc3545);
+    color: white;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.2s;
+}
+
+.remove-bonus:hover {
+    background: var(--color-button-danger-hover, #c82333);
+}
+
+.bonus-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+/* Viewer Specific Styles */
+.stronghold-summary {
+    margin: 0.5rem 0;
+}
+
+.stronghold-level-cost {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.level-display,
+.cost-display {
+    background: var(--color-bg-secondary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.9rem;
+}
+
+.stronghold-desc {
+    font-style: italic;
+    color: var(--color-text-dark-secondary);
+    margin: 0.5rem 0;
+}
+
+.no-custom-bonuses {
+    color: var(--color-text-dark-secondary);
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}
+
+.no-bonuses, .no-strongholds {
+    text-align: center;
+    color: var(--color-text-dark-secondary);
+    font-style: italic;
+    padding: 2rem;
+}
+
+/* Viewer Styles */
+.viewer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-border-dark);
+}
+
+.viewer-header h2 {
+    margin: 0;
+    color: var(--color-text-dark-primary);
+}
+
+.refresh-bonuses {
+    background: var(--color-button-secondary);
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.refresh-bonuses:hover {
+    background: var(--color-button-secondary-hover);
+}
+
+.character-info {
+    background: var(--color-bg-option);
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--color-border-highlight);
+}
+
+.character-info p {
+    margin: 0.25rem 0;
+}
+
+.stronghold-title {
+    flex-grow: 1;
+}
+
+.stronghold-meta {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.bonus-toggle {
+    background: none;
+    border: 1px solid var(--color-border-light);
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bonus-toggle:hover {
+    background: var(--color-bg-option);
+    border-color: var(--color-border-highlight);
+}
+
+.bonus-summary {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.class-bonus-note {
+    color: var(--color-text-highlight);
+    font-weight: bold;
+}
+
+.bonus-details {
+    border-top: 1px solid var(--color-border-light);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.bonus-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.bonus-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.bonus-level {
+    background: var(--color-bg-secondary);
+    padding: 0.125rem 0.25rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+}
+
+.bonus-description {
+    margin: 0.25rem 0;
+    color: var(--color-text-dark-secondary);
+}
+
+.bonus-type {
+    margin-top: 0.25rem;
+}
+
+.party-bonus {
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: 0.125rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+}
+
+.class-bonus {
+    background: #e8f5e8;
+    color: #2e7d32;
+    padding: 0.125rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+}
+
+.all-bonuses-section {
+    margin-top: 1rem;
+    border-top: 1px dashed var(--color-border-light);
+    padding-top: 1rem;
+}
+
+.all-bonuses-section summary {
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.bonus-item.unavailable {
+    opacity: 0.5;
+}
+
+.extended-rest-info {
+    margin-top: 2rem;
+    border-top: 2px solid var(--color-border-dark);
+    padding-top: 1rem;
+}
+
+.info-box {
+    background: var(--color-bg-option);
+    padding: 1rem;
+    border-radius: 6px;
+    border-left: 4px solid var(--color-border-highlight);
+}
+
+.info-box h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--color-text-dark-primary);
+}
+
+.info-box p {
+    margin: 0.5rem 0;
+    color: var(--color-text-dark-secondary);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--color-text-dark-secondary);
+}
+
+.empty-state i {
+    color: var(--color-border-dark);
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    margin: 1rem 0;
+    color: var(--color-text-dark-primary);
+}
+
+/* Form Styles */
+.stronghold-form {
+    padding: 1rem 0;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+    color: var(--color-text-dark-primary);
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border-light);
+    border-radius: 4px;
+    background: var(--color-bg-option);
+    color: var(--color-text-dark-primary);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--color-text-dark-secondary);
+    font-style: italic;
+}
+
+/* Player List Button */
+.strongholds-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-button-secondary);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.strongholds-button:hover {
+    background: var(--color-button-secondary-hover);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stronghold-header-row {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+    
+    .stronghold-info {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+    
+    .stronghold-details {
+        flex-wrap: wrap;
+    }
+    
+    .bonus-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}

@@ -1,0 +1,75 @@
+{
+  "strongholds-and-followers": {
+    "title": "Strongholds & Followers",
+    "description": "A comprehensive module for managing strongholds and their bonuses",
+    
+    "stronghold": {
+      "types": {
+        "temple": "Temple",
+        "keep": "Keep", 
+        "tower": "Tower",
+        "establishment": "Establishment"
+      },
+      "classes": {
+        "barbarian": "Barbarian",
+        "bard": "Bard",
+        "cleric": "Cleric",
+        "druid": "Druid",
+        "fighter": "Fighter",
+        "monk": "Monk",
+        "paladin": "Paladin",
+        "ranger": "Ranger",
+        "rogue": "Rogue",
+        "sorcerer": "Sorcerer",
+        "warlock": "Warlock",
+        "wizard": "Wizard"
+      }
+    },
+    
+    "ui": {
+      "manager": {
+        "title": "Stronghold Manager",
+        "create": "Create Stronghold",
+        "edit": "Edit Stronghold",
+        "delete": "Delete Stronghold",
+        "activate": "Activate",
+        "deactivate": "Deactivate",
+        "no-strongholds": "No strongholds have been created yet."
+      },
+      "viewer": {
+        "title": "Party Strongholds",
+        "refresh": "Refresh",
+        "no-strongholds": "Your party doesn't have any active strongholds yet.",
+        "extended-rest-info": "These bonuses are applied automatically when you complete an extended rest."
+      },
+      "form": {
+        "name": "Stronghold Name",
+        "type": "Stronghold Type",
+        "class-flavor": "Class Flavor",
+        "level": "Stronghold Level",
+        "active": "Stronghold is active",
+        "save": "Save",
+        "create": "Create",
+        "cancel": "Cancel"
+      }
+    },
+    
+    "bonuses": {
+      "party-wide": "Party-wide",
+      "class-specific": "Class-specific",
+      "level": "Level {level}",
+      "current-bonuses": "Current Bonuses",
+      "all-bonuses": "All Available Bonuses"
+    },
+    
+    "notifications": {
+      "created": "Created stronghold: {name}",
+      "updated": "Updated stronghold: {name}",
+      "deleted": "Deleted stronghold: {name}",
+      "activated": "Activated stronghold: {name}",
+      "deactivated": "Deactivated stronghold: {name}",
+      "bonuses-refreshed": "Stronghold bonuses refreshed",
+      "name-type-required": "Name and Type are required"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "strongholds-and-followers",
+  "version": "0.0.1",
+  "description": "FoundryVTT module for managing strongholds and their bonuses from the Strongholds & Followers supplement",
+  "main": "scripts/main.js",
+  "scripts": {
+    "lint": "eslint scripts/**/*.js",
+    "test": "echo \"No tests specified yet\" && exit 0",
+    "build": "echo \"No build process required\" && exit 0",
+    "version": "echo \"Version managed by GitHub Actions\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andrewgari/strongholds-and-followers.git"
+  },
+  "keywords": [
+    "foundryvtt",
+    "dnd5e",
+    "strongholds",
+    "followers",
+    "mcdm",
+    "tabletop",
+    "rpg"
+  ],
+  "author": "Andrew Gari",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andrewgari/strongholds-and-followers/issues"
+  },
+  "homepage": "https://github.com/andrewgari/strongholds-and-followers#readme",
+  "foundry": {
+    "id": "strongholds-and-followers",
+    "title": "Strongholds & Followers",
+    "compatibility": {
+      "minimum": "11",
+      "verified": "12"
+    }
+  }
+}

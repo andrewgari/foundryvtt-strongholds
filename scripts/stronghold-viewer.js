@@ -1,0 +1,65 @@
+import { StrongholdData } from './stronghold-data.js';
+
+export class StrongholdViewer extends Application {
+    static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            id: 'stronghold-viewer',
+            title: 'Party Strongholds',
+            template: 'modules/strongholds-and-followers/templates/stronghold-viewer.hbs',
+            width: 700,
+            height: 500,
+            resizable: true
+        });
+    }
+
+    async getData() {
+        const strongholds = game.settings.get('strongholds-and-followers', 'strongholds');
+        const activeStrongholds = Object.values(strongholds).filter(s => s.active);
+        
+        const strongholdsWithBonuses = activeStrongholds.map(stronghold => {
+            const customBonuses = stronghold.bonuses || [];
+            const myBonuses = customBonuses.filter(bonus => bonus.partyWide || !bonus.partyWide);
+            
+            return {
+                ...stronghold,
+                customBonuses: customBonuses,
+                myBonuses: myBonuses,
+                hasClassBonuses: stronghold.classFlavor && myBonuses.length > 0
+            };
+        });
+
+        return {
+            strongholds: strongholdsWithBonuses,
+            hasStrongholds: activeStrongholds.length > 0,
+            characterName: game.user.character?.name || 'Unknown Character'
+        };
+    }
+
+    activateListeners(html) {
+        super.activateListeners(html);
+        
+        html.find('.bonus-toggle').click(this._onToggleBonusView.bind(this));
+        html.find('.refresh-bonuses').click(this._onRefreshBonuses.bind(this));
+    }
+
+    _onToggleBonusView(event) {
+        event.preventDefault();
+        const strongholdId = event.currentTarget.dataset.strongholdId;
+        const bonusSection = event.currentTarget.closest('.stronghold-item').querySelector('.bonus-details');
+        const icon = event.currentTarget.querySelector('i');
+        
+        if (bonusSection.style.display === 'none' || !bonusSection.style.display) {
+            bonusSection.style.display = 'block';
+            icon.className = 'fas fa-chevron-up';
+        } else {
+            bonusSection.style.display = 'none';
+            icon.className = 'fas fa-chevron-down';
+        }
+    }
+
+    _onRefreshBonuses(event) {
+        event.preventDefault();
+        this.render();
+        ui.notifications.info('Stronghold bonuses refreshed');
+    }
+}

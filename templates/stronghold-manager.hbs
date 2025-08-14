@@ -1,0 +1,127 @@
+<div class="stronghold-manager">
+    <nav class="sheet-tabs tabs" data-group="main">
+        <a class="item active" data-tab="strongholds">
+            <i class="fas fa-castle"></i> Strongholds
+        </a>
+        <a class="item" data-tab="settings">
+            <i class="fas fa-cogs"></i> Settings
+        </a>
+    </nav>
+
+    <div class="tab-content">
+        <div class="tab" data-tab="strongholds">
+            <div class="stronghold-header">
+                <h2>Stronghold Management</h2>
+                <button class="create-stronghold" type="button">
+                    <i class="fas fa-plus"></i> Create Stronghold
+                </button>
+            </div>
+
+            <div class="stronghold-list">
+                {{#if strongholds}}
+                    {{#each strongholds}}
+                    <div class="stronghold-item {{#unless active}}inactive{{/unless}}" data-stronghold-id="{{id}}">
+                        <div class="stronghold-header-row">
+                            <h3 class="stronghold-name">{{name}}</h3>
+                            <div class="stronghold-controls">
+                                <button class="toggle-stronghold" data-stronghold-id="{{id}}" title="{{#if active}}Deactivate{{else}}Activate{{/if}}">
+                                    <i class="fas {{#if active}}fa-eye{{else}}fa-eye-slash{{/if}}"></i>
+                                </button>
+                                <button class="edit-stronghold" data-stronghold-id="{{id}}" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="delete-stronghold" data-stronghold-id="{{id}}" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="stronghold-info">
+                            <div class="stronghold-details">
+                                <span class="stronghold-type">{{capitalize type}}</span>
+                                {{#if classFlavor}}
+                                <span class="stronghold-class">({{capitalize classFlavor}})</span>
+                                {{/if}}
+                                <span class="stronghold-level">Level {{level}}/5</span>
+                                <span class="stronghold-cost">{{totalValueCost}} gp total</span>
+                            </div>
+                            
+                            {{#if active}}
+                            <div class="stronghold-status active">
+                                <i class="fas fa-check-circle"></i> Active
+                            </div>
+                            {{else}}
+                            <div class="stronghold-status inactive">
+                                <i class="fas fa-times-circle"></i> Inactive
+                            </div>
+                            {{/if}}
+                        </div>
+
+                        {{#if description}}
+                        <div class="stronghold-description">
+                            <p><em>{{description}}</em></p>
+                        </div>
+                        {{/if}}
+
+                        <div class="stronghold-actions">
+                            {{#if canUpgrade}}
+                            <button class="upgrade-stronghold" data-stronghold-id="{{id}}" title="Upgrade stronghold">
+                                <i class="fas fa-arrow-up"></i> Upgrade ({{upgradeCost}} gp)
+                            </button>
+                            {{/if}}
+                            <button class="add-bonus" data-stronghold-id="{{id}}" title="Add Custom Bonus">
+                                <i class="fas fa-plus"></i> Add Bonus
+                            </button>
+                        </div>
+
+                        <div class="stronghold-bonuses">
+                            <h4>Custom Bonuses:</h4>
+                            {{#if bonuses}}
+                            <ul>
+                                {{#each bonuses}}
+                                <li class="bonus-item">
+                                    <div class="bonus-header">
+                                        <strong>{{name}}</strong>
+                                        <button class="remove-bonus" data-stronghold-id="{{../id}}" data-bonus-id="{{id}}" title="Remove bonus">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <p>{{description}}</p>
+                                    {{#if partyWide}}<em>(Party-wide bonus)</em>{{else}}<em>(Character-specific bonus)</em>{{/if}}
+                                </li>
+                                {{/each}}
+                            </ul>
+                            {{else}}
+                            <p class="no-bonuses">No custom bonuses added yet</p>
+                            {{/if}}
+                        </div>
+                    </div>
+                    {{/each}}
+                {{else}}
+                <div class="no-strongholds">
+                    <p>No strongholds have been created yet.</p>
+                    <p>Click "Create Stronghold" to get started.</p>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+
+        <div class="tab" data-tab="settings">
+            <div class="settings-content">
+                <h2>Module Settings</h2>
+                <p>Configure stronghold behavior and automation options.</p>
+                
+                <div class="setting-row">
+                    <label for="autoApplyBonuses">
+                        <input type="checkbox" id="autoApplyBonuses" {{#if enableAutoApplyBonuses}}checked{{/if}}>
+                        Automatically apply stronghold bonuses during extended rests
+                    </label>
+                </div>
+                
+                <div class="setting-description">
+                    <p><em>When enabled, players will automatically receive chat messages listing applicable stronghold bonuses when they complete an extended rest.</em></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

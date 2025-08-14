@@ -1,0 +1,54 @@
+<form class="stronghold-form">
+    <div class="form-group">
+        <label for="stronghold-name">Stronghold Name *</label>
+        <input type="text" id="stronghold-name" name="name" value="{{stronghold.name}}" placeholder="Enter stronghold name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="stronghold-type">Stronghold Type *</label>
+        <select id="stronghold-type" name="type" required>
+            <option value="">Choose a type...</option>
+            {{#each strongholdTypes}}
+            <option value="{{this}}" {{#if (eq this ../stronghold.type)}}selected{{/if}}>
+                {{capitalize this}}{{#if ../strongholdCosts}} ({{lookup ../strongholdCosts this}} gp base cost){{/if}}
+            </option>
+            {{/each}}
+        </select>
+        <small>Base building costs shown. Upgrading costs additional gold.</small>
+    </div>
+
+    <div class="form-group">
+        <label for="stronghold-class">Class Flavor</label>
+        <select id="stronghold-class" name="classFlavor">
+            <option value="">No class specialization</option>
+            {{#each classFlavors}}
+            <option value="{{this}}" {{#if (eq this ../stronghold.classFlavor)}}selected{{/if}}>
+                {{capitalize this}}
+            </option>
+            {{/each}}
+        </select>
+        <small>Optional: Provides additional bonuses for characters of this class</small>
+    </div>
+
+    <div class="form-group">
+        <label for="stronghold-level">Stronghold Level</label>
+        <input type="number" id="stronghold-level" name="level" value="{{#if stronghold.level}}{{stronghold.level}}{{else}}1{{/if}}" min="1" max="5" step="1">
+        <small>Level determines upgrade costs and available features (1-5)</small>
+    </div>
+
+    <div class="form-group">
+        <label for="stronghold-description">Description</label>
+        <textarea id="stronghold-description" name="description" placeholder="Optional description of the stronghold...">{{stronghold.description}}</textarea>
+        <small>Brief description of the stronghold's appearance, location, or special features</small>
+    </div>
+
+    {{#if isEdit}}
+    <div class="form-group">
+        <label>
+            <input type="checkbox" name="active" {{#if stronghold.active}}checked{{/if}}>
+            Stronghold is active
+        </label>
+        <small>Only active strongholds provide bonuses</small>
+    </div>
+    {{/if}}
+</form>
