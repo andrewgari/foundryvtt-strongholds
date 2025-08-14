@@ -38,17 +38,27 @@ git push origin bump-major
 
 ## Release Channels
 
-### Latest Releases
-- Auto-generated from main branch merges
-- Always contains newest features
-- Patch version increments
-- Recommended for active development
+### 🎯 Stable (`stable`)
+- **Versions**: Only major.minor.0 (1.0.0, 1.1.0, 2.0.0, 2.1.0, etc.)
+- **Content**: Production-ready releases with new features
+- **Excludes**: Patch releases (1.0.1, 1.0.2, etc.)
+- **Use Case**: Production deployments, maximum stability
+- **URL**: `https://github.com/andrewgari/foundryvtt-strongholds/releases/download/stable/module.json`
 
-### Stable Releases  
-- Major versions only (x.0.0)
-- Production-ready
-- Creates additional `stable-vX` tag
-- Recommended for production use
+### 🚀 Latest (`latest`) 
+- **Versions**: All released versions (x.x.x)
+- **Content**: Most recent release with all features and fixes
+- **Includes**: Major, minor, and patch releases  
+- **Use Case**: Active development, want newest features and fixes
+- **URL**: `https://github.com/andrewgari/foundryvtt-strongholds/releases/latest/download/module.json`
+
+### ⚡ Snapshot (`snapshot`)
+- **Versions**: Development builds from PRs and feature branches
+- **Content**: Bleeding edge, unreleased features
+- **Format**: `0.1.0-pr123.202508141430.abc1234` or `0.1.0-feature-branch.timestamp.hash`
+- **Use Case**: Testing, development, preview upcoming features
+- **URL**: `https://github.com/andrewgari/foundryvtt-strongholds/releases/download/snapshot/module.json`
+- **⚠️ Warning**: Unstable, for development only!
 
 ## Examples
 
@@ -56,16 +66,32 @@ git push origin bump-major
 # Current version: 0.1.3
 
 # 1. Fix a bug (patch) - just merge PR
-# Result: 0.1.4 (automatic)
+# Result: 0.1.4 → Latest channel
 
 # 2. Add new feature (minor)
-git tag bump-minor && git push origin bump-minor
-# Result: 0.2.0
+git tag bump-minor && git push origin bump-minor  
+# Result: 0.2.0 → Latest + Stable channels (major.minor.0)
 
-# 3. Major rewrite (major)  
+# 3. Major rewrite (major)
 git tag bump-major && git push origin bump-major
-# Result: 1.0.0 (marked as stable)
+# Result: 1.0.0 → Latest + Stable channels (major.minor.0)
+
+# 4. Create PR with new feature
+# Result: 0.1.4-pr42.202508141430.abc123 → Snapshot channel
+
+# 5. Work on feature branch  
+# Result: 0.1.4-my-feature.202508141530.def456 → Snapshot channel
 ```
+
+## Channel Updates
+
+| Action | Stable | Latest | Snapshot |
+|--------|--------|--------|----------|
+| Merge PR to main | No change | ✅ Updated | No change |
+| Tag minor version | ✅ Updated | ✅ Updated | No change |  
+| Tag major version | ✅ Updated | ✅ Updated | No change |
+| Push to PR | No change | No change | ✅ Updated |
+| Push to feature branch | No change | No change | ✅ Updated |
 
 ## Behind the Scenes
 

@@ -54,14 +54,15 @@ jobs:
         id: release_type
         run: |
           VERSION="${{ steps.get_version.outputs.VERSION }}"
-          if [[ "$VERSION" =~ ^[0-9]+\.0\.0$ ]]; then
-            echo "is_major=true" >> $GITHUB_OUTPUT
+          # Stable: major.minor.0 versions (1.0.0, 1.1.0, 2.0.0, 2.1.0, etc.)
+          if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.0$ ]]; then
             echo "is_stable=true" >> $GITHUB_OUTPUT
             echo "release_name=Strongholds & Followers v${VERSION} (Stable)" >> $GITHUB_OUTPUT
+            echo "tag_type=stable" >> $GITHUB_OUTPUT
           else
-            echo "is_major=false" >> $GITHUB_OUTPUT
             echo "is_stable=false" >> $GITHUB_OUTPUT
-            echo "release_name=Strongholds & Followers v${VERSION}" >> $GITHUB_OUTPUT
+            echo "release_name=Strongholds & Followers v${VERSION} (Latest)" >> $GITHUB_OUTPUT
+            echo "tag_type=latest" >> $GITHUB_OUTPUT
           fi
 
       - name: Create Release
@@ -72,14 +73,25 @@ jobs:
           body: |
             ${{ steps.changelog.outputs.CHANGELOG }}
             
-            ${{ steps.release_type.outputs.is_stable == 'true' && '🎯 **Stable Release** - Recommended for production use' || '🚀 **Latest Release** - Auto-generated from main branch' }}
+            ${{ steps.release_type.outputs.is_stable == 'true' && '🎯 **Stable Release** - Major/Minor version for production use' || '🚀 **Latest Release** - Most recent release with all features' }}
+            
+            ## Release Channels
+            - **Stable** (`stable`): Major.minor.0 versions (1.0.0, 1.1.0, 2.0.0, etc.) - Production ready
+            - **Latest** (`latest`): Most recent release - All features and fixes  
+            - **Snapshot** (`snapshot`): Bleeding edge from PR merges - Development only
             
             ## Installation
             
             ### Automatic (Recommended)
-            1. In FoundryVTT, go to "Add-on Modules" 
-            2. Click "Install Module"
-            3. Paste this manifest URL: `https://github.com/${{ github.repository }}/releases/latest/download/module.json`
+            **Latest Channel:**
+            ```
+            https://github.com/${{ github.repository }}/releases/latest/download/module.json
+            ```
+            
+            **Stable Channel:**
+            ```
+            https://github.com/${{ github.repository }}/releases/download/stable/module.json
+            ```
             
             ### Manual
             1. Download the zip file below
@@ -94,47 +106,55 @@ jobs:
             module.json
           draft: false
           prerelease: false
-          make_latest: ${{ steps.release_type.outputs.is_stable == 'true' && 'true' || 'false' }}
+          make_latest: true
 
-      - name: Create stable tag for major releases
+      - name: Create stable release for major.minor.0 versions  
         if: steps.release_type.outputs.is_stable == 'true'
         run: |
           VERSION="${{ steps.get_version.outputs.VERSION }}"
-          MAJOR_VERSION=$(echo "$VERSION" | cut -d. -f1)
           
-          # Create or update stable tag
-          git tag -f "stable-v${MAJOR_VERSION}" "v${VERSION}"
-          git push origin "stable-v${MAJOR_VERSION}" --force
+          # Create or update stable tag (points to most recent major.minor.0)
+          git tag -f "stable" "v${VERSION}"
+          git push origin "stable" --force
           
           # Create stable release notes
           cat > stable_notes.md << EOF
-          🎯 **Stable Release Channel** - Major version ${MAJOR_VERSION}
+          🎯 **Stable Release Channel**
           
-          This is the stable release channel for major version ${MAJOR_VERSION}.x.x
+          This is the stable release channel containing the most recent major.minor.0 version.
           
           Currently pointing to: **v${VERSION}**
           
-          ## What is a Stable Release?
-          - Major version releases (x.0.0) are marked as stable
-          - Recommended for production use
-          - Receives only critical bug fixes
-          - Point releases maintain compatibility within major version
+          ## What is Stable?
+          - Only major.minor.0 versions (1.0.0, 1.1.0, 2.0.0, 2.1.0, etc.)
+          - Production-ready releases with new features
+          - Excludes patch releases (x.x.1, x.x.2, etc.)
+          - Recommended for production deployments
           
           ## Installation
-          Use the same manifest URL for automatic updates:
+          **Stable Channel:**
+          \`https://github.com/${{ github.repository }}/releases/download/stable/module.json\`
+          
+          **Latest Channel (includes patches):**
           \`https://github.com/${{ github.repository }}/releases/latest/download/module.json\`
           EOF
           
-          # Create stable release (allow failure if release already exists)
-          if ! gh release create "stable-v${MAJOR_VERSION}" \
-            --title "Stable v${MAJOR_VERSION} (Latest: v${VERSION})" \
+          # Create/update stable release
+          if ! gh release create "stable" \
+            --title "Stable Release (v${VERSION})" \
             --notes-file stable_notes.md \
-            --target "v${VERSION}"; then
-            echo "Warning: Failed to create stable release stable-v${MAJOR_VERSION}. This may be expected if it already exists."
-            # Update existing stable release to point to new version
-            gh release edit "stable-v${MAJOR_VERSION}" \
-              --title "Stable v${MAJOR_VERSION} (Latest: v${VERSION})" \
-              --notes-file stable_notes.md || echo "Could not update existing stable release"
+            --target "v${VERSION}" \
+            strongholds-and-followers-v${VERSION}.zip \
+            module.json; then
+            echo "Stable release exists, updating it..."
+            # Delete and recreate to update files
+            gh release delete "stable" --yes || true
+            gh release create "stable" \
+              --title "Stable Release (v${VERSION})" \
+              --notes-file stable_notes.md \
+              --target "v${VERSION}" \
+              strongholds-and-followers-v${VERSION}.zip \
+              module.json
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

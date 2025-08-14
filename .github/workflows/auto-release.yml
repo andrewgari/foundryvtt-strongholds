@@ -88,17 +88,29 @@ jobs:
           
           # Create release notes
           cat > release_notes.md << EOF
-          🚀 Auto-generated release v${NEW_VERSION}
+          🚀 **Latest Release** - v${NEW_VERSION}
           
           Patch update with improvements and bug fixes.
           
-          ## FoundryVTT Installation
-          **Automatic (Recommended):**
-          1. Go to Add-on Modules → Install Module
-          2. Paste: \`https://github.com/${{ github.repository }}/releases/latest/download/module.json\`
+          ## Release Channels
+          - **Stable** (\`stable\`): Major.minor.0 versions (1.0.0, 1.1.0, 2.0.0, etc.) - Production ready
+          - **Latest** (\`latest\`): Most recent release - All features and fixes  
+          - **Snapshot** (\`snapshot\`): Bleeding edge from PR merges - Development only
           
-          **Manual:**
-          Download the zip file below and extract to FoundryVTT \`Data/modules/\` directory.
+          ## FoundryVTT Installation
+          **Latest Channel (Recommended):**
+          \`https://github.com/${{ github.repository }}/releases/latest/download/module.json\`
+          
+          **Stable Channel (Production):**
+          \`https://github.com/${{ github.repository }}/releases/download/stable/module.json\`
+          
+          **Snapshot Channel (Development):**
+          \`https://github.com/${{ github.repository }}/releases/download/snapshot/module.json\`
+          
+          ## Manual Installation
+          1. Download the zip file below
+          2. Extract to FoundryVTT \`Data/modules/\` directory  
+          3. Enable in your world's module settings
           
           ## Compatibility
           - FoundryVTT v13+
