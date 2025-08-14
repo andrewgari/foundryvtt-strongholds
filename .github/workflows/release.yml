@@ -8,6 +8,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: write
       
@@ -31,12 +32,11 @@ jobs:
 
       - name: Create release package
         run: |
-          # Remove files that shouldn't be in the release
-          rm -rf .git .github test-module.html
-          rm -f "Strongholds & Followers v1.12.pdf"
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
           
-          # Create zip file
-          zip -r "strongholds-and-followers-v${{ steps.get_version.outputs.VERSION }}.zip" . -x "*.git*" "test-module.html" "*.pdf"
+          # Create clean release package (exclude development files)
+          zip -r "strongholds-and-followers-v${VERSION}.zip" . \
+            -x "*.git*" "*.github*" "test-module.html" "*.pdf" "GITHUB_SETUP.md" "VERSIONING.md" "*.md"
 
       - name: Generate changelog
         id: changelog
@@ -50,20 +50,48 @@ jobs:
           echo "$VERSION_SECTION" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: Determine release type
+        id: release_type
+        run: |
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          # Stable: major.minor.0 versions (1.0.0, 1.1.0, 2.0.0, 2.1.0, etc.)
+          if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.0$ ]]; then
+            echo "is_stable=true" >> $GITHUB_OUTPUT
+            echo "release_name=Strongholds & Followers v${VERSION} (Stable)" >> $GITHUB_OUTPUT
+            echo "tag_type=stable" >> $GITHUB_OUTPUT
+          else
+            echo "is_stable=false" >> $GITHUB_OUTPUT
+            echo "release_name=Strongholds & Followers v${VERSION} (Latest)" >> $GITHUB_OUTPUT
+            echo "tag_type=latest" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.get_version.outputs.VERSION }}
-          name: "Strongholds & Followers v${{ steps.get_version.outputs.VERSION }}"
+          name: "${{ steps.release_type.outputs.release_name }}"
           body: |
             ${{ steps.changelog.outputs.CHANGELOG }}
+            
+            ${{ steps.release_type.outputs.is_stable == 'true' && '🎯 **Stable Release** - Major/Minor version for production use' || '🚀 **Latest Release** - Most recent release with all features' }}
+            
+            ## Release Channels
+            - **Stable** (`stable`): Major.minor.0 versions (1.0.0, 1.1.0, 2.0.0, etc.) - Production ready
+            - **Latest** (`latest`): Most recent release - All features and fixes  
+            - **Snapshot** (`snapshot`): Bleeding edge from PR merges - Development only
             
             ## Installation
             
             ### Automatic (Recommended)
-            1. In FoundryVTT, go to "Add-on Modules" 
-            2. Click "Install Module"
-            3. Paste this manifest URL: `https://github.com/${{ github.repository }}/releases/latest/download/module.json`
+            **Latest Channel:**
+            ```
+            https://github.com/${{ github.repository }}/releases/latest/download/module.json
+            ```
+            
+            **Stable Channel:**
+            ```
+            https://github.com/${{ github.repository }}/releases/download/stable/module.json
+            ```
             
             ### Manual
             1. Download the zip file below
@@ -71,15 +99,62 @@ jobs:
             3. Enable in your world's module settings
             
             ## Compatibility
-            - FoundryVTT: v11+
-            - D&D 5e System: Recommended for full functionality
+            - FoundryVTT: v13+
+            - D&D 5e System: v5.0.0+ (Required dependency)
           files: |
             strongholds-and-followers-v${{ steps.get_version.outputs.VERSION }}.zip
             module.json
           draft: false
           prerelease: false
+          make_latest: true
 
-      - name: Update latest release manifest
+      - name: Create stable release for major.minor.0 versions  
+        if: steps.release_type.outputs.is_stable == 'true'
         run: |
-          # This ensures the manifest URL always points to the latest version
-          echo "Latest release manifest updated"
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          
+          # Create or update stable tag (points to most recent major.minor.0)
+          git tag -f "stable" "v${VERSION}"
+          git push origin "stable" --force
+          
+          # Create stable release notes
+          cat > stable_notes.md << EOF
+          🎯 **Stable Release Channel**
+          
+          This is the stable release channel containing the most recent major.minor.0 version.
+          
+          Currently pointing to: **v${VERSION}**
+          
+          ## What is Stable?
+          - Only major.minor.0 versions (1.0.0, 1.1.0, 2.0.0, 2.1.0, etc.)
+          - Production-ready releases with new features
+          - Excludes patch releases (x.x.1, x.x.2, etc.)
+          - Recommended for production deployments
+          
+          ## Installation
+          **Stable Channel:**
+          \`https://github.com/${{ github.repository }}/releases/download/stable/module.json\`
+          
+          **Latest Channel (includes patches):**
+          \`https://github.com/${{ github.repository }}/releases/latest/download/module.json\`
+          EOF
+          
+          # Create/update stable release
+          if ! gh release create "stable" \
+            --title "Stable Release (v${VERSION})" \
+            --notes-file stable_notes.md \
+            --target "v${VERSION}" \
+            strongholds-and-followers-v${VERSION}.zip \
+            module.json; then
+            echo "Stable release exists, updating it..."
+            # Delete and recreate to update files
+            gh release delete "stable" --yes || true
+            gh release create "stable" \
+              --title "Stable Release (v${VERSION})" \
+              --notes-file stable_notes.md \
+              --target "v${VERSION}" \
+              strongholds-and-followers-v${VERSION}.zip \
+              module.json
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,127 @@
+name: Auto Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  auto-release:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Get current version
+        id: current_version
+        run: |
+          VERSION=$(jq -r '.version' module.json)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Bump patch version
+        id: bump_version
+        run: |
+          CURRENT="${{ steps.current_version.outputs.version }}"
+          IFS='.' read -r major minor patch <<< "$CURRENT"
+          NEW_PATCH=$((patch + 1))
+          NEW_VERSION="$major.$minor.$NEW_PATCH"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "Bumping version from $CURRENT to $NEW_VERSION"
+
+      - name: Update version files
+        run: |
+          NEW_VERSION="${{ steps.bump_version.outputs.new_version }}"
+          
+          # Update module.json
+          jq --arg version "$NEW_VERSION" '.version = $version' module.json > tmp.json && mv tmp.json module.json
+          
+          # Update package.json
+          jq --arg version "$NEW_VERSION" '.version = $version' package.json > tmp.json && mv tmp.json package.json
+          
+          # Update README
+          sed -i "s/### Version [0-9]\+\.[0-9]\+\.[0-9]\+/### Version $NEW_VERSION/" README.md
+
+      - name: Create release package
+        run: |
+          NEW_VERSION="${{ steps.bump_version.outputs.new_version }}"
+          
+          # Update download URL in module.json
+          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/v${NEW_VERSION}/strongholds-and-followers-v${NEW_VERSION}.zip"
+          jq --arg download "$DOWNLOAD_URL" '.download = $download' module.json > tmp.json && mv tmp.json module.json
+          
+          # Create release package (exclude dev files)
+          zip -r "strongholds-and-followers-v${NEW_VERSION}.zip" . \
+            -x "*.git*" "*.github*" "test-module.html" "*.pdf" "GITHUB_SETUP.md" "VERSIONING.md" "*.md"
+
+      - name: Commit and tag
+        run: |
+          NEW_VERSION="${{ steps.bump_version.outputs.new_version }}"
+          
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add module.json package.json README.md
+          git commit -m "chore: bump version to v${NEW_VERSION}"
+          git tag "v${NEW_VERSION}"
+
+      - name: Push changes and tag
+        run: |
+          git push origin main
+          git push origin "v${{ steps.bump_version.outputs.new_version }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub release
+        run: |
+          NEW_VERSION="${{ steps.bump_version.outputs.new_version }}"
+          
+          # Create release notes
+          cat > release_notes.md << EOF
+          🚀 **Latest Release** - v${NEW_VERSION}
+          
+          Patch update with improvements and bug fixes.
+          
+          ## Release Channels
+          - **Stable** (\`stable\`): Major.minor.0 versions (1.0.0, 1.1.0, 2.0.0, etc.) - Production ready
+          - **Latest** (\`latest\`): Most recent release - All features and fixes  
+          - **Snapshot** (\`snapshot\`): Bleeding edge from PR merges - Development only
+          
+          ## FoundryVTT Installation
+          **Latest Channel (Recommended):**
+          \`https://github.com/${{ github.repository }}/releases/latest/download/module.json\`
+          
+          **Stable Channel (Production):**
+          \`https://github.com/${{ github.repository }}/releases/download/stable/module.json\`
+          
+          **Snapshot Channel (Development):**
+          \`https://github.com/${{ github.repository }}/releases/download/snapshot/module.json\`
+          
+          ## Manual Installation
+          1. Download the zip file below
+          2. Extract to FoundryVTT \`Data/modules/\` directory  
+          3. Enable in your world's module settings
+          
+          ## Compatibility
+          - FoundryVTT v13+
+          - D&D 5e System v5.0.0+ (required)
+          EOF
+          
+          gh release create "v${NEW_VERSION}" \
+            --title "v${NEW_VERSION}" \
+            --notes-file release_notes.md \
+            --latest \
+            "strongholds-and-followers-v${NEW_VERSION}.zip" \
+            module.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

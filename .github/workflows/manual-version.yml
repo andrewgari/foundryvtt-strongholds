@@ -1,0 +1,88 @@
+name: Manual Version Bump
+
+on:
+  push:
+    tags:
+      - 'bump-major'
+      - 'bump-minor'
+
+jobs:
+  manual-version:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/bump-')
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Get current version and bump type
+        id: version_info
+        run: |
+          VERSION=$(jq -r '.version' module.json)
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "current_version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
+          
+          IFS='.' read -r major minor patch <<< "$VERSION"
+          
+          if [[ "$TAG_NAME" == "bump-major" ]]; then
+            NEW_VERSION="$((major + 1)).0.0"
+            echo "bump_type=major" >> $GITHUB_OUTPUT
+          elif [[ "$TAG_NAME" == "bump-minor" ]]; then
+            NEW_VERSION="$major.$((minor + 1)).0"
+            echo "bump_type=minor" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "Bumping $TAG_NAME: $VERSION → $NEW_VERSION"
+
+      - name: Update version files
+        run: |
+          NEW_VERSION="${{ steps.version_info.outputs.new_version }}"
+          
+          # Update module.json
+          jq --arg version "$NEW_VERSION" '.version = $version' module.json > tmp.json && mv tmp.json module.json
+          
+          # Update package.json  
+          jq --arg version "$NEW_VERSION" '.version = $version' package.json > tmp.json && mv tmp.json package.json
+          
+          # Update README
+          sed -i "s/### Version [0-9]\+\.[0-9]\+\.[0-9]\+/### Version $NEW_VERSION/" README.md
+
+      - name: Commit and push
+        run: |
+          NEW_VERSION="${{ steps.version_info.outputs.new_version }}"
+          BUMP_TYPE="${{ steps.version_info.outputs.bump_type }}"
+          
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add module.json package.json README.md
+          git commit -m "chore: bump $BUMP_TYPE version to v${NEW_VERSION}"
+          git push origin main
+
+      - name: Delete trigger tag
+        run: |
+          if ! git push --delete origin ${{ steps.version_info.outputs.tag }}; then
+            echo "Warning: Failed to delete tag '${{ steps.version_info.outputs.tag }}' from remote. This may be expected if the tag does not exist."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create version tag
+        run: |
+          NEW_VERSION="${{ steps.version_info.outputs.new_version }}"
+          git tag "v${NEW_VERSION}"
+          git push origin "v${NEW_VERSION}"
+          echo "Created tag v${NEW_VERSION} - this will trigger the release workflow"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
