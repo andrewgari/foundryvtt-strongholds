@@ -31,12 +31,11 @@ jobs:
 
       - name: Create release package
         run: |
-          # Remove files that shouldn't be in the release
-          rm -rf .git .github test-module.html
-          rm -f "Strongholds & Followers v1.12.pdf"
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
           
-          # Create zip file
-          zip -r "strongholds-and-followers-v${{ steps.get_version.outputs.VERSION }}.zip" . -x "*.git*" "test-module.html" "*.pdf"
+          # Create clean release package (exclude development files)
+          zip -r "strongholds-and-followers-v${VERSION}.zip" . \
+            -x "*.git*" "*.github*" "test-module.html" "*.pdf" "GITHUB_SETUP.md" "VERSIONING.md" "*.md"
 
       - name: Generate changelog
         id: changelog
