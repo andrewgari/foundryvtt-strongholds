@@ -72,7 +72,9 @@ jobs:
 
       - name: Delete trigger tag
         run: |
-          git push --delete origin ${{ steps.version_info.outputs.tag }}
+          if ! git push --delete origin ${{ steps.version_info.outputs.tag }}; then
+            echo "Warning: Failed to delete tag '${{ steps.version_info.outputs.tag }}' from remote. This may be expected if the tag does not exist."
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
