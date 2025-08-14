@@ -52,6 +52,14 @@ Hooks.once('init', async function() {
 Hooks.once('ready', async function() {
     console.log('Strongholds & Followers | Ready');
     
+    // Check for D&D 5e system compatibility
+    if (game.system.id !== 'dnd5e') {
+        ui.notifications.warn('Strongholds & Followers: This module is designed for the D&D 5e system. Some features may not work correctly.');
+        console.warn('Strongholds & Followers: Expected D&D 5e system, found:', game.system.id);
+    } else {
+        console.log('Strongholds & Followers | D&D 5e system detected, version:', game.system.version);
+    }
+    
     if (game.user.isGM) {
         ui.notifications.info("Strongholds & Followers module loaded. Use the 'Manage Strongholds' button in the scene controls.");
     }
@@ -100,29 +108,61 @@ Hooks.on('dnd5e.restCompleted', async (actor, data) => {
     
     if (activeStrongholds.length === 0) return;
     
-    let bonusMessage = `<h3>${actor.name} can benefit from stronghold bonuses:</h3><ul>`;
+    const actorName = StrongholdData.getCharacterName(actor);
+    const actorLevel = StrongholdData.getCharacterLevel(actor);
+    const actorClasses = StrongholdData.getCharacterClasses(actor);
+    
+    let bonusMessage = `<div class="stronghold-rest-bonuses">
+        <h3><i class="fas fa-castle"></i> ${actorName} gains stronghold bonuses:</h3>
+        <div class="character-info">
+            <p><strong>Level:</strong> ${actorLevel} | <strong>Classes:</strong> ${actorClasses.join(', ') || 'None'}</p>
+        </div>
+        <ul>`;
+    
     let hasBonuses = false;
     
     for (const stronghold of activeStrongholds) {
-        const customBonuses = stronghold.bonuses || [];
-        if (customBonuses.length > 0) {
+        const applicableBonuses = StrongholdData.getApplicableBonuses(stronghold, actor);
+        if (applicableBonuses.length > 0) {
             hasBonuses = true;
-            bonusMessage += `<li><strong>${stronghold.name}</strong> (Level ${stronghold.level}):<ul>`;
-            for (const bonus of customBonuses) {
-                bonusMessage += `<li>${bonus.name}: ${bonus.description}</li>`;
+            bonusMessage += `<li class="stronghold-bonus-group">
+                <strong>${stronghold.name}</strong> (${stronghold.type}, Level ${stronghold.level})
+                ${stronghold.classFlavor ? ` - <em>${stronghold.classFlavor} flavored</em>` : ''}:
+                <ul>`;
+            
+            for (const bonus of applicableBonuses) {
+                const bonusType = bonus.partyWide ? 'Party-wide' : 'Personal';
+                bonusMessage += `<li class="bonus-item">
+                    <strong>${bonus.name}</strong>: ${bonus.description} 
+                    <em>(${bonusType})</em>
+                </li>`;
             }
             bonusMessage += '</ul></li>';
         }
     }
     
-    bonusMessage += '</ul>';
+    bonusMessage += '</ul></div>';
     
     if (hasBonuses) {
         ChatMessage.create({
             content: bonusMessage,
-            whisper: [game.user.id]
+            whisper: [game.user.id],
+            speaker: ChatMessage.getSpeaker({actor: actor})
         });
+        
+        console.log(`Strongholds & Followers | Applied bonuses to ${actorName} (${actorClasses.join(', ')})`);
     }
+});
+
+// Additional D&D 5e integration hooks
+Hooks.on('dnd5e.preRollAbilitySave', (actor, rollData, abilityId) => {
+    // Future: Add stronghold bonuses to ability saves
+    console.log('Strongholds & Followers | Ability save detected for', actor.name);
+});
+
+Hooks.on('dnd5e.preRollSkill', (actor, rollData, skillId) => {
+    // Future: Add stronghold bonuses to skill rolls  
+    console.log('Strongholds & Followers | Skill roll detected for', actor.name, 'skill:', skillId);
 });
 
 console.log('Strongholds & Followers | Module loaded');

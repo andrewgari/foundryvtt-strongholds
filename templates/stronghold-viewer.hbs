@@ -9,7 +9,14 @@
     {{#if hasStrongholds}}
     <div class="character-info">
         <p><strong>Character:</strong> {{characterName}}</p>
-        <p><em>Showing bonuses applicable to your character during extended rests</em></p>
+        {{#if characterClasses}}
+        <p><strong>Classes:</strong> {{#each characterClasses}}{{this}}{{#unless @last}}, {{/unless}}{{/each}} (Level {{characterLevel}})</p>
+        {{/if}}
+        {{#if (eq systemId "dnd5e")}}
+        <p><em>Showing D&D 5e stronghold bonuses applicable during extended rests</em></p>
+        {{else}}
+        <p><em>System: {{systemId}} - Some features may require D&D 5e system</em></p>
+        {{/if}}
     </div>
 
     <div class="strongholds-list">

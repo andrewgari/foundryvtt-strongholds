@@ -16,22 +16,33 @@ export class StrongholdViewer extends Application {
         const strongholds = game.settings.get('strongholds-and-followers', 'strongholds');
         const activeStrongholds = Object.values(strongholds).filter(s => s.active);
         
+        // Get the user's current character
+        const userCharacter = game.user.character;
+        const characterClasses = userCharacter ? StrongholdData.getCharacterClasses(userCharacter) : [];
+        const characterLevel = userCharacter ? StrongholdData.getCharacterLevel(userCharacter) : 1;
+        
         const strongholdsWithBonuses = activeStrongholds.map(stronghold => {
             const customBonuses = stronghold.bonuses || [];
-            const myBonuses = customBonuses.filter(bonus => bonus.partyWide || !bonus.partyWide);
+            const applicableBonuses = userCharacter ? 
+                StrongholdData.getApplicableBonuses(stronghold, userCharacter) : 
+                customBonuses.filter(b => b.partyWide);
             
             return {
                 ...stronghold,
                 customBonuses: customBonuses,
-                myBonuses: myBonuses,
-                hasClassBonuses: stronghold.classFlavor && myBonuses.length > 0
+                myBonuses: applicableBonuses,
+                hasClassBonuses: stronghold.classFlavor && 
+                    StrongholdData.actorHasMatchingClass(userCharacter, stronghold.classFlavor)
             };
         });
 
         return {
             strongholds: strongholdsWithBonuses,
             hasStrongholds: activeStrongholds.length > 0,
-            characterName: game.user.character?.name || 'Unknown Character'
+            characterName: StrongholdData.getCharacterName(userCharacter),
+            characterClasses: characterClasses,
+            characterLevel: characterLevel,
+            systemId: game.system.id
         };
     }
 

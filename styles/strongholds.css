@@ -503,6 +503,63 @@
     background: var(--color-button-secondary-hover);
 }
 
+/* D&D 5e Integration Styles */
+.stronghold-rest-bonuses {
+    border-left: 4px solid #1f5582;
+    padding-left: 1rem;
+    margin: 0.5rem 0;
+}
+
+.stronghold-rest-bonuses h3 {
+    color: #1f5582;
+    margin: 0 0 0.5rem 0;
+}
+
+.stronghold-rest-bonuses .character-info {
+    background: var(--color-bg-option);
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.stronghold-bonus-group {
+    margin-bottom: 0.5rem;
+}
+
+.stronghold-bonus-group > strong {
+    color: var(--color-text-dark-primary);
+}
+
+.bonus-item {
+    margin: 0.25rem 0;
+    padding-left: 0.5rem;
+}
+
+.bonus-item strong {
+    color: var(--color-text-highlight);
+}
+
+.bonus-item em {
+    color: var(--color-text-dark-secondary);
+    font-size: 0.85rem;
+}
+
+/* Character info enhancement */
+.character-info p {
+    margin: 0.25rem 0;
+}
+
+.character-info strong {
+    color: var(--color-text-dark-primary);
+}
+
+/* System warning styling */
+.character-info em {
+    color: var(--color-text-dark-secondary);
+    font-style: italic;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .stronghold-header-row {

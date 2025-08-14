@@ -66,9 +66,13 @@ The module includes the following settings:
 
 ## Compatibility
 
-- **Foundry VTT**: Version 11+
-- **D&D 5e System**: Required for automatic bonus detection
-- **Other Systems**: Basic functionality available, but bonus application may need manual handling
+- **Foundry VTT**: Version 13+ (required)
+- **D&D 5e System**: Version 5.0.0+ (required dependency)
+  - Character class detection
+  - Automatic bonus application during extended rests
+  - Level-based progression tracking
+  - Enhanced chat message integration
+- **Other Systems**: Limited functionality - system detection warnings will be displayed
 
 ## API
 
@@ -139,6 +143,11 @@ This project uses [Semantic Versioning](https://semver.org/):
 - Custom bonus management (ready for PDF content)
 - GM management interface with create/edit/upgrade functions
 - Player viewing interface
+- **D&D 5e System Integration**:
+  - Character class detection and matching
+  - Automatic bonus application during extended rests
+  - Enhanced chat messages with character context
+  - System compatibility validation
 - Persistent data storage
 - GitHub Actions CI/CD pipeline with automatic versioning
 - FoundryVTT auto-update integration
