@@ -9,6 +9,7 @@ on:
 jobs:
   manual-version:
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/bump-')
     permissions:
       contents: write
       

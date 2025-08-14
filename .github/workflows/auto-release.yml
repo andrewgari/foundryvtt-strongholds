@@ -8,6 +8,7 @@ on:
 jobs:
   auto-release:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
       
@@ -85,23 +86,28 @@ jobs:
         run: |
           NEW_VERSION="${{ steps.bump_version.outputs.new_version }}"
           
+          # Create release notes
+          cat > release_notes.md << EOF
+          🚀 Auto-generated release v${NEW_VERSION}
+          
+          Patch update with improvements and bug fixes.
+          
+          ## FoundryVTT Installation
+          **Automatic (Recommended):**
+          1. Go to Add-on Modules → Install Module
+          2. Paste: \`https://github.com/${{ github.repository }}/releases/latest/download/module.json\`
+          
+          **Manual:**
+          Download the zip file below and extract to FoundryVTT \`Data/modules/\` directory.
+          
+          ## Compatibility
+          - FoundryVTT v13+
+          - D&D 5e System v5.0.0+ (required)
+          EOF
+          
           gh release create "v${NEW_VERSION}" \
             --title "v${NEW_VERSION}" \
-            --notes "🚀 Auto-generated release v${NEW_VERSION}
-
-Patch update with improvements and bug fixes.
-
-## FoundryVTT Installation
-**Automatic (Recommended):**
-1. Go to Add-on Modules → Install Module
-2. Paste: \`https://github.com/${{ github.repository }}/releases/latest/download/module.json\`
-
-**Manual:**
-Download the zip file below and extract to FoundryVTT \`Data/modules/\` directory.
-
-## Compatibility
-- FoundryVTT v13+
-- D&D 5e System v5.0.0+ (required)" \
+            --notes-file release_notes.md \
             --latest \
             "strongholds-and-followers-v${NEW_VERSION}.zip" \
             module.json

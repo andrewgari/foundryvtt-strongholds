@@ -8,6 +8,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: write
       
@@ -103,24 +104,29 @@ jobs:
           git tag -f "stable-v${MAJOR_VERSION}" "v${VERSION}"
           git push origin "stable-v${MAJOR_VERSION}" --force
           
+          # Create stable release notes
+          cat > stable_notes.md << EOF
+          🎯 **Stable Release Channel** - Major version ${MAJOR_VERSION}
+          
+          This is the stable release channel for major version ${MAJOR_VERSION}.x.x
+          
+          Currently pointing to: **v${VERSION}**
+          
+          ## What is a Stable Release?
+          - Major version releases (x.0.0) are marked as stable
+          - Recommended for production use
+          - Receives only critical bug fixes
+          - Point releases maintain compatibility within major version
+          
+          ## Installation
+          Use the same manifest URL for automatic updates:
+          \`https://github.com/${{ github.repository }}/releases/latest/download/module.json\`
+          EOF
+          
           # Create stable release
           gh release create "stable-v${MAJOR_VERSION}" \
             --title "Stable v${MAJOR_VERSION} (Latest: v${VERSION})" \
-            --notes "🎯 **Stable Release Channel** - Major version ${MAJOR_VERSION}
-
-This is the stable release channel for major version ${MAJOR_VERSION}.x.x
-            
-Currently pointing to: **v${VERSION}**
-
-## What is a Stable Release?
-- Major version releases (x.0.0) are marked as stable
-- Recommended for production use
-- Receives only critical bug fixes
-- Point releases maintain compatibility within major version
-
-## Installation
-Use the same manifest URL for automatic updates:
-\`https://github.com/${{ github.repository }}/releases/latest/download/module.json\`" \
+            --notes-file stable_notes.md \
             --target "v${VERSION}" || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
