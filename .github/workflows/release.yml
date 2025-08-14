@@ -50,13 +50,27 @@ jobs:
           echo "$VERSION_SECTION" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: Determine release type
+        id: release_type
+        run: |
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          if [[ "$VERSION" =~ ^[0-9]+\.0\.0$ ]]; then
+            echo "is_major=true" >> $GITHUB_OUTPUT
+            echo "is_stable=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_major=false" >> $GITHUB_OUTPUT
+            echo "is_stable=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.get_version.outputs.VERSION }}
-          name: "Strongholds & Followers v${{ steps.get_version.outputs.VERSION }}"
+          name: "Strongholds & Followers v${{ steps.get_version.outputs.VERSION }}${{ steps.release_type.outputs.is_stable == 'true' && ' (Stable)' || '' }}"
           body: |
             ${{ steps.changelog.outputs.CHANGELOG }}
+            
+            ${{ steps.release_type.outputs.is_stable == 'true' && '🎯 **Stable Release** - Recommended for production use' || '🚀 **Latest Release** - Auto-generated from main branch' }}
             
             ## Installation
             
@@ -71,15 +85,43 @@ jobs:
             3. Enable in your world's module settings
             
             ## Compatibility
-            - FoundryVTT: v11+
-            - D&D 5e System: Recommended for full functionality
+            - FoundryVTT: v13+
+            - D&D 5e System: v5.0.0+ (Required dependency)
           files: |
             strongholds-and-followers-v${{ steps.get_version.outputs.VERSION }}.zip
             module.json
           draft: false
           prerelease: false
+          make_latest: ${{ steps.release_type.outputs.is_stable == 'true' && 'true' || 'false' }}
 
-      - name: Update latest release manifest
+      - name: Create stable tag for major releases
+        if: steps.release_type.outputs.is_stable == 'true'
         run: |
-          # This ensures the manifest URL always points to the latest version
-          echo "Latest release manifest updated"
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          MAJOR_VERSION=$(echo "$VERSION" | cut -d. -f1)
+          
+          # Create or update stable tag
+          git tag -f "stable-v${MAJOR_VERSION}" "v${VERSION}"
+          git push origin "stable-v${MAJOR_VERSION}" --force
+          
+          # Create stable release
+          gh release create "stable-v${MAJOR_VERSION}" \
+            --title "Stable v${MAJOR_VERSION} (Latest: v${VERSION})" \
+            --notes "🎯 **Stable Release Channel** - Major version ${MAJOR_VERSION}
+
+This is the stable release channel for major version ${MAJOR_VERSION}.x.x
+            
+Currently pointing to: **v${VERSION}**
+
+## What is a Stable Release?
+- Major version releases (x.0.0) are marked as stable
+- Recommended for production use
+- Receives only critical bug fixes
+- Point releases maintain compatibility within major version
+
+## Installation
+Use the same manifest URL for automatic updates:
+\`https://github.com/${{ github.repository }}/releases/latest/download/module.json\`" \
+            --target "v${VERSION}" || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -33,13 +33,13 @@ jobs:
           VERSION=$(jq -r '.version' module.json)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Bump minor version
+      - name: Bump patch version
         id: bump_version
         run: |
           CURRENT="${{ steps.current_version.outputs.version }}"
           IFS='.' read -r major minor patch <<< "$CURRENT"
-          NEW_MINOR=$((minor + 1))
-          NEW_VERSION="$major.$NEW_MINOR.0"
+          NEW_PATCH=$((patch + 1))
+          NEW_VERSION="$major.$minor.$NEW_PATCH"
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "Bumping version from $CURRENT to $NEW_VERSION"
 
@@ -63,6 +63,19 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
+
+      - name: Create latest release
+        run: |
+          NEW_VERSION="${{ steps.bump_version.outputs.new_version }}"
+          
+          # Create release with latest tag
+          gh release create "v$NEW_VERSION" \
+            --title "v$NEW_VERSION" \
+            --notes "Auto-generated release for version $NEW_VERSION" \
+            --latest \
+            --generate-notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   dev-version:
     runs-on: ubuntu-latest

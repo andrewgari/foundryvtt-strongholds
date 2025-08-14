@@ -124,14 +124,16 @@ This project uses [Semantic Versioning](https://semver.org/):
 - **Patch** (0.0.x): Bug fixes, minor improvements
 
 ### Automatic Versioning Workflow
-- **Push to main branch**: Minor version auto-bump (0.1.0 → 0.2.0)
-- **Create release tag**: Triggers GitHub release with FoundryVTT-compatible packages
+- **Push to main branch**: Patch version auto-bump (0.0.1 → 0.0.2)
+- **Create `bump-minor` tag**: Minor version update (0.1.0 → 0.2.0) 
+- **Create `bump-major` tag**: Major version update (1.0.0 → 2.0.0)
 - **Feature branches**: Development versions with commit hash (0.1.0-dev.abc123)
 
 ### Release Process
-1. **Manual Release**: `./scripts/release.sh [major|minor|patch]`
-2. **Automatic**: Push to main triggers minor bump, tag triggers release
-3. **FoundryVTT Integration**: Releases are automatically available for update in Foundry
+1. **Patch Updates**: Merge PR to main → auto-bump patch version (0.0.1 → 0.0.2)
+2. **Minor Updates**: `git tag bump-minor && git push origin bump-minor`
+3. **Major Updates**: `git tag bump-major && git push origin bump-major`
+4. **FoundryVTT Integration**: All releases automatically available for update in Foundry
 
 ## Changelog
 
