@@ -2,7 +2,7 @@
   "id": "strongholds-and-followers",
   "title": "Strongholds & Followers",
   "description": "A comprehensive module for managing strongholds and their bonuses from the Strongholds & Followers supplement. Allows GMs to create and manage strongholds while players can view their benefits and automatically apply bonuses during extended rests.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "authors": [
     {
       "name": "Andrew Gari"
