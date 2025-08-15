@@ -6,8 +6,13 @@
   "scripts": {
     "lint": "eslint scripts/**/*.js",
     "test": "echo \"No tests specified yet\" && exit 0",
-    "build": "echo \"No build process required\" && exit 0",
-    "version": "echo \"Version managed by GitHub Actions\" && exit 0"
+    "build": "./scripts/build-local.sh",
+    "version": "echo \"Version managed by GitHub Actions\" && exit 0",
+    "deploy": "./scripts/build-local.sh",
+    "deploy:local": "./scripts/build-local.sh",
+    "foundry:setup": "./scripts/setup-foundry.sh",
+    "foundry:deploy": "./scripts/build-local.sh",
+    "dev": "./scripts/build-local.sh && echo 'Module deployed! Start Foundry and enable the module to test.'"
   },
   "repository": {
     "type": "git",
