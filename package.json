@@ -1,6 +1,6 @@
 {
   "name": "strongholds-and-followers",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "FoundryVTT module for managing strongholds and their bonuses from the Strongholds & Followers supplement",
   "main": "scripts/main.js",
   "scripts": {
