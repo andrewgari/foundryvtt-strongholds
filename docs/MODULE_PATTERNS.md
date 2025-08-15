@@ -62,9 +62,23 @@ Hooks.once('init', async function() {
         name: 'Automatically Apply Bonuses',
         hint: 'Automatically apply stronghold bonuses when players take extended rests',
         scope: 'world',    // GM controls this
-        config: true,      // Show in settings UI  
+        config: true,      // Show in settings UI
         type: Boolean,
         default: true
+    });
+
+    // Configure Settings menu button in header
+    game.settings.registerMenu('strongholds-and-followers', 'manageStrongholds', {
+        name: 'Manage Strongholds',
+        hint: 'Open Strongholds Manager/Viewer',
+        icon: 'fas fa-castle',
+        type: class {
+            constructor() {
+                if (game.user.isGM) new StrongholdManager().render(true);
+                else new StrongholdViewer().render(true);
+            }
+        },
+        restricted: false
     });
 });
 ```

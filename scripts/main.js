@@ -42,6 +42,20 @@ Hooks.once('init', async function() {
         default: true
     });
 
+    // Add a Configure Settings menu button in the header to open Strongholds (GM or Player view)
+    game.settings.registerMenu('strongholds-and-followers', 'manageStrongholds', {
+        name: 'Manage Strongholds',
+        hint: 'Open the Strongholds management/viewer window',
+        icon: 'fas fa-castle',
+        type: class {
+            constructor() {
+                if (game.user.isGM) new StrongholdManager().render(true);
+                else new StrongholdViewer().render(true);
+            }
+        },
+        restricted: false
+    });
+
     game.strongholds = {
         StrongholdManager,
         StrongholdViewer,
