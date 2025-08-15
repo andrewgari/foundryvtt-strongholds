@@ -29,6 +29,9 @@ This directory contains comprehensive documentation for AI agents and developers
 - Event handling best practices
 - Styling with Foundry CSS variables
 
+### **[DOCUMENT_BIBLE.md](./DOCUMENT_BIBLE.md)**
+**Authoritative project “bible” with objectives, vision, and architecture overview**
+
 ## 🎯 **How to Use This Documentation**
 
 ### **For AI Agents**

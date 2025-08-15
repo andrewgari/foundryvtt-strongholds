@@ -27,5 +27,8 @@ build/
 .env
 .env.local
 
+# Local OpenAI CLI config (contains secrets)
+.openai/config.json
+
 # PDF documentation (too large for git)
 *.pdf

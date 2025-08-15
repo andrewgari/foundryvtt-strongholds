@@ -61,43 +61,27 @@ Hooks.once('ready', async function() {
     }
     
     if (game.user.isGM) {
-        ui.notifications.info("Strongholds & Followers module loaded. Use the 'Manage Strongholds' button in the scene controls.");
+        ui.notifications.info("Strongholds & Followers module loaded. Click the 'Strongholds' button in the scene controls toolbar.");
     }
 });
 
 Hooks.on('getSceneControlButtons', (controls) => {
-    if (!game.user.isGM) return;
-    
+    // Add a Strongholds toolbar button for both GM (manager) and players (viewer)
     const tokenControls = controls.find(c => c.name === 'token');
-    if (tokenControls) {
-        tokenControls.tools.push({
-            name: 'strongholds',
-            title: 'Manage Strongholds',
-            icon: 'fas fa-castle',
-            button: true,
-            onClick: () => {
-                new StrongholdManager().render(true);
-            }
-        });
-    }
+    if (!tokenControls) return;
+    tokenControls.tools.push({
+        name: 'strongholds',
+        title: 'Strongholds',
+        icon: 'fas fa-castle',
+        button: true,
+        onClick: () => {
+            if (game.user.isGM) new StrongholdManager().render(true);
+            else new StrongholdViewer().render(true);
+        }
+    });
 });
 
-Hooks.on('renderPlayerList', (app, html, data) => {
-    if (game.user.isGM) return;
-    
-    const strongholdButton = $(`
-        <div class="strongholds-button" title="View Strongholds">
-            <i class="fas fa-castle"></i>
-            <span>Strongholds</span>
-        </div>
-    `);
-    
-    strongholdButton.on('click', () => {
-        new StrongholdViewer().render(true);
-    });
-    
-    html.append(strongholdButton);
-});
+// Remove player-list button in favor of unified toolbar button above
 
 Hooks.on('dnd5e.restCompleted', async (actor, data) => {
     if (!game.settings.get('strongholds-and-followers', 'enableAutoApplyBonuses')) return;

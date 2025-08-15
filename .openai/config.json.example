@@ -1,0 +1,11 @@
+{
+  // Configuration for OpenAI CLI codex commands
+  // See https://github.com/openai/openai-cli for details
+  "model": "gpt-5",
+  // Fill in your own overrides below and save as .openai/config.json (ignored by git):
+  // "temperature": 0.7,
+  // "max_tokens": 1024,
+  // "organization": "org-...",
+  // "api_key": "YOUR_API_KEY",
+  // "api_base": "https://api.openai.com/v1"
+}
