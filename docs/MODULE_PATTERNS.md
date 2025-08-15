@@ -175,6 +175,8 @@ Hooks.on('dnd5e.restCompleted', async (actor, data) => {
         whisper: [game.user.id]  // Private message to player
     });
 });
+
+> **Reference**: See the Foundry API for scene controls: https://foundryvtt.com/api/Hooks.html#getSceneControlButtons
 ```
 
 ## 📊 **Data Management Patterns**

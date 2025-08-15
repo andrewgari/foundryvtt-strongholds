@@ -67,6 +67,10 @@ await game.settings.set('module-name', 'setting-key', newValue);
 Hooks.once('init', () => {});
 Hooks.once('ready', () => {});
 
+// Scene Controls Toolbar: customize left toolbar buttons
+// Reference: https://foundryvtt.com/api/Hooks.html#getSceneControlButtons
+Hooks.on('getSceneControlButtons', (controls) => {});
+
 // Document operations
 Hooks.on('createActor', (actor, options, userId) => {});
 Hooks.on('updateActor', (actor, updateData, options, userId) => {});
