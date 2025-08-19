@@ -27,11 +27,15 @@ export class StrongholdViewer extends Application {
                 StrongholdData.getApplicableBonuses(stronghold, userCharacter) : 
                 customBonuses.filter(b => b.partyWide);
             
+            const typeSummary = StrongholdData.getTypeMechanicsSummary(stronghold.type);
+            const classSummary = stronghold.classFlavor ? StrongholdData.getClassMechanicsSummary(stronghold.classFlavor) : { followers: '', actions: [], tables: [] };
             return {
                 ...stronghold,
                 customBonuses: customBonuses,
                 myBonuses: applicableBonuses,
                 typeDescription: StrongholdData.getTypeDescription(stronghold.type),
+                typeSummary,
+                classSummary,
                 classFlavorDisplay: stronghold.classFlavor ? StrongholdData.CLASS_FLAVOR_DISPLAY[stronghold.classFlavor] || stronghold.classFlavor : null,
                 hasClassBonuses: stronghold.classFlavor &&
                     StrongholdData.actorHasMatchingClass(userCharacter, stronghold.classFlavor)

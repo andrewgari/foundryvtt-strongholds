@@ -24,12 +24,16 @@ export class StrongholdManager extends Application {
         const strongholdArray = Object.values(strongholds).map(stronghold => {
             const upgradeCost = stronghold.level < 5 ? 
                 StrongholdData.getUpgradeCost(stronghold.level, stronghold.level + 1) : 0;
+            const typeSummary = StrongholdData.getTypeMechanicsSummary(stronghold.type);
+            const classSummary = stronghold.classFlavor ? StrongholdData.getClassMechanicsSummary(stronghold.classFlavor) : { followers: '', actions: [], tables: [] };
             return {
                 ...stronghold,
                 upgradeCost: upgradeCost,
                 canUpgrade: stronghold.level < 5,
                 totalValueCost: StrongholdData.getTotalCostForLevel(stronghold.type, stronghold.level),
                 typeDescription: StrongholdData.getTypeDescription(stronghold.type),
+                typeSummary,
+                classSummary,
                 classFlavorDisplay: stronghold.classFlavor ? StrongholdData.CLASS_FLAVOR_DISPLAY[stronghold.classFlavor] || stronghold.classFlavor : null
             };
         });

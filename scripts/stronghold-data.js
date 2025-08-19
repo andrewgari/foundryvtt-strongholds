@@ -17,6 +17,181 @@ export class StrongholdData {
         return this.STRONGHOLD_TYPE_DESCRIPTIONS[type] || '';
     }
 
+    // High-level mechanics summaries by stronghold type (concise, paraphrased)
+    static TYPE_MECHANICS_SUMMARY = {
+        keep: {
+            demesne: [
+                'Improved security and morale throughout the demesne; garrison presence discourages threats.',
+                'Rapid mustering and supply for defenders during crises.',
+                'Increases readiness of allied units stationed nearby.'
+            ],
+            actions: [
+                'Drill Troops: Conduct training to improve a unit’s effectiveness for upcoming conflicts.',
+                'Fortify Works: Improve defenses, repair breaches, or raise temporary works before a siege.',
+                'Patrol & Recon: Send scouts to reveal threats, routes, or enemy dispositions.',
+                'Rally Militia: Call on local levies to temporarily bolster forces.'
+            ],
+            notes: [
+                'Suited to martial characters and warfare-oriented campaigns.'
+            ]
+        },
+        temple: {
+            demesne: [
+                'Sanctuary and healing for allies; rites uplift the faithful.',
+                'Consecrated ground deters profane threats and unrest.',
+                'Divine authority improves goodwill among locals and pilgrims.'
+            ],
+            actions: [
+                'Conduct Rites: Bestow blessings or omens on characters or units.',
+                'Consecrate/Exorcise: Purify sites, remove blights, or repel malign influences.',
+                'Petition the Faith: Leverage church networks for aid, supplies, or influence.'
+            ],
+            notes: [
+                'Thematic fit for divine casters and holy orders.'
+            ]
+        },
+        tower: {
+            demesne: [
+                'Hub of research and experimentation; apprentices, labs, and wards.',
+                'Arcane protections safeguard the environs from magical threats.',
+                'Access to esoteric materials and assistants for projects.'
+            ],
+            actions: [
+                'Research & Scribing: Reduce time or cost to learn, scribe, or refine spells/rituals.',
+                'Craft Arcana: Prepare scrolls, potions, or minor devices with improved reliability.',
+                'Raise Wards: Establish temporary or situational magical defenses.'
+            ],
+            notes: [
+                'Ideal for arcane casters and scholarly pursuits.'
+            ]
+        },
+        establishment: {
+            demesne: [
+
+    // High-level mechanics summaries by class flavor (concise, paraphrased)
+    static CLASS_MECHANICS_SUMMARY = {
+        barbarian: {
+            followers: 'Fierce retainers, skirmishers, and hardy scouts gravitate to your banner.',
+            actions: [
+                'Rally Warband: Stir warriors to a ferocious surge or swift pursuit.',
+                'Trial of Mettle: Prove strength to gain the tribe’s support or intimidate rivals.'
+            ],
+            tables: [ 'Servitors (barbarian-themed allies and retainers)' ]
+        },
+        bard: {
+            followers: 'Artists, heralds, and rumor-mongers expand your fame and influence.',
+            actions: [
+                'Command Performance: Inspire allies or sway the crowd’s mood decisively.',
+                'Compose & Publicize: Convert renown into tangible favors over downtime.'
+            ],
+            tables: [ 'Servitors (performers, agents, and influential patrons)' ]
+        },
+        cleric: {
+            followers: 'Acolytes, healers, and faithful lay clergy gather to serve.',
+            actions: [
+                'Divine Rites: Bless allies, sanctify ground, or oppose profane forces.',
+                'Intercession: Seek signs or aid from your deity’s hierarchy.'
+            ],
+            tables: [ 'Divine Intervention (structured results and omens)' ]
+        },
+        druid: {
+            followers: 'Wardens, herbalists, and beasts attend your circle’s call.',
+            actions: [
+                'Commune with Land: Learn of threats, resources, and seasonal shifts.',
+                'Rally Wardens: Enlist beasts or circles to guard and guide.'
+            ],
+            tables: [ 'Servitors (natural allies and circles)' ]
+        },
+        fighter: {
+            followers: 'Veteran soldiers, drill sergeants, and siege crews bolster your command.',
+            actions: [
+                'Drill & Discipline: Improve a unit’s readiness or cohesion before battle.',
+                'Siege Readiness: Expedite fortification, engines, or supply lines.'
+            ],
+            tables: [ 'Servitors (martial units, engineers, captains)' ]
+        },
+        monk: {
+            followers: 'Ascetics and martial adepts practice and teach under your guidance.',
+            actions: [
+                'Meditative Regimen: Restore focus; sharpen reflexes among adepts.',
+                'Way of the Cloister: Intercede to resolve conflicts peaceably.'
+            ],
+            tables: [ 'Servitors (monastic adepts and allies)' ]
+        },
+        paladin: {
+            followers: 'Squires, knights, and faithful retainers heed your oath.',
+            actions: [
+                'Oathbound Vigil: Inspire zeal, protect the weak, or bolster resolve.',
+                'Sacred Muster: Call on allied orders for aid.'
+            ],
+            tables: [ 'Special Mounts (sacred or exemplar steeds)' ]
+        },
+        ranger: {
+            followers: 'Trackers, scouts, and wardens secure the borders and wilds.',
+            actions: [
+                'Map & Harry: Chart safe routes, harry foes, or secure supply lines.',
+                'Call of the Wilds: Enlist beasts or locals as guides and guards.'
+            ],
+            tables: [ 'Servitors (scouts, beasts, and wayfinders)' ]
+        },
+        rogue: {
+            followers: 'Fixers, fences, and informants cultivate networks and opportunities.',
+            actions: [
+                'Pull Strings: Acquire illicit access, safehouses, or hush favors.',
+                'Cover of Night: Arrange distractions, smuggling, or quiet exits.'
+            ],
+            tables: [ 'Servitors (contacts, crews, and cutpurses)' ]
+        },
+        sorcerer: {
+            followers: 'Apprentices and attuned allies assist with volatile workings.',
+            actions: [
+                'Channel Lineage: Amplify a signature effect in a controlled setting.',
+                'Sanctum Focus: Convert downtime into refined, reliable power.'
+            ],
+            tables: [ 'Servitors (bloodline-touched aids)' ]
+        },
+        warlock: {
+            followers: 'Occultists and pact-sworn attendants manage signs and boons.',
+            actions: [
+                'Pact Observance: Seek counsel, omens, or temporary boons within bounds.',
+                'Veil & Ward: Mask activities or bind an intrusion briefly.'
+            ],
+            tables: [ 'Servitors (cabalists and pact agents)' ]
+        },
+        wizard: {
+            followers: 'Apprentices, scribes, and constructs sustain methodical study.',
+            actions: [
+                'Scriptorium: Compress time and cost to copy or prepare spellwork.',
+                'Laboratory: Execute careful experiments with mitigated risk.'
+            ],
+            tables: [ 'Spell Customization (schools, materials, side-effects)' ]
+        }
+    };
+
+    static getClassMechanicsSummary(flavor) {
+        return this.CLASS_MECHANICS_SUMMARY[flavor] || { followers: '', actions: [], tables: [] };
+    }
+
+                'Generates income and connections through trade, events, and patronage.',
+                'Network of informants surfaces rumors, jobs, and social leverage.',
+                'Boosts prosperity and goodwill, improving local cooperation.'
+            ],
+            actions: [
+                'Call in Favors: Convert goodwill into aid, introductions, or material support.',
+                'Host Events: Raise renown, attract patrons, or calm tensions among factions.',
+                'Broker Deals: Improve terms for procurement, contracts, or alliances.'
+            ],
+            notes: [
+                'Great for face characters, intrigue, and resource play.'
+            ]
+        }
+    };
+
+    static getTypeMechanicsSummary(type) {
+        return this.TYPE_MECHANICS_SUMMARY[type] || { demesne: [], actions: [], notes: [] };
+    }
+
+
 
     static CLASS_FLAVORS = {
         BARBARIAN: 'barbarian',

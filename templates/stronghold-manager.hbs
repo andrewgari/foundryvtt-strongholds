@@ -35,7 +35,7 @@
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="stronghold-info">
                             <div class="stronghold-details">
                                 <span class="stronghold-type">{{capitalize type}}</span>
@@ -48,7 +48,7 @@
                                 <span class="stronghold-level">Level {{level}}/5</span>
                                 <span class="stronghold-cost">{{totalValueCost}} gp total</span>
                             </div>
-                            
+
                             {{#if active}}
                             <div class="stronghold-status active">
                                 <i class="fas fa-check-circle"></i> Active
@@ -94,6 +94,51 @@
                                             <i class="fas fa-times"></i>
                                         </button>
                                     </div>
+
+                            <div class="mechanics-summary">
+                                <h4>Mechanics</h4>
+                                {{#if typeSummary}}
+                                <div class="mechanics-block type-summary">
+                                    <h5>Demesne Effects</h5>
+                                    <ul>
+                                        {{#each typeSummary.demesne}}
+                                        <li>{{this}}</li>
+                                        {{/each}}
+                                    </ul>
+                                    <h5>Stronghold Actions</h5>
+                                    <ul>
+                                        {{#each typeSummary.actions}}
+                                        <li>{{this}}</li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                                {{/if}}
+                                {{#if classSummary}}
+                                <div class="mechanics-block class-summary">
+                                    {{#if classSummary.followers}}
+                                    <h5>Followers</h5>
+                                    <p>{{classSummary.followers}}</p>
+                                    {{/if}}
+                                    {{#if classSummary.actions}}
+                                    <h5>Class Actions</h5>
+                                    <ul>
+                                        {{#each classSummary.actions}}
+                                        <li>{{this}}</li>
+                                        {{/each}}
+                                    </ul>
+                                    {{/if}}
+                                    {{#if classSummary.tables}}
+                                    <h5>Tables</h5>
+                                    <ul>
+                                        {{#each classSummary.tables}}
+                                        <li>{{this}}</li>
+                                        {{/each}}
+                                    </ul>
+                                    {{/if}}
+                                </div>
+                                {{/if}}
+                            </div>
+
                                     <p>{{description}}</p>
                                     {{#if partyWide}}<em>(Party-wide bonus)</em>{{else}}<em>(Character-specific bonus)</em>{{/if}}
                                 </li>
@@ -118,14 +163,14 @@
             <div class="settings-content">
                 <h2>Module Settings</h2>
                 <p>Configure stronghold behavior and automation options.</p>
-                
+
                 <div class="setting-row">
                     <label for="autoApplyBonuses">
                         <input type="checkbox" id="autoApplyBonuses" {{#if enableAutoApplyBonuses}}checked{{/if}}>
                         Automatically apply stronghold bonuses during extended rests
                     </label>
                 </div>
-                
+
                 <div class="setting-description">
                     <p><em>When enabled, players will automatically receive chat messages listing applicable stronghold bonuses when they complete an extended rest.</em></p>
                 </div>

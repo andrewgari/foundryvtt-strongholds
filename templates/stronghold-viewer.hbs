@@ -74,8 +74,51 @@
             </div>
 
             <div class="bonus-details" style="display: none;">
+                <h4>Mechanics</h4>
+                {{#if typeSummary}}
+                <div class="mechanics-block type-summary">
+                    <h5>Demesne Effects</h5>
+                    <ul>
+                        {{#each typeSummary.demesne}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                    <h5>Stronghold Actions</h5>
+                    <ul>
+                        {{#each typeSummary.actions}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+                {{/if}}
+
+                {{#if classSummary}}
+                <div class="mechanics-block class-summary">
+                    {{#if classSummary.followers}}
+                    <h5>Followers</h5>
+                    <p>{{classSummary.followers}}</p>
+                    {{/if}}
+                    {{#if classSummary.actions}}
+                    <h5>Class Actions</h5>
+                    <ul>
+                        {{#each classSummary.actions}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                    {{/if}}
+                    {{#if classSummary.tables}}
+                    <h5>Tables</h5>
+                    <ul>
+                        {{#each classSummary.tables}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                    {{/if}}
+                </div>
+                {{/if}}
+
                 {{#if customBonuses}}
-                <h4>Available Bonuses:</h4>
+                <h4>Custom Bonuses</h4>
                 <ul class="bonus-list">
                     {{#each customBonuses}}
                     <li class="bonus-item">
