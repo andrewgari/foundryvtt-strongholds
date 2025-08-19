@@ -21,6 +21,22 @@ export class StrongholdData {
         WIZARD: 'wizard'
     };
 
+    static CLASS_FLAVOR_DISPLAY = {
+        barbarian: 'Barbarian’s Camp',
+        bard: 'Bard’s Theater',
+        cleric: 'Cleric’s Church',
+        druid: 'Druid’s Grove',
+        fighter: 'Fighter’s Fortress',
+        monk: 'Monk’s Monastery',
+        paladin: 'Paladin’s Chapel',
+        ranger: 'Ranger’s Lodge',
+        rogue: 'Rogue’s Tavern',
+        sorcerer: 'Sorcerer’s Sanctum',
+        warlock: 'Warlock’s Fane',
+        wizard: 'Wizard’s Library'
+    };
+
+
     static STRONGHOLD_COSTS = {
         building: {
             'temple': 25000,
@@ -100,18 +116,18 @@ export class StrongholdData {
     // D&D 5e Integration Methods
     static getApplicableBonuses(stronghold, actor) {
         if (!actor) return [];
-        
+
         const customBonuses = stronghold.bonuses || [];
-        
+
         return customBonuses.filter(bonus => {
             // Party-wide bonuses apply to everyone
             if (bonus.partyWide) return true;
-            
+
             // Class-specific bonuses need class matching
             if (!bonus.partyWide && stronghold.classFlavor) {
                 return this.actorHasMatchingClass(actor, stronghold.classFlavor);
             }
-            
+
             // Character-specific bonuses (not party-wide, no class flavor)
             return !bonus.partyWide;
         });
@@ -119,15 +135,15 @@ export class StrongholdData {
 
     static actorHasMatchingClass(actor, classFlavor) {
         if (!actor || !classFlavor) return false;
-        
+
         // D&D 5e specific class checking
         if (game.system.id === 'dnd5e') {
             const actorClasses = actor.classes || {};
-            return Object.keys(actorClasses).some(className => 
+            return Object.keys(actorClasses).some(className =>
                 className.toLowerCase() === classFlavor.toLowerCase()
             );
         }
-        
+
         // Generic fallback for other systems
         const actorType = actor.type?.toLowerCase() || '';
         const actorClass = actor.system?.details?.class?.toLowerCase() || '';
@@ -136,25 +152,25 @@ export class StrongholdData {
 
     static getCharacterLevel(actor) {
         if (!actor) return 1;
-        
+
         // D&D 5e specific level detection
         if (game.system.id === 'dnd5e') {
             return actor.system?.details?.level || 1;
         }
-        
+
         // Generic fallback
         return actor.system?.level || actor.system?.details?.level || 1;
     }
 
     static getCharacterClasses(actor) {
         if (!actor) return [];
-        
+
         // D&D 5e specific class detection
         if (game.system.id === 'dnd5e') {
             const classes = actor.classes || {};
             return Object.keys(classes);
         }
-        
+
         // Generic fallback
         const className = actor.system?.details?.class;
         return className ? [className] : [];

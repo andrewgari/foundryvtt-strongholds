@@ -28,7 +28,7 @@
                     <div class="stronghold-meta">
                         <span class="stronghold-type">{{capitalize type}}</span>
                         {{#if classFlavor}}
-                        <span class="stronghold-class">({{capitalize classFlavor}})</span>
+                        <span class="stronghold-class">({{#if classFlavorDisplay}}{{classFlavorDisplay}}{{else}}{{capitalize classFlavor}}{{/if}})</span>
                         {{/if}}
                         <span class="stronghold-level">Level {{level}}</span>
                     </div>

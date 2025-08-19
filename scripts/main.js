@@ -80,19 +80,68 @@ Hooks.once('ready', async function() {
 });
 
 Hooks.on('getSceneControlButtons', (controls) => {
-    // Add a Strongholds toolbar button for both GM (manager) and players (viewer)
-    const tokenControls = controls.find(c => c.name === 'token');
-    if (!tokenControls) return;
-    tokenControls.tools.push({
-        name: 'strongholds',
-        title: 'Strongholds',
-        icon: 'fas fa-castle',
-        button: true,
-        onClick: () => {
-            if (game.user.isGM) new StrongholdManager().render(true);
-            else new StrongholdViewer().render(true);
+    try {
+        // Foundry v13: controls is a record (object) keyed by control set name
+        if (controls && !Array.isArray(controls)) {
+            controls.strongholds = {
+                name: 'strongholds',
+                title: 'Strongholds',
+                icon: 'fas fa-home',
+                tools: {
+                    view: {
+                        name: 'view',
+                        title: 'View',
+                        icon: 'fas fa-eye',
+                        button: true,
+                        visible: true,
+                        onClick: () => new StrongholdViewer().render(true)
+                    },
+                    manage: {
+                        name: 'manage',
+                        title: 'Manage',
+                        icon: 'fas fa-cog',
+                        button: true,
+                        visible: game.user.isGM,
+                        onClick: () => new StrongholdManager().render(true)
+                    }
+                }
+            };
+            return;
         }
-    });
+        // Fallback for v12/v10 compatibility: array-based controls
+        if (Array.isArray(controls)) {
+            const group = {
+                name: 'strongholds',
+                title: 'Strongholds',
+                icon: 'fas fa-home',
+                tools: [
+                    {
+                        name: 'view',
+                        title: 'View',
+                        icon: 'fas fa-eye',
+                        button: true,
+                        visible: true,
+                        onClick: () => {
+                            new StrongholdViewer().render(true);
+                        }
+                    },
+                    {
+                        name: 'manage',
+                        title: 'Manage',
+                        icon: 'fas fa-cog',
+                        button: true,
+                        visible: game.user.isGM,
+                        onClick: () => {
+                            new StrongholdManager().render(true);
+                        }
+                    }
+                ]
+            };
+            controls.push(group);
+        }
+    } catch (err) {
+        console.error('Strongholds & Followers | Failed to register scene controls', err);
+    }
 });
 
 // Remove player-list button in favor of unified toolbar button above
