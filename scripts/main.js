@@ -90,10 +90,13 @@ Hooks.on('getSceneControlButtons', (controls) => {
     try {
         // Foundry v13: controls is a record (object) keyed by control set name
         if (controls && !Array.isArray(controls)) {
+            console.log('Strongholds & Followers | Registering scene controls (object mode)');
             controls.strongholds = {
                 name: 'strongholds',
                 title: 'Strongholds',
                 icon: 'fas fa-home',
+                visible: true,
+                activeTool: 'view',
                 tools: {
                     view: {
                         name: 'view',

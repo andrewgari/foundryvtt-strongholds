@@ -67,6 +67,24 @@ export class StrongholdData {
         },
         establishment: {
             demesne: [
+                'Generates income and connections through trade, events, and patronage.',
+                'Network of informants surfaces rumors, jobs, and social leverage.',
+                'Boosts prosperity and goodwill, improving local cooperation.'
+            ],
+            actions: [
+                'Call in Favors: Convert goodwill into aid, introductions, or material support.',
+                'Host Events: Raise renown, attract patrons, or calm tensions among factions.',
+                'Broker Deals: Improve terms for procurement, contracts, or alliances.'
+            ],
+            notes: [
+                'Great for face characters, intrigue, and resource play.'
+            ]
+        }
+    };
+
+    static getTypeMechanicsSummary(type) {
+        return this.TYPE_MECHANICS_SUMMARY[type] || { demesne: [], actions: [], notes: [] };
+    }
 
     // High-level mechanics summaries by class flavor (concise, paraphrased)
     static CLASS_MECHANICS_SUMMARY = {
@@ -170,25 +188,6 @@ export class StrongholdData {
 
     static getClassMechanicsSummary(flavor) {
         return this.CLASS_MECHANICS_SUMMARY[flavor] || { followers: '', actions: [], tables: [] };
-    }
-
-                'Generates income and connections through trade, events, and patronage.',
-                'Network of informants surfaces rumors, jobs, and social leverage.',
-                'Boosts prosperity and goodwill, improving local cooperation.'
-            ],
-            actions: [
-                'Call in Favors: Convert goodwill into aid, introductions, or material support.',
-                'Host Events: Raise renown, attract patrons, or calm tensions among factions.',
-                'Broker Deals: Improve terms for procurement, contracts, or alliances.'
-            ],
-            notes: [
-                'Great for face characters, intrigue, and resource play.'
-            ]
-        }
-    };
-
-    static getTypeMechanicsSummary(type) {
-        return this.TYPE_MECHANICS_SUMMARY[type] || { demesne: [], actions: [], notes: [] };
     }
 
 
