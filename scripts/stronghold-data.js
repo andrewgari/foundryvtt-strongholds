@@ -48,6 +48,26 @@ export class StrongholdData {
         wizard: 'Wizard’s Library'
     };
 
+    static CLASS_FLAVOR_DESCRIPTIONS = {
+        barbarian: 'A rugged camp of warbands where trials, feasts, and raids are mustered.',
+        bard: 'A lively theater that stages performances, spreads renown, and sways local opinion.',
+        cleric: 'A holy church that offers rites, healing, and guidance to the faithful.',
+        druid: 'A sacred grove tended by circles, where nature spirits are invoked and seasons observed.',
+        fighter: 'A disciplined fortress with drill yards, armories, and veteran captains.',
+        monk: 'A quiet monastery devoted to austerity, training, and contemplative practice.',
+        paladin: 'A consecrated chapel that upholds oaths, hosts vigils, and shelters the weak.',
+        ranger: 'A secluded lodge for scouts and trackers, mapping trails and warding borders.',
+        rogue: 'A bustling tavern that trades in secrets, safehouses, and shady opportunities.',
+        sorcerer: 'A personal sanctum attuned to bloodline magic, experiments, and unpredictable power.',
+        warlock: 'A veiled fane where pacts are honored, boons bargained, and signs interpreted.',
+        wizard: 'A vast library for research, scribing, and the careful study of the arcane.'
+    };
+
+    static getClassFlavorDescription(flavor) {
+        if (!flavor) return '';
+        return this.CLASS_FLAVOR_DESCRIPTIONS[flavor] || '';
+    }
+
 
     static STRONGHOLD_COSTS = {
         building: {

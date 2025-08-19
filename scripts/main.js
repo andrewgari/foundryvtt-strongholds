@@ -4,7 +4,7 @@ import { StrongholdData } from './stronghold-data.js';
 
 Hooks.once('init', async function() {
     console.log('Strongholds & Followers | Initializing');
-    
+
     // Register Handlebars helpers
     Handlebars.registerHelper('capitalize', function(str) {
         if (!str || typeof str !== 'string') return '';
@@ -23,7 +23,14 @@ Hooks.once('init', async function() {
         if (!obj || !key) return '';
         return obj[key] || '';
     });
-    
+
+    // Helper to fetch class flavor description from data
+    Handlebars.registerHelper('getClassFlavorDescription', function(flavor) {
+        if (!flavor) return '';
+        return StrongholdData.getClassFlavorDescription(flavor);
+    });
+
+
     game.settings.register('strongholds-and-followers', 'strongholds', {
         name: 'Strongholds Data',
         hint: 'Stores all stronghold information',
@@ -65,7 +72,7 @@ Hooks.once('init', async function() {
 
 Hooks.once('ready', async function() {
     console.log('Strongholds & Followers | Ready');
-    
+
     // Check for D&D 5e system compatibility
     if (game.system.id !== 'dnd5e') {
         ui.notifications.warn('Strongholds & Followers: This module is designed for the D&D 5e system. Some features may not work correctly.');
@@ -73,7 +80,7 @@ Hooks.once('ready', async function() {
     } else {
         console.log('Strongholds & Followers | D&D 5e system detected, version:', game.system.version);
     }
-    
+
     if (game.user.isGM) {
         ui.notifications.info("Strongholds & Followers module loaded. Click the 'Strongholds' button in the scene controls toolbar.");
     }
@@ -149,25 +156,25 @@ Hooks.on('getSceneControlButtons', (controls) => {
 Hooks.on('dnd5e.restCompleted', async (actor, data) => {
     if (!game.settings.get('strongholds-and-followers', 'enableAutoApplyBonuses')) return;
     if (data.longRest !== true) return;
-    
+
     const strongholds = game.settings.get('strongholds-and-followers', 'strongholds');
     const activeStrongholds = Object.values(strongholds).filter(s => s.active);
-    
+
     if (activeStrongholds.length === 0) return;
-    
+
     const actorName = StrongholdData.getCharacterName(actor);
     const actorLevel = StrongholdData.getCharacterLevel(actor);
     const actorClasses = StrongholdData.getCharacterClasses(actor);
-    
+
     let bonusMessage = `<div class="stronghold-rest-bonuses">
         <h3><i class="fas fa-castle"></i> ${actorName} gains stronghold bonuses:</h3>
         <div class="character-info">
             <p><strong>Level:</strong> ${actorLevel} | <strong>Classes:</strong> ${actorClasses.join(', ') || 'None'}</p>
         </div>
         <ul>`;
-    
+
     let hasBonuses = false;
-    
+
     for (const stronghold of activeStrongholds) {
         const applicableBonuses = StrongholdData.getApplicableBonuses(stronghold, actor);
         if (applicableBonuses.length > 0) {
@@ -176,27 +183,27 @@ Hooks.on('dnd5e.restCompleted', async (actor, data) => {
                 <strong>${stronghold.name}</strong> (${stronghold.type}, Level ${stronghold.level})
                 ${stronghold.classFlavor ? ` - <em>${stronghold.classFlavor} flavored</em>` : ''}:
                 <ul>`;
-            
+
             for (const bonus of applicableBonuses) {
                 const bonusType = bonus.partyWide ? 'Party-wide' : 'Personal';
                 bonusMessage += `<li class="bonus-item">
-                    <strong>${bonus.name}</strong>: ${bonus.description} 
+                    <strong>${bonus.name}</strong>: ${bonus.description}
                     <em>(${bonusType})</em>
                 </li>`;
             }
             bonusMessage += '</ul></li>';
         }
     }
-    
+
     bonusMessage += '</ul></div>';
-    
+
     if (hasBonuses) {
         ChatMessage.create({
             content: bonusMessage,
             whisper: [game.user.id],
             speaker: ChatMessage.getSpeaker({actor: actor})
         });
-        
+
         console.log(`Strongholds & Followers | Applied bonuses to ${actorName} (${actorClasses.join(', ')})`);
     }
 });
@@ -208,7 +215,7 @@ Hooks.on('dnd5e.preRollAbilitySave', (actor, rollData, abilityId) => {
 });
 
 Hooks.on('dnd5e.preRollSkill', (actor, rollData, skillId) => {
-    // Future: Add stronghold bonuses to skill rolls  
+    // Future: Add stronghold bonuses to skill rolls
     console.log('Strongholds & Followers | Skill roll detected for', actor.name, 'skill:', skillId);
 });
 

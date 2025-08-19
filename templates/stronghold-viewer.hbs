@@ -58,7 +58,15 @@
                 {{#if customBonuses}}
                 <p><strong>{{customBonuses.length}} custom bonus{{#unless (eq customBonuses.length 1)}}es{{/unless}} available</strong></p>
                 {{#if hasClassBonuses}}
-                <p class="class-bonus-note"><i class="fas fa-star"></i> Includes class-flavored stronghold</p>
+                <p class="class-bonus-note">
+                    <i class="fas fa-star"></i> Includes class-flavored stronghold
+                    {{#if classFlavorDisplay}}
+                      — <em>{{classFlavorDisplay}}</em>
+                    {{/if}}
+                    {{#if (and classFlavor classFlavorDisplay)}}
+                      <br><span class="class-flavor-desc">{{getClassFlavorDescription classFlavor}}</span>
+                    {{/if}}
+                </p>
                 {{/if}}
                 {{else}}
                 <p class="no-bonuses">No custom bonuses have been added yet</p>

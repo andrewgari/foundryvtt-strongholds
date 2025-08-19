@@ -41,6 +41,9 @@
                                 <span class="stronghold-type">{{capitalize type}}</span>
                                 {{#if classFlavor}}
                                 <span class="stronghold-class">({{#if classFlavorDisplay}}{{classFlavorDisplay}}{{else}}{{capitalize classFlavor}}{{/if}})</span>
+                                {{#if (and classFlavor classFlavorDisplay)}}
+                                <span class="class-flavor-desc"> — {{getClassFlavorDescription classFlavor}}</span>
+                                {{/if}}
                                 {{/if}}
                                 <span class="stronghold-level">Level {{level}}/5</span>
                                 <span class="stronghold-cost">{{totalValueCost}} gp total</span>
