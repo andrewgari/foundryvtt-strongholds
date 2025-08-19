@@ -29,6 +29,7 @@ export class StrongholdManager extends Application {
                 upgradeCost: upgradeCost,
                 canUpgrade: stronghold.level < 5,
                 totalValueCost: StrongholdData.getTotalCostForLevel(stronghold.type, stronghold.level),
+                typeDescription: StrongholdData.getTypeDescription(stronghold.type),
                 classFlavorDisplay: stronghold.classFlavor ? StrongholdData.CLASS_FLAVOR_DISPLAY[stronghold.classFlavor] || stronghold.classFlavor : null
             };
         });

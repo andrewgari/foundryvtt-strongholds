@@ -62,6 +62,11 @@
                             <p><em>{{description}}</em></p>
                         </div>
                         {{/if}}
+                        {{#if typeDescription}}
+                        <div class="stronghold-type-description">
+                            <p>{{typeDescription}}</p>
+                        </div>
+                        {{/if}}
 
                         <div class="stronghold-actions">
                             {{#if canUpgrade}}

@@ -6,6 +6,18 @@ export class StrongholdData {
         ESTABLISHMENT: 'establishment'
     };
 
+    static STRONGHOLD_TYPE_DESCRIPTIONS = {
+        keep: 'A fortified residence for martial leadership. Emphasizes training drills, watch rotations, and attracts veteran retainers.',
+        temple: 'A sacred site of worship and healing. Offers rites, blessings, sanctuary, and faithful acolytes.',
+        tower: 'A seat of arcane study and experimentation. Enables research, spell scribing, wards, and curious constructs.',
+        establishment: 'A hub of commerce and influence. Generates income, rumors, contacts, and favors from patrons.'
+    };
+
+    static getTypeDescription(type) {
+        return this.STRONGHOLD_TYPE_DESCRIPTIONS[type] || '';
+    }
+
+
     static CLASS_FLAVORS = {
         BARBARIAN: 'barbarian',
         BARD: 'bard',

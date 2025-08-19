@@ -31,6 +31,7 @@ export class StrongholdViewer extends Application {
                 ...stronghold,
                 customBonuses: customBonuses,
                 myBonuses: applicableBonuses,
+                typeDescription: StrongholdData.getTypeDescription(stronghold.type),
                 classFlavorDisplay: stronghold.classFlavor ? StrongholdData.CLASS_FLAVOR_DISPLAY[stronghold.classFlavor] || stronghold.classFlavor : null,
                 hasClassBonuses: stronghold.classFlavor &&
                     StrongholdData.actorHasMatchingClass(userCharacter, stronghold.classFlavor)
