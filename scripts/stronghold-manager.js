@@ -22,7 +22,7 @@ export class StrongholdManager extends Application {
     async getData() {
         const strongholds = game.settings.get('strongholds-and-followers', 'strongholds');
         const strongholdArray = Object.values(strongholds).map(stronghold => {
-            const upgradeCost = stronghold.level < 5 ? 
+            const upgradeCost = stronghold.level < 5 ?
                 StrongholdData.getUpgradeCost(stronghold.level, stronghold.level + 1) : 0;
             const typeSummary = StrongholdData.getTypeMechanicsSummary(stronghold.type);
             const classSummary = stronghold.classFlavor ? StrongholdData.getClassMechanicsSummary(stronghold.classFlavor) : { followers: '', actions: [], tables: [] };
@@ -51,6 +51,18 @@ export class StrongholdManager extends Application {
 
         html.find('.create-stronghold').click(this._onCreateStronghold.bind(this));
         html.find('.edit-stronghold').click(this._onEditStronghold.bind(this));
+
+        // Collapsible sections in mechanics summary
+        html.find('.section-toggle').click((ev) => {
+            const btn = ev.currentTarget;
+            const body = btn.nextElementSibling;
+            const icon = btn.querySelector('i');
+            if (!body) return;
+            const isHidden = body.style.display === 'none' || !body.style.display;
+            body.style.display = isHidden ? 'block' : 'none';
+            if (icon) icon.className = isHidden ? 'fas fa-chevron-down' : 'fas fa-chevron-right';
+        });
+
         html.find('.delete-stronghold').click(this._onDeleteStronghold.bind(this));
         html.find('.toggle-stronghold').click(this._onToggleStronghold.bind(this));
         html.find('.upgrade-stronghold').click(this._onUpgradeStronghold.bind(this));
@@ -60,7 +72,7 @@ export class StrongholdManager extends Application {
 
     async _onCreateStronghold(event) {
         event.preventDefault();
-        
+
         const dialog = new Dialog({
             title: 'Create New Stronghold',
             content: await renderTemplate('modules/strongholds-and-followers/templates/stronghold-form.hbs', {
@@ -101,10 +113,10 @@ export class StrongholdManager extends Application {
     async _createStronghold(name, type, classFlavor, level, description) {
         const strongholds = game.settings.get('strongholds-and-followers', 'strongholds');
         const newStronghold = StrongholdData.createStronghold(name, type, classFlavor, level, description);
-        
+
         strongholds[newStronghold.id] = newStronghold;
         await game.settings.set('strongholds-and-followers', 'strongholds', strongholds);
-        
+
         const cost = StrongholdData.getTotalCostForLevel(type, level);
         ui.notifications.info(`Created stronghold: ${name} (Cost: ${cost.toLocaleString()} gp)`);
         this.render();
@@ -159,11 +171,11 @@ export class StrongholdManager extends Application {
 
     async _updateStronghold(strongholdId, updates) {
         const strongholds = game.settings.get('strongholds-and-followers', 'strongholds');
-        
+
         if (strongholds[strongholdId]) {
             Object.assign(strongholds[strongholdId], updates);
             await game.settings.set('strongholds-and-followers', 'strongholds', strongholds);
-            
+
             ui.notifications.info(`Updated stronghold: ${updates.name}`);
             this.render();
         }
@@ -185,7 +197,7 @@ export class StrongholdManager extends Application {
         if (confirmed) {
             delete strongholds[strongholdId];
             await game.settings.set('strongholds-and-followers', 'strongholds', strongholds);
-            
+
             ui.notifications.info(`Deleted stronghold: ${stronghold.name}`);
             this.render();
         }
@@ -201,7 +213,7 @@ export class StrongholdManager extends Application {
 
         stronghold.active = !stronghold.active;
         await game.settings.set('strongholds-and-followers', 'strongholds', strongholds);
-        
+
         ui.notifications.info(`${stronghold.active ? 'Activated' : 'Deactivated'} stronghold: ${stronghold.name}`);
         this.render();
     }
@@ -215,7 +227,7 @@ export class StrongholdManager extends Application {
         if (!stronghold || stronghold.level >= 5) return;
 
         const upgradeCost = StrongholdData.getUpgradeCost(stronghold.level, stronghold.level + 1);
-        
+
         const confirmed = await Dialog.confirm({
             title: 'Upgrade Stronghold',
             content: `<p>Upgrade <strong>${stronghold.name}</strong> from Level ${stronghold.level} to Level ${stronghold.level + 1}?</p>
@@ -226,7 +238,7 @@ export class StrongholdManager extends Application {
             stronghold.level += 1;
             stronghold.totalCostPaid += upgradeCost;
             await game.settings.set('strongholds-and-followers', 'strongholds', strongholds);
-            
+
             ui.notifications.info(`Upgraded ${stronghold.name} to Level ${stronghold.level} (Cost: ${upgradeCost.toLocaleString()} gp)`);
             this.render();
         }
@@ -235,7 +247,7 @@ export class StrongholdManager extends Application {
     async _onAddBonus(event) {
         event.preventDefault();
         const strongholdId = event.currentTarget.dataset.strongholdId;
-        
+
         const dialog = new Dialog({
             title: 'Add Custom Bonus',
             content: `
@@ -290,7 +302,7 @@ export class StrongholdManager extends Application {
         event.preventDefault();
         const strongholdId = event.currentTarget.dataset.strongholdId;
         const bonusId = event.currentTarget.dataset.bonusId;
-        
+
         const confirmed = await Dialog.confirm({
             title: 'Remove Bonus',
             content: '<p>Are you sure you want to remove this bonus?</p>'
