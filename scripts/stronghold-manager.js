@@ -128,6 +128,7 @@ export class StrongholdManager extends Application {
 
     async _onEditStronghold(event) {
         event.preventDefault();
+        event.stopPropagation();
         const strongholdId = event.currentTarget.dataset.strongholdId;
         const strongholds = game.settings.get('strongholds-and-followers', 'strongholds');
         const stronghold = strongholds[strongholdId];
@@ -212,6 +213,7 @@ export class StrongholdManager extends Application {
 
     async _onToggleStronghold(event) {
         event.preventDefault();
+        event.stopPropagation();
         const strongholdId = event.currentTarget.dataset.strongholdId;
         const strongholds = game.settings.get('strongholds-and-followers', 'strongholds');
         const stronghold = strongholds[strongholdId];
@@ -227,6 +229,7 @@ export class StrongholdManager extends Application {
 
     async _onUpgradeStronghold(event) {
         event.preventDefault();
+        event.stopPropagation();
         const strongholdId = event.currentTarget.dataset.strongholdId;
         const strongholds = game.settings.get('strongholds-and-followers', 'strongholds');
         const stronghold = strongholds[strongholdId];
@@ -253,6 +256,7 @@ export class StrongholdManager extends Application {
 
     async _onAddBonus(event) {
         event.preventDefault();
+        event.stopPropagation();
         const strongholdId = event.currentTarget.dataset.strongholdId;
 
         const dialog = new Dialog({
@@ -307,6 +311,7 @@ export class StrongholdManager extends Application {
 
     async _onRemoveBonus(event) {
         event.preventDefault();
+        event.stopPropagation();
         const strongholdId = event.currentTarget.dataset.strongholdId;
         const bonusId = event.currentTarget.dataset.bonusId;
 
