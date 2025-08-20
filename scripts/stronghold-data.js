@@ -318,6 +318,10 @@ export class StrongholdData {
         return totalCost;
     }
 
+    /**
+     * @deprecated This method only returns the base upgrade cost and does not include class-specific upgrade costs.
+     * Use {@link StrongholdData.getUpgradeCostForStronghold} for full upgrade cost calculation.
+     */
     static getUpgradeCost(fromLevel, toLevel) {
         // Backward-compatible base upgrade cost (no class portion)
         return this.getUpgradeCostBase(fromLevel, toLevel);
