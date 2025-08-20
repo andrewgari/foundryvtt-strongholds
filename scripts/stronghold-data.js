@@ -255,6 +255,12 @@ export class StrongholdData {
             3: 25000,
             4: 50000,
             5: 100000
+        },
+        classUpgrading: {
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0
         }
     };
 
@@ -263,15 +269,11 @@ export class StrongholdData {
         const defaults = this.STRONGHOLD_COSTS;
         const buildingOverride = game.settings.get('strongholds-and-followers', 'buildingCosts') || {};
         const upgradeOverride = game.settings.get('strongholds-and-followers', 'upgradeCosts') || {};
+        const classUpgradeOverride = game.settings.get('strongholds-and-followers', 'classUpgradeCosts') || {};
         return {
-            building: {
-                ...defaults.building,
-                ...buildingOverride
-            },
-            upgrading: {
-                ...defaults.upgrading,
-                ...upgradeOverride
-            }
+            building: { ...defaults.building, ...buildingOverride },
+            upgrading: { ...defaults.upgrading, ...upgradeOverride },
+            classUpgrading: { ...defaults.classUpgrading, ...classUpgradeOverride }
         };
     }
 
@@ -298,7 +300,7 @@ export class StrongholdData {
         return cfg.building[type] || 0;
     }
 
-    static getUpgradeCost(fromLevel, toLevel) {
+    static getUpgradeCostBase(fromLevel, toLevel) {
         const cfg = this.getCostConfig();
         let totalCost = 0;
         for (let level = fromLevel + 1; level <= toLevel; level++) {
@@ -307,10 +309,38 @@ export class StrongholdData {
         return totalCost;
     }
 
+    static getClassUpgradeCost(fromLevel, toLevel) {
+        const cfg = this.getCostConfig();
+        let totalCost = 0;
+        for (let level = fromLevel + 1; level <= toLevel; level++) {
+            totalCost += cfg.classUpgrading[level] || 0;
+        }
+        return totalCost;
+    }
+
+    static getUpgradeCost(fromLevel, toLevel) {
+        // Backward-compatible base upgrade cost (no class portion)
+        return this.getUpgradeCostBase(fromLevel, toLevel);
+    }
+
+    static getUpgradeCostForStronghold(stronghold, fromLevel, toLevel) {
+        const base = this.getUpgradeCostBase(fromLevel, toLevel);
+        const classPart = stronghold?.classFlavor ? this.getClassUpgradeCost(fromLevel, toLevel) : 0;
+        return base + classPart;
+    }
+
     static getTotalCostForLevel(type, level) {
+        // Backward-compatible total (without class additions)
         const buildingCost = this.getBuildingCost(type);
-        const upgradeCost = this.getUpgradeCost(1, level);
+        const upgradeCost = this.getUpgradeCostBase(1, level);
         return buildingCost + upgradeCost;
+    }
+
+    static getTotalCostForStronghold(stronghold) {
+        const buildingCost = this.getBuildingCost(stronghold.type);
+        const baseUpgrades = this.getUpgradeCostBase(1, stronghold.level);
+        const classUpgrades = stronghold?.classFlavor ? this.getClassUpgradeCost(1, stronghold.level) : 0;
+        return buildingCost + baseUpgrades + classUpgrades;
     }
 
     static addBonus(strongholdId, bonus) {

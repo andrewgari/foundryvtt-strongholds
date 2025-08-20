@@ -23,14 +23,14 @@ export class StrongholdManager extends Application {
         const strongholds = game.settings.get('strongholds-and-followers', 'strongholds');
         const strongholdArray = Object.values(strongholds).map(stronghold => {
             const upgradeCost = stronghold.level < 5 ?
-                StrongholdData.getUpgradeCost(stronghold.level, stronghold.level + 1) : 0;
+                StrongholdData.getUpgradeCostForStronghold(stronghold, stronghold.level, stronghold.level + 1) : 0;
             const typeSummary = StrongholdData.getTypeMechanicsSummary(stronghold.type);
             const classSummary = stronghold.classFlavor ? StrongholdData.getClassMechanicsSummary(stronghold.classFlavor) : { followers: '', actions: [], tables: [] };
             return {
                 ...stronghold,
                 upgradeCost: upgradeCost,
                 canUpgrade: stronghold.level < 5,
-                totalValueCost: StrongholdData.getTotalCostForLevel(stronghold.type, stronghold.level),
+                totalValueCost: StrongholdData.getTotalCostForStronghold(stronghold),
                 typeDescription: StrongholdData.getTypeDescription(stronghold.type),
                 typeSummary,
                 classSummary,
@@ -85,11 +85,19 @@ export class StrongholdManager extends Application {
                 4: Number(html.find('#price-up-4').val()) || undefined,
                 5: Number(html.find('#price-up-5').val()) || undefined
             };
+            const classUpgrading = {
+                2: Number(html.find('#price-class-2').val()) || undefined,
+                3: Number(html.find('#price-class-3').val()) || undefined,
+                4: Number(html.find('#price-class-4').val()) || undefined,
+                5: Number(html.find('#price-class-5').val()) || undefined
+            };
             // Remove undefined entries to keep defaults for blanks
             const bClean = Object.fromEntries(Object.entries(building).filter(([,v]) => Number.isFinite(v)));
             const uClean = Object.fromEntries(Object.entries(upgrading).filter(([,v]) => Number.isFinite(v)));
+            const cuClean = Object.fromEntries(Object.entries(classUpgrading).filter(([,v]) => Number.isFinite(v)));
             await game.settings.set('strongholds-and-followers', 'buildingCosts', bClean);
             await game.settings.set('strongholds-and-followers', 'upgradeCosts', uClean);
+            await game.settings.set('strongholds-and-followers', 'classUpgradeCosts', cuClean);
             ui.notifications.info('Stronghold prices saved');
             this.render();
         });
