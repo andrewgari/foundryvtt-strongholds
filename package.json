@@ -12,7 +12,7 @@
     "deploy:local": "./scripts/build-local.sh",
     "foundry:setup": "./scripts/setup-foundry.sh",
     "foundry:deploy": "./scripts/build-local.sh",
-    "dev": "./scripts/build-local.sh && echo 'Module deployed! Start Foundry and enable the module to test.'"
+    "dev": "./scripts/build-local.sh && node ./scripts/dev-reload-watch.js"
   },
   "repository": {
     "type": "git",
