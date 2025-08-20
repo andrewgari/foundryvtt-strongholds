@@ -1,0 +1,104 @@
+<!--
+Strongholds Menu Template
+
+Expected data context:
+{
+  strongholds: Array<{
+    id: string | number,
+    name: string,
+    type: string,
+    level: number,
+    status?: string,
+    expanded?: boolean,
+    bonuses?: Array<{
+      name: string,           // e.g., "Economy", "Warfare", "Lore", "Intrigue", "Magic", "Misc"
+      icon?: string,          // optional icon CSS classes, e.g., "fa-solid fa-coins"
+      items: Array<{
+        label: string,        // short, human-readable label, e.g., "Income"
+        value: string,        // formatted value, e.g., "+2", "-10%", "+1d4"
+        source?: string,      // short source tag, e.g., "Steward", "Library"
+        icon?: string         // optional icon for the bonus item
+      }>
+    }>
+  }>,
+  showActions?: boolean,         // if true, renders View/Manage actions per row
+  showExpandControls?: boolean   // if true, renders Expand all / Collapse all controls
+}
+-->
+
+<div class="strongholds-menu">
+  <header class="sm-header">
+    <h2 class="sm-title">Strongholds</h2>
+    {{#if showExpandControls}}
+      <div class="sm-list-controls">
+        <button type="button" class="btn btn-xs sm-expand-all" data-action="expand-all" aria-label="Expand all">Expand all</button>
+        <button type="button" class="btn btn-xs sm-collapse-all" data-action="collapse-all" aria-label="Collapse all">Collapse all</button>
+      </div>
+    {{/if}}
+  </header>
+
+  {{#if strongholds.length}}
+    <ul class="sm-list" role="list">
+      {{#each strongholds as |sh|}}
+        <li class="sm-row" role="listitem" data-id="{{sh.id}}">
+          <div class="sm-row-inner">
+            <button type="button" class="sm-toggle" aria-expanded="{{#if sh.expanded}}true{{else}}false{{/if}}" aria-controls="sh-{{sh.id}}-details" title="Toggle details">
+              <i class="fa-solid fa-caret-right sm-caret" aria-hidden="true"></i>
+              <span class="sr-only">Toggle details</span>
+            </button>
+
+            <div class="sm-main">
+              <div class="sm-name" title="{{sh.name}}">{{sh.name}}</div>
+              <div class="sm-badges">
+                <span class="sm-badge sm-badge-type" title="Type">{{sh.type}}</span>
+                <span class="sm-badge sm-badge-level" title="Level">L{{sh.level}}</span>
+                {{#if sh.status}}
+                  <span class="sm-badge sm-badge-status" title="Status">{{sh.status}}</span>
+                {{/if}}
+              </div>
+            </div>
+
+            {{#if ../../showActions}}
+              <nav class="sm-actions" aria-label="Row actions">
+                <a class="btn btn-xs sm-action-view" data-action="view" data-id="{{sh.id}}">View</a>
+                <a class="btn btn-xs sm-action-manage" data-action="manage" data-id="{{sh.id}}">Manage</a>
+              </nav>
+            {{/if}}
+          </div>
+
+          <section id="sh-{{sh.id}}-details" class="sm-details" hidden>
+            {{#if sh.bonuses}}
+              <div class="sm-bonuses">
+                {{#each sh.bonuses as |group|}}
+                  <div class="sm-bonus-group">
+                    <h4 class="sm-group-title">
+                      {{#if group.icon}}<i class="{{group.icon}} sm-group-icon" aria-hidden="true"></i>{{/if}}
+                      <span>{{group.name}}</span>
+                    </h4>
+                    <ul class="sm-group-list">
+                      {{#each group.items as |b|}}
+                        <li class="sm-bonus-item">
+                          {{#if b.icon}}<i class="{{b.icon}} sm-bonus-icon" aria-hidden="true"></i>{{/if}}
+                          <span class="sm-bonus-label">{{b.label}}</span>
+                          <span class="sm-bonus-value">{{b.value}}</span>
+                          {{#if b.source}}<span class="sm-bonus-source">({{b.source}})</span>{{/if}}
+                        </li>
+                      {{/each}}
+                    </ul>
+                  </div>
+                {{/each}}
+              </div>
+            {{else}}
+              <p class="sm-bonuses-empty">No bonuses to show.</p>
+            {{/if}}
+          </section>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <div class="sm-empty">
+      <p>You don’t have any Strongholds yet.</p>
+    </div>
+  {{/if}}
+</div>
+

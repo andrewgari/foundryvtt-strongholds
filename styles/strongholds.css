@@ -1,4 +1,13 @@
 /* Strongholds & Followers Module Styles */
+/* Theme-aware accents for stronghold types using Foundry vars only */
+.type-temple { --stronghold-accent: var(--color-text-highlight); }
+.type-keep { --stronghold-accent: var(--color-border-highlight); }
+.type-tower { --stronghold-accent: var(--color-border-dark); }
+.type-establishment { --stronghold-accent: var(--color-border-light-primary, var(--color-border-light)); }
+
+/* Fallback */
+.stronghold-item { --stronghold-accent: var(--color-border-highlight); }
+
 
 .stronghold-manager,
 .stronghold-viewer {
@@ -44,10 +53,21 @@
 .stronghold-item {
     background: var(--color-bg-option);
     border: 1px solid var(--color-border-light);
-    border-radius: 6px;
+    border-radius: 8px;
     margin-bottom: 1rem;
     padding: 1rem;
-    transition: all 0.2s;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    box-shadow: 0 0 0 2px transparent;
+}
+.stronghold-item::before {
+    content: "";
+    display: block;
+    height: 4px;
+    margin: -1rem -1rem 0.75rem -1rem;
+    background: var(--stronghold-accent);
+    opacity: 0.6;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }
 
 .stronghold-item.inactive {
@@ -56,7 +76,8 @@
 }
 
 .stronghold-item:hover {
-    border-color: var(--color-border-highlight);
+    border-color: var(--stronghold-accent);
+    box-shadow: 0 0 0 2px var(--stronghold-accent);
 }
 
 .stronghold-header-row {
@@ -217,6 +238,23 @@
     border-radius: 3px;
     cursor: pointer;
     font-size: 0.8rem;
+
+/* Cost display prominence */
+.cost-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-radius: 4px;
+    padding: 0.125rem 0.5rem;
+    font-weight: 600;
+    color: var(--color-text-dark-primary);
+}
+.cost-upgrade {
+    border-color: var(--stronghold-accent);
+}
+
     transition: background-color 0.2s;
 }
 
@@ -304,12 +342,48 @@
     padding: 1rem;
     border-radius: 6px;
     margin-bottom: 1rem;
-    border-left: 4px solid var(--color-border-highlight);
+    border-left: 4px solid var(--stronghold-accent);
 }
+    border-left-color: var(--stronghold-accent);
+
 
 .character-info p {
     margin: 0.25rem 0;
 }
+
+/* Improve text readability */
+.stronghold-viewer, .stronghold-manager {
+    color: var(--color-text-dark-primary);
+}
+.stronghold-viewer p, .stronghold-manager p,
+.stronghold-viewer small, .stronghold-manager small {
+    color: var(--color-text-dark-secondary);
+
+/* Class flavor visibility and formatting */
+.class-flavor-summary {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-left: 3px solid var(--stronghold-accent);
+    background: color-mix(in srgb, var(--stronghold-accent) 8%, transparent);
+    border-radius: 4px;
+}
+.class-flavor-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    color: var(--color-text-dark-primary);
+}
+.class-flavor-text {
+    margin: 0.25rem 0 0 0;
+    color: var(--color-text-dark-secondary);
+}
+
+}
+.stronghold-viewer h3 { font-size: 1.15rem; font-weight: 700; margin: 0; }
+.stronghold-viewer h4 { font-size: 1rem; font-weight: 700; }
+.stronghold-viewer h5 { font-size: 0.95rem; font-weight: 700; }
+
 
 .stronghold-title {
     flex-grow: 1;
@@ -318,23 +392,42 @@
 .stronghold-meta {
     display: flex;
     gap: 0.5rem;
-    margin-top: 0.25rem;
-    font-size: 0.9rem;
+    margin-top: 0.375rem;
+    font-size: 0.95rem;
+    color: var(--color-text-dark-secondary);
+}
+.stronghold-type {
+    border: 1px solid var(--stronghold-accent);
+    color: var(--color-text-dark-primary);
+    background: color-mix(in srgb, var(--stronghold-accent) 12%, transparent);
+}
+.stronghold-level {
+    background: var(--stronghold-accent);
+    color: var(--color-text-light-primary, #fff);
+}
+.stronghold-class {
+    border: 1px solid var(--color-text-highlight);
+    background: color-mix(in srgb, var(--color-text-highlight) 12%, transparent);
+    color: var(--color-text-dark-primary);
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    font-weight: 700;
 }
 
 .bonus-toggle {
-    background: none;
-    border: 1px solid var(--color-border-light);
+    background: var(--color-bg-option);
+    border: 1px solid var(--stronghold-accent);
     padding: 0.5rem;
-    border-radius: 4px;
+    border-radius: 999px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: background-color 0.2s, transform 0.1s;
+    color: var(--color-text-dark-primary);
 }
 
 .bonus-toggle:hover {
-    background: var(--color-bg-option);
-    border-color: var(--color-border-highlight);
+    background: color-mix(in srgb, var(--stronghold-accent) 12%, transparent);
 }
+.bonus-toggle:active { transform: translateY(1px); }
 
 .bonus-summary {
     margin: 0.5rem 0;
@@ -357,6 +450,33 @@
     padding: 0;
     margin: 0;
 }
+
+/* Form layout improvements */
+.stronghold-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.stronghold-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+}
+.stronghold-form input,
+.stronghold-form select,
+.stronghold-form textarea {
+    width: 100%;
+}
+.stronghold-form textarea { min-height: 6rem; }
+
+.dialog .window-content .stronghold-form { max-width: 700px; }
+.dialog .window-content .stronghold-form label { font-weight: 700; }
+.dialog .window-content .stronghold-form small {
+    font-style: italic;
+    color: var(--color-text-dark-secondary);
+}
+
 
 .bonus-header {
     display: flex;
@@ -396,6 +516,24 @@
     border-radius: 3px;
     font-size: 0.8rem;
 }
+
+/* Action preview chips */
+.action-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+.action-chip {
+    background: color-mix(in srgb, var(--stronghold-accent) 10%, var(--color-bg-secondary));
+    border: 1px solid var(--stronghold-accent);
+    border-radius: 999px;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.8rem;
+    color: var(--color-text-dark-primary);
+    font-weight: 600;
+}
+
 
 .all-bonuses-section {
     margin-top: 1rem;
@@ -567,20 +705,55 @@
         gap: 0.5rem;
         align-items: flex-start;
     }
-    
+
     .stronghold-info {
         flex-direction: column;
         gap: 0.5rem;
         align-items: flex-start;
     }
-    
+
     .stronghold-details {
         flex-wrap: wrap;
     }
-    
+
     .bonus-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.25rem;
     }
 }
+
+/* Create/Edit Stronghold Form Layout */
+.stronghold-form {
+    /* ensure consistent spacing inside Foundry Dialog */
+    padding-right: 0.25rem;
+}
+.stronghold-form .form-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
+.stronghold-form .form-group label {
+    flex: 0 0 40%;
+    font-weight: 700;
+    text-align: left;
+}
+.stronghold-form .form-group input[type="text"],
+.stronghold-form .form-group input[type="number"],
+.stronghold-form .form-group select,
+.stronghold-form .form-group textarea {
+    flex: 1 1 auto;
+}
+.stronghold-form .form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+/* Place help text on its own line, aligned with the control */
+.stronghold-form .form-group small {
+    flex-basis: 100%;
+    margin-left: 40%;
+    color: var(--color-text-dark-secondary);
+}
+/* Tweak dialog buttons area for nicer spacing */
+.window-app .dialog .dialog-buttons { gap: 0.5rem; }
