@@ -178,7 +178,7 @@
         <div class="tab" data-tab="settings">
             <div class="settings-content">
                 <h2>Module Settings</h2>
-                <p>Configure stronghold behavior and automation options.</p>
+                <p>Configure stronghold behavior, pricing, and automation options.</p>
 
                 <div class="setting-row">
                     <label for="autoApplyBonuses">
@@ -187,8 +187,37 @@
                     </label>
                 </div>
 
+                <hr>
+                <h3>Prices</h3>
+                <p><small>GM configurable. Leave fields blank to keep defaults. Values are gp.</small></p>
+
+                <div class="price-table">
+                    <div class="price-section">
+                        <h4>Building Costs</h4>
+                        <div class="grid-2">
+                            <label>Temple <input type="number" min="0" step="100" id="price-temple" value="{{prices.building.temple}}"></label>
+                            <label>Keep <input type="number" min="0" step="100" id="price-keep" value="{{prices.building.keep}}"></label>
+                            <label>Tower <input type="number" min="0" step="100" id="price-tower" value="{{prices.building.tower}}"></label>
+                            <label>Establishment <input type="number" min="0" step="100" id="price-establishment" value="{{prices.building.establishment}}"></label>
+                        </div>
+                    </div>
+                    <div class="price-section">
+                        <h4>Upgrade Costs</h4>
+                        <div class="grid-4">
+                            <label>To 2 <input type="number" min="0" step="100" id="price-up-2" value="{{prices.upgrading.2}}"></label>
+                            <label>To 3 <input type="number" min="0" step="100" id="price-up-3" value="{{prices.upgrading.3}}"></label>
+                            <label>To 4 <input type="number" min="0" step="100" id="price-up-4" value="{{prices.upgrading.4}}"></label>
+                            <label>To 5 <input type="number" min="0" step="100" id="price-up-5" value="{{prices.upgrading.5}}"></label>
+                        </div>
+                    </div>
+                    <div class="price-actions">
+                        <button type="button" class="btn-compact save-prices"><i class="fas fa-save"></i> Save Prices</button>
+                        <button type="button" class="btn-compact reset-prices"><i class="fas fa-undo"></i> Reset to Defaults</button>
+                    </div>
+                </div>
+
                 <div class="setting-description">
-                    <p><em>When enabled, players will automatically receive chat messages listing applicable stronghold bonuses when they complete an extended rest.</em></p>
+                    <p><em>Prices update new creations and total cost calculations. Existing strongholds retain their stored totalCostPaid unless modified.</em></p>
                 </div>
             </div>
         </div>

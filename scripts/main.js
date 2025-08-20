@@ -83,6 +83,25 @@ Hooks.once('init', async function() {
         default: false
     });
 
+
+    // Price configuration (GM world settings): store only overrides, merge with defaults at runtime
+    game.settings.register('strongholds-and-followers', 'buildingCosts', {
+        name: 'Building Costs (Overrides)',
+        hint: 'GM: Optional overrides for building costs per stronghold type. Leave empty to use defaults.',
+        scope: 'world',
+        config: false,
+        type: Object,
+        default: {}
+    });
+    game.settings.register('strongholds-and-followers', 'upgradeCosts', {
+        name: 'Upgrade Costs (Overrides)',
+        hint: 'GM: Optional overrides for per-level upgrade costs (2..5). Leave empty to use defaults.',
+        scope: 'world',
+        config: false,
+        type: Object,
+        default: {}
+    });
+
     // Add a Configure Settings menu button in the header to open Strongholds (GM or Player view)
     game.settings.registerMenu('strongholds-and-followers', 'manageStrongholds', {
         name: 'Manage Strongholds',

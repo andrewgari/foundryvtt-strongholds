@@ -42,6 +42,8 @@ export class StrongholdManager extends Application {
             strongholds: strongholdArray,
             strongholdTypes: StrongholdData.STRONGHOLD_TYPES,
             classFlavors: StrongholdData.CLASS_FLAVORS,
+            enableAutoApplyBonuses: game.settings.get('strongholds-and-followers', 'enableAutoApplyBonuses'),
+            prices: StrongholdData.getCostConfig(),
             isGM: game.user.isGM
         };
     }
@@ -66,6 +68,40 @@ export class StrongholdManager extends Application {
         html.find('.delete-stronghold').click(this._onDeleteStronghold.bind(this));
         html.find('.toggle-stronghold').click(this._onToggleStronghold.bind(this));
         html.find('.upgrade-stronghold').click(this._onUpgradeStronghold.bind(this));
+
+        // Settings: prices save/reset
+        html.find('.save-prices').click(async (ev) => {
+            ev.preventDefault(); ev.stopPropagation();
+            if (!game.user.isGM) return ui.notifications.warn('Only the GM can change prices');
+            const building = {
+                temple: Number(html.find('#price-temple').val()) || undefined,
+                keep: Number(html.find('#price-keep').val()) || undefined,
+                tower: Number(html.find('#price-tower').val()) || undefined,
+                establishment: Number(html.find('#price-establishment').val()) || undefined
+            };
+            const upgrading = {
+                2: Number(html.find('#price-up-2').val()) || undefined,
+                3: Number(html.find('#price-up-3').val()) || undefined,
+                4: Number(html.find('#price-up-4').val()) || undefined,
+                5: Number(html.find('#price-up-5').val()) || undefined
+            };
+            // Remove undefined entries to keep defaults for blanks
+            const bClean = Object.fromEntries(Object.entries(building).filter(([,v]) => Number.isFinite(v)));
+            const uClean = Object.fromEntries(Object.entries(upgrading).filter(([,v]) => Number.isFinite(v)));
+            await game.settings.set('strongholds-and-followers', 'buildingCosts', bClean);
+            await game.settings.set('strongholds-and-followers', 'upgradeCosts', uClean);
+            ui.notifications.info('Stronghold prices saved');
+            this.render();
+        });
+        html.find('.reset-prices').click(async (ev) => {
+            ev.preventDefault(); ev.stopPropagation();
+            if (!game.user.isGM) return ui.notifications.warn('Only the GM can reset prices');
+            await game.settings.set('strongholds-and-followers', 'buildingCosts', {});
+            await game.settings.set('strongholds-and-followers', 'upgradeCosts', {});
+            ui.notifications.info('Prices reset to defaults');
+            this.render();
+        });
+
         html.find('.add-bonus').click(this._onAddBonus.bind(this));
         html.find('.remove-bonus').click(this._onRemoveBonus.bind(this));
     }

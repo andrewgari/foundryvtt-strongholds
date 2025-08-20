@@ -258,8 +258,25 @@ export class StrongholdData {
         }
     };
 
+    static getCostConfig() {
+        // Merge world settings over defaults so unset keys fall back safely
+        const defaults = this.STRONGHOLD_COSTS;
+        const buildingOverride = game.settings.get('strongholds-and-followers', 'buildingCosts') || {};
+        const upgradeOverride = game.settings.get('strongholds-and-followers', 'upgradeCosts') || {};
+        return {
+            building: {
+                ...defaults.building,
+                ...buildingOverride
+            },
+            upgrading: {
+                ...defaults.upgrading,
+                ...upgradeOverride
+            }
+        };
+    }
+
     static createStronghold(name, type, classFlavor = null, level = 1, description = '') {
-        const buildingCost = this.STRONGHOLD_COSTS.building[type] || 0;
+        const buildingCost = this.getBuildingCost(type);
         return {
             id: foundry.utils.randomID(),
             name: name,
@@ -277,13 +294,15 @@ export class StrongholdData {
     }
 
     static getBuildingCost(type) {
-        return this.STRONGHOLD_COSTS.building[type] || 0;
+        const cfg = this.getCostConfig();
+        return cfg.building[type] || 0;
     }
 
     static getUpgradeCost(fromLevel, toLevel) {
+        const cfg = this.getCostConfig();
         let totalCost = 0;
         for (let level = fromLevel + 1; level <= toLevel; level++) {
-            totalCost += this.STRONGHOLD_COSTS.upgrading[level] || 0;
+            totalCost += cfg.upgrading[level] || 0;
         }
         return totalCost;
     }
