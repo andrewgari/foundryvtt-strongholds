@@ -157,7 +157,7 @@ This project uses [Semantic Versioning](https://semver.org/):
 
 ## Changelog
 
-### Version 0.1.4
+### Version 0.1.5
 - Initial development release
 - Core stronghold management system (Temple, Keep, Tower, Establishment)
 - Level progression system (1-5) with upgrade costs
