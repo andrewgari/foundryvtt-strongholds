@@ -11,6 +11,12 @@ const path = require('path');
 const ROOT = process.cwd();
 const MODULE_ROOT = ROOT; // This script should be run from the module root
 const OUTPUT_FILE = path.join(MODULE_ROOT, 'dev-reload.json');
+// Attempt to also write into Foundry's served module directory (so clients can fetch it)
+const HOME = process.env.HOME || require('os').homedir();
+const MODULE_ID = 'strongholds-and-followers';
+const DEFAULT_DATA_DIR = path.join(HOME, '.local', 'share', 'FoundryVTT');
+const FOUNDRY_DATA_DIR = process.env.FOUNDRY_DATA_DIR || DEFAULT_DATA_DIR;
+const SERVED_OUTPUT_FILE = path.join(FOUNDRY_DATA_DIR, 'Data', 'modules', MODULE_ID, 'dev-reload.json');
 
 // Directories/files to watch for changes
 const WATCH_TARGETS = [
@@ -67,10 +73,23 @@ function computeSnapshot() {
   return { latest, count };
 }
 
+function safeWrite(p, contents) {
+  try {
+    fs.mkdirSync(path.dirname(p), { recursive: true });
+    fs.writeFileSync(p, contents);
+    return true;
+  } catch (e) {
+    log(`Write failed: ${p} (${e.message})`);
+    return false;
+  }
+}
+
 function writeToken() {
   const token = Date.now().toString();
-  fs.writeFileSync(OUTPUT_FILE, JSON.stringify({ token }, null, 2));
-  log(`Updated ${path.relative(MODULE_ROOT, OUTPUT_FILE)} -> ${token}`);
+  const payload = JSON.stringify({ token }, null, 2);
+  safeWrite(OUTPUT_FILE, payload);
+  safeWrite(SERVED_OUTPUT_FILE, payload);
+  log(`Updated token -> ${token}`);
 }
 
 function log(msg) {

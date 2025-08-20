@@ -18,16 +18,16 @@
     </div>
 
     <div class="form-group">
-        <label for="stronghold-class">Class Flavor</label>
+        <label for="stronghold-class">Stronghold Specialization</label>
         <select id="stronghold-class" name="classFlavor">
-            <option value="">No class specialization</option>
+            <option value="">No specialization</option>
             {{#each classFlavors}}
             <option value="{{this}}" {{#if (eq this ../stronghold.classFlavor)}}selected{{/if}}>
-                {{capitalize this}}
+                {{getClassFlavorDisplay this}}
             </option>
             {{/each}}
         </select>
-        <small>Optional: Provides additional bonuses for characters of this class</small>
+        <small>Optional: Provides additional bonuses for this specialized class</small>
     </div>
 
     <div class="form-group">

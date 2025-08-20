@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "foundryvtt": {
+      "transport": "tcp",
+      "port": 30001
+    }
+  }
+}

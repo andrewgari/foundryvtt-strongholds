@@ -1,9 +1,16 @@
 <div class="stronghold-viewer">
     <div class="viewer-header">
         <h2><i class="fas fa-castle"></i> Party Strongholds</h2>
-        <button class="refresh-bonuses" title="Refresh stronghold data">
-            <i class="fas fa-sync-alt"></i>
-        </button>
+        <div class="header-actions">
+            {{#if isGM}}
+            <button class="reload-clients" title="Reload all connected clients">
+                <i class="fas fa-bolt"></i>
+            </button>
+            {{/if}}
+            <button class="refresh-bonuses" title="Refresh stronghold data">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
     </div>
 
     {{#if hasStrongholds}}
@@ -21,20 +28,20 @@
 
     <div class="strongholds-list">
         {{#each strongholds}}
-        <div class="stronghold-item">
+        <div class="stronghold-item type-{{type}}">
             <div class="stronghold-header">
                 <div class="stronghold-title">
                     <h3>{{name}}</h3>
                     <div class="stronghold-meta">
                         <span class="stronghold-type">{{capitalize type}}</span>
                         {{#if classFlavor}}
-                        <span class="stronghold-class">({{#if classFlavorDisplay}}{{classFlavorDisplay}}{{else}}{{capitalize classFlavor}}{{/if}})</span>
+                        <span class="stronghold-class">{{#if classFlavorDisplay}}{{classFlavorDisplay}}{{else}}{{capitalize classFlavor}}{{/if}}</span>
                         {{/if}}
                         <span class="stronghold-level">Level {{level}}</span>
                     </div>
                 </div>
-                
-                <button class="bonus-toggle" data-stronghold-id="{{id}}">
+
+                <button class="bonus-toggle" data-stronghold-id="{{id}}" title="Show details">
                     <i class="fas fa-chevron-down"></i>
                 </button>
             </div>
@@ -43,7 +50,10 @@
                 <div class="stronghold-level-cost">
                     <span class="level-display">Level {{level}}/5</span>
                     {{#if totalCostPaid}}
-                    <span class="cost-display">Total Value: {{totalCostPaid}} gp</span>
+                    <span class="cost-display" title="Total gold value invested"><i class="fas fa-coins"></i> {{formatNumber totalCostPaid}} gp</span>
+                    {{/if}}
+                    {{#if canUpgrade}}
+                    <span class="cost-display cost-upgrade" title="Gold required to reach next level"><i class="fas fa-level-up-alt"></i> {{formatNumber upgradeCost}} gp</span>
                     {{/if}}
                 </div>
                 {{#if description}}
@@ -51,6 +61,23 @@
                 {{/if}}
                 {{#if typeDescription}}
                 <p class="stronghold-type-desc"><em>{{typeDescription}}</em></p>
+                {{/if}}
+
+                {{#if classFlavorDisplay}}
+                <div class="class-flavor-summary">
+                    <span class="class-flavor-badge" title="Class Flavor"><i class="fas fa-hat-wizard"></i> {{classFlavorDisplay}}</span>
+                    {{#if (getClassFlavorDescription classFlavor)}}
+                    <p class="class-flavor-text">{{getClassFlavorDescription classFlavor}}</p>
+                    {{/if}}
+                </div>
+                {{/if}}
+
+                {{#if actionPreview}}
+                <div class="action-preview">
+                    {{#each actionPreview}}
+                    <span class="action-chip" title="Stronghold action">{{this}}</span>
+                    {{/each}}
+                </div>
                 {{/if}}
             </div>
 

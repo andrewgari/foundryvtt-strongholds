@@ -32,3 +32,4 @@ build/
 
 # PDF documentation (too large for git)
 *.pdf
+/.claude_code_config

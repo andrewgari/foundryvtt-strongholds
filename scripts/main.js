@@ -24,10 +24,26 @@ Hooks.once('init', async function() {
         return obj[key] || '';
     });
 
+    // Small helpers for templates
+    Handlebars.registerHelper('and', function(a, b) {
+        return Boolean(a && b);
+    });
+    Handlebars.registerHelper('formatNumber', function(n) {
+        const num = Number(n);
+        if (!isFinite(num)) return n;
+        return num.toLocaleString();
+    });
+
     // Helper to fetch class flavor description from data
     Handlebars.registerHelper('getClassFlavorDescription', function(flavor) {
         if (!flavor) return '';
         return StrongholdData.getClassFlavorDescription(flavor);
+    });
+
+    // Helper to fetch class flavor display name
+    Handlebars.registerHelper('getClassFlavorDisplay', function(flavor) {
+        if (!flavor) return '';
+        return StrongholdData.CLASS_FLAVOR_DISPLAY[flavor] || flavor;
     });
 
 
@@ -49,6 +65,16 @@ Hooks.once('init', async function() {
         default: true
     });
 
+    // Dev setting: Auto reload clients when dev-reload.json changes
+    game.settings.register('strongholds-and-followers', 'devAutoReload', {
+        name: 'Dev: Auto Reload on Change',
+        hint: 'When enabled (client-side), the client polls dev-reload.json and reloads on change. For development only.',
+        scope: 'client',
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
     // Add a Configure Settings menu button in the header to open Strongholds (GM or Player view)
     game.settings.registerMenu('strongholds-and-followers', 'manageStrongholds', {
         name: 'Manage Strongholds',
@@ -63,12 +89,70 @@ Hooks.once('init', async function() {
         restricted: false
     });
 
+    // Expose API
     game.strongholds = {
         StrongholdManager,
         StrongholdViewer,
         StrongholdData
     };
+
+    // Helper: GM-only broadcast to reload all clients
+    game.strongholds.reloadAllClients = function() {
+        if (!game.user.isGM) return;
+        try {
+            game.socket.emit('module.strongholds-and-followers', { action: 'reload' });
+            ui.notifications.info('Requested reload for all connected clients...');
+        } catch (e) {
+            console.error('Strongholds & Followers | Failed to emit reload', e);
+            ui.notifications.error('Failed to request reload');
+        }
+    };
 });
+
+// Listen for reload requests and perform a soft reload
+Hooks.on('ready', () => {
+    try {
+        game.socket.on('module.strongholds-and-followers', (payload) => {
+            if (payload?.action === 'reload') {
+                // Soft reload assets and UI; fallback to full page reload
+                ui.notifications.info('Strongholds & Followers: Reload requested by GM');
+                window.location.reload();
+            }
+        });
+    } catch (e) {
+        console.error('Strongholds & Followers | Failed to register reload socket listener', e);
+    }
+});
+
+// Optional: Development auto-reload loop (client-side, off by default)
+Hooks.on('ready', () => {
+    const enabled = game.settings.get('strongholds-and-followers', 'devAutoReload');
+    if (!enabled) return;
+
+    let lastToken = null;
+    const url = `modules/${game.modules.get('strongholds-and-followers')?.id}/dev-reload.json`;
+
+    async function poll() {
+        try {
+            const res = await fetch(url, { cache: 'no-cache' });
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.token && lastToken && data.token !== lastToken) {
+                    ui.notifications.info('Strongholds & Followers: Detected changes — reloading...');
+                    window.location.reload();
+                    return;
+                }
+                lastToken = data?.token || lastToken;
+            }
+        } catch (e) {
+            // swallow errors during dev
+        } finally {
+            setTimeout(poll, 1500);
+        }
+    }
+    poll();
+});
+
 
 Hooks.once('ready', async function() {
     console.log('Strongholds & Followers | Ready');

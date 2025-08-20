@@ -76,11 +76,15 @@ export class StrongholdManager extends Application {
         const dialog = new Dialog({
             title: 'Create New Stronghold',
             content: await renderTemplate('modules/strongholds-and-followers/templates/stronghold-form.hbs', {
+                stronghold: {},
                 strongholdTypes: StrongholdData.STRONGHOLD_TYPES,
                 classFlavors: StrongholdData.CLASS_FLAVORS,
                 strongholdCosts: StrongholdData.STRONGHOLD_COSTS.building,
                 isEdit: false
             }),
+            render: (html) => {
+                try { html.closest('.app').style.minWidth = '600px'; } catch {}
+            },
             buttons: {
                 create: {
                     label: 'Create',
@@ -138,6 +142,9 @@ export class StrongholdManager extends Application {
                 classFlavors: StrongholdData.CLASS_FLAVORS,
                 isEdit: true
             }),
+            render: (html) => {
+                try { html.closest('.app').style.minWidth = '600px'; } catch {}
+            },
             buttons: {
                 save: {
                     label: 'Save',

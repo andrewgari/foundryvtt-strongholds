@@ -63,6 +63,13 @@ fi
 echo -e "${YELLOW}🔒 Setting permissions...${NC}"
 chmod -R 755 "$TARGET_DIR"
 
+
+# Touch dev-reload.json so connected clients (with Dev Auto Reload) will refresh
+if [ -d "$TARGET_DIR" ]; then
+  echo -e "${YELLOW}⚡ Triggering dev reload token...${NC}"
+  echo "{ \"token\": \"$(date +%s)\" }" > "$TARGET_DIR/dev-reload.json"
+fi
+
 # Verify installation
 if [ -f "$TARGET_DIR/module.json" ]; then
     echo -e "${GREEN}✅ Module successfully deployed to: $TARGET_DIR${NC}"
@@ -77,7 +84,7 @@ if [ -f "$TARGET_DIR/module.json" ]; then
     echo -e "   2. Go to Setup > Game Worlds > [Your World] > Manage Modules"
     echo -e "   3. Enable 'Strongholds & Followers' module"
     echo -e "   4. Launch your world to test the module"
-    
+
     # Show a notice about the permanent installation location
     echo ""
     echo -e "${BLUE}💡 Foundry VTT Installation:${NC}"
@@ -88,7 +95,7 @@ if [ -f "$TARGET_DIR/module.json" ]; then
         echo -e "   ${YELLOW}Consider moving your Foundry server to: /home/andrewgari/Applications/FoundryVTT${NC}"
     fi
     echo -e "   Data: $FOUNDRY_DATA_DIR (✅ created)"
-    
+
 else
     echo -e "${RED}❌ Module deployment failed!${NC}"
     exit 1
