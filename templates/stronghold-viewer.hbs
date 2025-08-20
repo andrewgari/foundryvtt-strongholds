@@ -47,21 +47,42 @@
             </div>
 
             <div class="stronghold-summary">
-                <div class="stronghold-level-cost">
-                    <span class="level-display">Level {{level}}/5</span>
-                    {{#if totalCostPaid}}
-                    <span class="cost-display" title="Total gold value invested"><i class="fas fa-coins"></i> {{formatNumber totalCostPaid}} gp</span>
-                    {{/if}}
-                    {{#if canUpgrade}}
-                    <span class="cost-display cost-upgrade" title="Gold required to reach next level"><i class="fas fa-level-up-alt"></i> {{formatNumber upgradeCost}} gp</span>
-                    {{/if}}
-                </div>
-                {{#if description}}
-                <p class="stronghold-desc">{{description}}</p>
-                {{/if}}
-                {{#if typeDescription}}
-                <p class="stronghold-type-desc"><em>{{typeDescription}}</em></p>
-                {{/if}}
+                <table class="sg-table sg-table--compact sg-table--striped">
+                    <thead>
+                        <tr>
+                            <th><i class=\"fas fa-chess-rook\"></i> Type</th>
+                            <th><i class=\"fas fa-hat-wizard\"></i> Class</th>
+                            <th><i class=\"fas fa-signal\"></i> Level</th>
+                            <th><i class=\"fas fa-user-friends\"></i> Followers</th>
+                            <th><i class=\"fas fa-coins\"></i> Total Value</th>
+                            <th><i class=\"fas fa-toggle-on\"></i> Active</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{capitalize type}}</td>
+                            <td>
+                                {{#if classFlavorDisplay}}{{classFlavorDisplay}}{{else}}
+                                  {{#if classFlavor}}{{capitalize classFlavor}}{{else}}—{{/if}}
+                                {{/if}}
+                            </td>
+                            <td class="cell-num">{{level}} / 5</td>
+                            <td>{{#if classSummary.followers}}{{classSummary.followers}}{{else}}—{{/if}}</td>
+                            <td class="cell-num">{{#if totalCostPaid}}{{formatNumber totalCostPaid}} gp{{else}}—{{/if}}</td>
+                            <td class="cell-num"><i class="fas fa-check-circle" title="Active"></i></td>
+                        </tr>
+                        {{#if description}}
+                        <tr class="row-note">
+                            <td colspan="6" class="cell-note">{{description}}</td>
+                        </tr>
+                        {{/if}}
+                        {{#if typeDescription}}
+                        <tr class="row-note">
+                            <td colspan="6" class="cell-note"><em>{{typeDescription}}</em></td>
+                        </tr>
+                        {{/if}}
+                    </tbody>
+                </table>
 
                 {{#if classFlavorDisplay}}
                 <div class="class-flavor-summary">
@@ -106,43 +127,49 @@
                     <div class="section-body" style="display: none;">
                         {{#if typeSummary}}
                         <div class="mechanics-block type-summary">
-                            <h5>Demesne Effects</h5>
-                            <ul>
-                                {{#each typeSummary.demesne}}
-                                <li>{{this}}</li>
-                                {{/each}}
-                            </ul>
-                            <h5>Stronghold Actions</h5>
-                            <ul>
-                                {{#each typeSummary.actions}}
-                                <li>{{this}}</li>
-                                {{/each}}
-                            </ul>
+                            <table class="sg-table sg-table--compact sg-table--striped">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2"><i class="fas fa-globe"></i> Demesne Effects</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each typeSummary.demesne}}
+                                    <tr><td colspan="2">{{this}}</td></tr>
+                                    {{/each}}
+                                    <tr><th colspan="2"><i class="fas fa-fist-raised"></i> Stronghold Actions</th></tr>
+                                    {{#each typeSummary.actions}}
+                                    <tr><td colspan="2">{{this}}</td></tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
                         </div>
                         {{/if}}
 
                         {{#if classSummary}}
                         <div class="mechanics-block class-summary">
-                            {{#if classSummary.followers}}
-                            <h5>Followers</h5>
-                            <p>{{classSummary.followers}}</p>
-                            {{/if}}
-                            {{#if classSummary.actions}}
-                            <h5>Class Actions</h5>
-                            <ul>
-                                {{#each classSummary.actions}}
-                                <li>{{this}}</li>
-                                {{/each}}
-                            </ul>
-                            {{/if}}
-                            {{#if classSummary.tables}}
-                            <h5>Tables</h5>
-                            <ul>
-                                {{#each classSummary.tables}}
-                                <li>{{this}}</li>
-                                {{/each}}
-                            </ul>
-                            {{/if}}
+                            <table class="sg-table sg-table--compact sg-table--striped">
+                                <tbody>
+                                    {{#if classSummary.followers}}
+                                    <tr>
+                                        <th style="width: 180px"><i class="fas fa-user-friends"></i> Followers</th>
+                                        <td>{{classSummary.followers}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if classSummary.actions}}
+                                    <tr><th colspan="2"><i class="fas fa-bolt"></i> Class Actions</th></tr>
+                                    {{#each classSummary.actions}}
+                                    <tr><td colspan="2">{{this}}</td></tr>
+                                    {{/each}}
+                                    {{/if}}
+                                    {{#if classSummary.tables}}
+                                    <tr><th colspan="2"><i class="fas fa-table"></i> Tables</th></tr>
+                                    {{#each classSummary.tables}}
+                                    <tr><td colspan="2">{{this}}</td></tr>
+                                    {{/each}}
+                                    {{/if}}
+                                </tbody>
+                            </table>
                         </div>
                         {{/if}}
                     </div>
@@ -152,23 +179,31 @@
                     <button class="section-toggle" type="button"><i class="fas fa-chevron-right"></i> Custom Bonuses</button>
                     <div class="section-body" style="display: none;">
                         {{#if customBonuses}}
-                        <ul class="bonus-list">
-                            {{#each customBonuses}}
-                            <li class="bonus-item">
-                                <div class="bonus-header">
-                                    <strong>{{name}}</strong>
-                                </div>
-                                <p class="bonus-description">{{description}}</p>
-                                <div class="bonus-type">
-                                    {{#if partyWide}}
-                                    <span class="party-bonus"><i class="fas fa-users"></i> Party-wide</span>
-                                    {{else}}
-                                    <span class="class-bonus"><i class="fas fa-user"></i> Character-specific</span>
-                                    {{/if}}
-                                </div>
-                            </li>
-                            {{/each}}
-                        </ul>
+                        <table class="sg-table sg-table--compact sg-table--striped">
+                            <thead>
+                                <tr>
+                                    <th>Bonus</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each customBonuses}}
+                                <tr>
+                                    <td>
+                                        <strong>{{name}}</strong>
+                                        <div class="cell-note">{{description}}</div>
+                                    </td>
+                                    <td>
+                                        {{#if partyWide}}
+                                            <span class="party-bonus"><i class="fas fa-users"></i> Party-wide</span>
+                                        {{else}}
+                                            <span class="class-bonus"><i class="fas fa-user"></i> Character-specific</span>
+                                        {{/if}}
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
                         {{else}}
                         <p class="no-custom-bonuses">No custom bonuses have been added by the GM yet.</p>
                         {{/if}}

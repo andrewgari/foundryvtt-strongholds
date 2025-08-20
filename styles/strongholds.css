@@ -14,6 +14,45 @@
     font-family: 'Signika', sans-serif;
 }
 
+
+/* Compact, expandable list styles (module-scoped, Foundry-friendly) */
+.strongholds-app .sh-list { margin: 0; padding: 0; list-style: none; }
+.strongholds-app .sh-item + .sh-item { margin-top: 6px; }
+
+.strongholds-app .sh-panel { border: 1px solid var(--color-border-light); border-radius: 6px; background: var(--color-bg-option); }
+.strongholds-app .sh-summary { gap: 8px; padding: 6px 8px; align-items: center; }
+.strongholds-app .sh-summary::-webkit-details-marker { display: none; }
+.strongholds-app .sh-chev { transition: transform .15s ease; margin-right: 2px; }
+.strongholds-app .sh-panel[open] .sh-chev { transform: rotate(90deg); }
+
+.strongholds-app .sh-name { flex: 1 1 auto; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.strongholds-app .sh-type, .strongholds-app .sh-class, .strongholds-app .sh-level, .strongholds-app .sh-value, .strongholds-app .sh-status { flex: 0 0 auto; opacity: 0.9; }
+
+.strongholds-app .sh-details { border-top: 1px solid var(--color-border-light); padding: 8px 10px; }
+
+/* Smaller utility button used in compact panels */
+.strongholds-app .btn-compact { font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 3px; }
+
+/* Collapsible section for Custom Bonuses (closed by default) */
+.strongholds-app details.sh-collapsible { margin-top: 6px; border: 1px dashed var(--color-border-light); border-radius: 4px; background: var(--color-bg-option-light); }
+.strongholds-app .sh-collapsible > summary.sh-collapsible-summary { cursor: pointer; padding: 4px 6px; font-weight: 600; }
+.strongholds-app .sh-collapsible[open] > summary.sh-collapsible-summary { border-bottom: 1px solid var(--color-border-light); }
+
+/* List header grid (aligned with summary row) */
+.strongholds-app .sh-list-header { margin: 0 0 6px 0; }
+.strongholds-app .sh-header-grid,
+.strongholds-app .sh-summary { display: grid; grid-template-columns: 20px 1fr 120px 160px 90px 110px 120px 120px; align-items: center; }
+.strongholds-app .sh-header-grid { font-weight: 700; color: var(--color-text-dark-secondary); padding: 4px 8px; border-bottom: 1px solid var(--color-border-light); }
+.strongholds-app .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+/* Zebra striping that meshes with Foundry themes */
+.strongholds-app .sh-item:nth-child(odd) .sh-summary { background: color-mix(in srgb, var(--color-bg-option) 96%, var(--color-border-light) 4%); }
+.strongholds-app .sh-item:nth-child(even) .sh-summary { background: color-mix(in srgb, var(--color-bg-option) 92%, var(--color-border-light) 8%); }
+.strongholds-app .sh-item .sh-summary { border-radius: 6px 6px 0 0; }
+.strongholds-app .sh-item .sh-details { background: color-mix(in srgb, var(--color-bg-option) 98%, transparent 2%); }
+
+
+
 /* Manager Styles */
 .stronghold-header {
     display: flex;
@@ -205,6 +244,11 @@
     border-left: 3px solid var(--color-border-light);
     padding-left: 0.5rem;
 }
+
+
+/* Ensure compact buttons override base sizing */
+.strongholds-app .upgrade-stronghold.btn-compact,
+.strongholds-app .add-bonus.btn-compact { font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 3px; }
 
 .stronghold-actions {
     display: flex;
@@ -756,4 +800,28 @@
     color: var(--color-text-dark-secondary);
 }
 /* Tweak dialog buttons area for nicer spacing */
+
+/* Excel-candy table styles (re-added) */
+.sg-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--color-bg-option); border: 1px solid var(--color-border-light); border-radius: 6px; overflow: hidden; }
+.sg-table th, .sg-table td { padding: 0.5rem 0.6rem; border-right: 1px solid var(--color-border-light); border-bottom: 1px solid var(--color-border-light); }
+.sg-table th { background: var(--color-bg-secondary); color: var(--color-text-dark-primary); font-weight: 700; text-align: left; }
+.sg-table td { color: var(--color-text-dark-primary); }
+.sg-table tr:last-child td { border-bottom: 0; }
+.sg-table tr td:last-child, .sg-table tr th:last-child { border-right: 0; }
+.sg-table--compact th, .sg-table--compact td { padding: 0.35rem 0.5rem; font-size: 0.95rem; }
+.sg-table--striped tbody tr:nth-child(odd) { background: color-mix(in srgb, var(--color-bg-option) 92%, transparent); }
+
+/* Numeric alignment + emphasis */
+.cell-num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.cell-note { color: var(--color-text-dark-secondary); font-style: italic; }
+.row-note td { background: color-mix(in srgb, var(--color-bg-option) 96%, transparent); }
+
+/* Tighten viewer header and section dividers to feel tabular */
+.viewer-header { border-bottom-width: 1px; }
+.bonus-details { border-top-width: 1px; }
+
+/* Button accents more spreadsheet-like */
+.bonus-toggle { border-color: var(--color-border-dark); }
+.bonus-toggle:hover { background: var(--color-bg-secondary); }
+
 .window-app .dialog .dialog-buttons { gap: 0.5rem; }

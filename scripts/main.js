@@ -24,6 +24,14 @@ Hooks.once('init', async function() {
         return obj[key] || '';
     });
 
+
+    // Number formatting helpers
+    Handlebars.registerHelper('formatNumber', function(value) {
+        const n = Number(value);
+        if (isNaN(n)) return value ?? '';
+        return n.toLocaleString();
+    });
+
     // Small helpers for templates
     Handlebars.registerHelper('and', function(a, b) {
         return Boolean(a && b);
