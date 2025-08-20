@@ -333,6 +333,15 @@ export class StrongholdData {
         return base + classPart;
     }
 
+    /**
+     * @deprecated
+     * Calculates the total cost for a stronghold of the given type and level, excluding any class-specific upgrade costs.
+     * This method is retained for backward compatibility and does NOT include class upgrades (e.g., for strongholds with a classFlavor).
+     * For new code, use {@link getTotalCostForStronghold} which includes all relevant costs.
+     * @param {string} type - The type of stronghold (e.g., 'keep', 'temple', etc.)
+     * @param {number} level - The level to calculate the total cost for.
+     * @returns {number} The total cost (building + base upgrades, no class upgrades).
+     */
     static getTotalCostForLevel(type, level) {
         // Backward-compatible total (without class additions)
         const buildingCost = this.getBuildingCost(type);
