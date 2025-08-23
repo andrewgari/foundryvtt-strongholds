@@ -26,10 +26,10 @@
     ]
   },
   "esmodules": [
-    "scripts/main.js"
+    "dist/main.js"
   ],
   "styles": [
-    "styles/strongholds.css"
+    "dist/styles.css"
   ],
   "languages": [
     {
