@@ -20,8 +20,13 @@ Hooks.on('getSceneControlButtons', (controls: unknown[]) => {
   const isGM = game.user?.isGM;
   console.log('Strongholds | User is GM:', isGM);
 
-  const handleView = (event?: Event) => {
+  const handleView = (event?: unknown) => {
     console.log('Strongholds | View tool invoked', event);
+    // Guard: only respond to real button clicks on our 'view' tool
+    if (!(event instanceof MouseEvent)) return;
+    const target = event.currentTarget as HTMLElement | null;
+    const toolName = target?.dataset?.tool;
+    if (toolName !== 'view') return;
     try {
       const app = openStrongholdViewer();
       console.log('Strongholds | Viewer app created:', app);
@@ -32,8 +37,13 @@ Hooks.on('getSceneControlButtons', (controls: unknown[]) => {
     }
   };
 
-  const handleManage = (event?: Event) => {
+  const handleManage = (event?: unknown) => {
     console.log('Strongholds | Manage tool invoked', event);
+    // Guard: only respond to real button clicks on our 'manage' tool
+    if (!(event instanceof MouseEvent)) return;
+    const target = event.currentTarget as HTMLElement | null;
+    const toolName = target?.dataset?.tool;
+    if (toolName !== 'manage') return;
     try {
       const app = new StrongholdsManagementSvelteApp({
         id: 'strongholds-mgmt',
