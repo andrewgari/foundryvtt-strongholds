@@ -54,6 +54,8 @@ Hooks.on('getSceneControlButtons', (controls: unknown[]) => {
       title: 'View',
       icon: 'fas fa-eye',
       button: true,
+      visible: true,
+      toggle: false,
       onClick: handleView
     },
     isGM
@@ -62,6 +64,8 @@ Hooks.on('getSceneControlButtons', (controls: unknown[]) => {
           title: 'Manage',
           icon: 'fas fa-cog',
           button: true,
+          visible: true,
+          toggle: false,
           onClick: handleManage
         }
       : null
@@ -72,8 +76,7 @@ Hooks.on('getSceneControlButtons', (controls: unknown[]) => {
     title: 'Strongholds',
     icon: 'fas fa-home',
     layer: 'tokens',
-    tools: strongholdsTools,
-    activeTool: 'view'
+    tools: strongholdsTools
   };
 
   console.log('Strongholds | Adding control with tools:', strongholdsTools);
