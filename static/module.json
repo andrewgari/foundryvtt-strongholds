@@ -11,7 +11,7 @@
   },
   "url": "https://github.com/andrewgari/foundryvtt-strongholds",
   "manifest": "https://raw.githubusercontent.com/andrewgari/foundryvtt-strongholds/main/module.json",
-  "download": "https://github.com/andrewgari/foundryvtt-strongholds/releases/latest/download/strongholds-and-followers.zip",
+  "download": "https://github.com/andrewgari/foundryvtt-strongholds/releases/download/v0.1.8/strongholds-and-followers-v0.1.8.zip",
   "esmodules": ["main.js"],
   "styles": ["styles.css"],
   "packs": [],

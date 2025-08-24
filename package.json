@@ -3,11 +3,10 @@
   "version": "0.1.8",
   "description": "A Foundry VTT module for managing strongholds and settlements",
   "type": "module",
-  "main": "index.js",
   "directories": {
     "doc": "docs"
   },
-  "dependencies": {
+  "dependencies": {},
     "acorn": "^8.15.0",
     "acorn-jsx": "^5.3.2",
     "acorn-walk": "^8.3.4",
@@ -331,7 +330,7 @@
     "validate": "npm run clean && npm run typecheck && npm run test && npm run build",
     "link": "[ -z \"$FOUNDRY_DATA\" ] && echo 'Set FOUNDRY_DATA to your Foundry Data path' && exit 1 || (mkdir -p \"$FOUNDRY_DATA/Data/modules\" && ln -sfn \"$PWD/dist\" \"$FOUNDRY_DATA/Data/modules/strongholds-and-followers\")",
     "reload": "node scripts/reload-foundry.js",
-    "deploy": "npm run build && mkdir -p releases && cd dist && zip -r ../releases/strongholds-and-followers-v$npm_package_version.zip . && cp module.json ../releases/module.json",
+    "deploy": "npm run build && mkdir -p releases && cd dist && zip -r ../releases/strongholds-and-followers-v$npm_package_version.zip . -x dev-reload.json && cp module.json ../releases/module.json",
     "release": "BUMP=${BUMP:-patch} && npm run validate && npm version $BUMP -m 'chore: release v%s' && git push && git push --tags && npm run deploy",
     "release:patch": "BUMP=patch npm run release",
     "release:minor": "BUMP=minor npm run release",
@@ -355,6 +354,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.8.0",
     "@types/node": "^24.3.0",
+    "chokidar-cli": "^3.0.0",
     "jsdom": "^26.1.0",
     "sass": "^1.90.0",
     "typescript": "^5.9.2",
