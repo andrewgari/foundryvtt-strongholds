@@ -13,17 +13,16 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "verbatimModuleSyntax": true,
-    "types": ["svelte", "vite/client", "node"],
+    "types": ["vite/client", "node"],
     "baseUrl": ".",
     "paths": {
       "@apps/*": ["src/apps/*"],
-      "@foundry/*": ["src/foundry/*"],
-      "@styles/*": ["src/styles/*"]
+      "@foundry/*": ["src/foundry/*"]
     }
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.svelte",
+
     "src/types/**/*.d.ts"
   ],
   "exclude": ["dist", "node_modules"]

@@ -1,14 +1,11 @@
 import { defineConfig } from 'vite';
-import { svelte } from '@sveltejs/vite-plugin-svelte';
 import path from 'node:path';
 
 export default defineConfig(({ mode }) => ({
-  plugins: [svelte()],
+  plugins: [],
   resolve: {
     alias: {
-      '@apps': path.resolve(__dirname, 'src/apps'),
-      '@foundry': path.resolve(__dirname, 'src/foundry'),
-      '@styles': path.resolve(__dirname, 'src/styles')
+      '@apps': path.resolve(__dirname, 'src/apps')
     }
   },
   build: {

@@ -1,9 +1,6 @@
 import './styles/main.scss';
-import StrongholdsManagementApp from './apps/StrongholdsManagementApp.svelte';
-import { SvelteApplication, type SvelteAppOptions } from './foundry/ApplicationBase';
+import { StrongholdsManagementApp } from './apps/StrongholdsManagementApp';
 import { openStrongholdViewer } from './apps/StrongholdViewerApp';
-
-class StrongholdsManagementSvelteApp extends SvelteApplication {}
 
 
 
@@ -20,13 +17,11 @@ Hooks.on('getSceneControlButtons', (controls: unknown[]) => {
   const isGM = game.user?.isGM;
   console.log('Strongholds | User is GM:', isGM);
 
-  const handleView = (event?: unknown) => {
-    console.log('Strongholds | View tool invoked', event);
-    // Guard: only respond to real button clicks on our 'view' tool
+  const handleViewClick = (event?: unknown) => {
+    console.log('Strongholds | View tool click', event);
     if (!(event instanceof MouseEvent)) return;
     const target = event.currentTarget as HTMLElement | null;
-    const toolName = target?.dataset?.tool;
-    if (toolName !== 'view') return;
+    if (target?.dataset?.tool !== 'view') return;
     try {
       const app = openStrongholdViewer();
       console.log('Strongholds | Viewer app created:', app);
@@ -37,19 +32,14 @@ Hooks.on('getSceneControlButtons', (controls: unknown[]) => {
     }
   };
 
-  const handleManage = (event?: unknown) => {
-    console.log('Strongholds | Manage tool invoked', event);
-    // Guard: only respond to real button clicks on our 'manage' tool
+  const handleManageClick = (event?: unknown) => {
+    console.log('Strongholds | Manage tool click', event);
     if (!(event instanceof MouseEvent)) return;
     const target = event.currentTarget as HTMLElement | null;
-    const toolName = target?.dataset?.tool;
-    if (toolName !== 'manage') return;
+    if (target?.dataset?.tool !== 'manage') return;
     try {
-      const app = new StrongholdsManagementSvelteApp({
-        id: 'strongholds-mgmt',
-        title: 'Strongholds Management',
-        svelte: StrongholdsManagementApp
-      } as SvelteAppOptions).render(true);
+      const app = new StrongholdsManagementApp();
+      app.render(true);
       console.log('Strongholds | Management app created:', app);
       return app;
     } catch (error) {
@@ -66,7 +56,7 @@ Hooks.on('getSceneControlButtons', (controls: unknown[]) => {
       button: true,
       visible: true,
       toggle: false,
-      onClick: handleView
+      onClick: handleViewClick
     },
     isGM
       ? {
@@ -76,7 +66,7 @@ Hooks.on('getSceneControlButtons', (controls: unknown[]) => {
           button: true,
           visible: true,
           toggle: false,
-          onClick: handleManage
+          onClick: handleManageClick
         }
       : null
   ].filter(Boolean);
