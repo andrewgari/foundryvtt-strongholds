@@ -204,10 +204,10 @@
                     <div class="price-section">
                         <h4>Upgrade Costs</h4>
                         <div class="grid-4">
-                            <label>To 2 <input type="number" min="0" step="100" id="price-up-2" value="{{prices.upgrading.2}}"></label>
-                            <label>To 3 <input type="number" min="0" step="100" id="price-up-3" value="{{prices.upgrading.3}}"></label>
-                            <label>To 4 <input type="number" min="0" step="100" id="price-up-4" value="{{prices.upgrading.4}}"></label>
-                            <label>To 5 <input type="number" min="0" step="100" id="price-up-5" value="{{prices.upgrading.5}}"></label>
+                            <label>To 2 <input type="number" min="0" step="100" id="price-up-2" value="{{lookup prices.upgrading '2'}}"></label>
+                            <label>To 3 <input type="number" min="0" step="100" id="price-up-3" value="{{lookup prices.upgrading '3'}}"></label>
+                            <label>To 4 <input type="number" min="0" step="100" id="price-up-4" value="{{lookup prices.upgrading '4'}}"></label>
+                            <label>To 5 <input type="number" min="0" step="100" id="price-up-5" value="{{lookup prices.upgrading '5'}}"></label>
                         </div>
                     </div>
                     <div class="price-actions">

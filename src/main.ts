@@ -1,10 +1,11 @@
 import './styles/main.scss';
-import StrongholdsApp from './apps/StrongholdsApp.svelte';
 import StrongholdsManagementApp from './apps/StrongholdsManagementApp.svelte';
 import { SvelteApplication, type SvelteAppOptions } from './foundry/ApplicationBase';
+import { openStrongholdViewer } from './apps/StrongholdViewerApp';
 
-class StrongholdsSvelteApp extends SvelteApplication {}
 class StrongholdsManagementSvelteApp extends SvelteApplication {}
+
+
 
 Hooks.once('init', () => {
   console.log('Strongholds | init');
@@ -15,40 +16,75 @@ Hooks.once('ready', () => {
 });
 
 Hooks.on('getSceneControlButtons', (controls: unknown[]) => {
+  console.log('Strongholds | getSceneControlButtons hook called');
   const isGM = game.user?.isGM;
+  console.log('Strongholds | User is GM:', isGM);
+
+  const handleView = (event?: Event) => {
+    console.log('Strongholds | View tool invoked', event);
+    try {
+      const app = openStrongholdViewer();
+      console.log('Strongholds | Viewer app created:', app);
+      return app;
+    } catch (error) {
+      console.error('Strongholds | Error opening viewer:', error);
+      (globalThis as any).ui?.notifications?.error?.('Failed to open Stronghold Viewer');
+    }
+  };
+
+  const handleManage = (event?: Event) => {
+    console.log('Strongholds | Manage tool invoked', event);
+    try {
+      const app = new StrongholdsManagementSvelteApp({
+        id: 'strongholds-mgmt',
+        title: 'Strongholds Management',
+        svelte: StrongholdsManagementApp
+      } as SvelteAppOptions).render(true);
+      console.log('Strongholds | Management app created:', app);
+      return app;
+    } catch (error) {
+      console.error('Strongholds | Error opening management:', error);
+      (globalThis as any).ui?.notifications?.error?.('Failed to open Strongholds Management');
+    }
+  };
 
   const strongholdsTools = [
     {
-      name: 'view-strongholds',
-      title: 'View Strongholds',
+      name: 'view',
+      title: 'View',
       icon: 'fas fa-eye',
-      onClick: () => new StrongholdsSvelteApp({ id: 'strongholds-app', title: 'Strongholds', svelte: StrongholdsApp } as SvelteAppOptions).render(true),
-      button: true
+      button: true,
+      onClick: handleView,
+      onChange: handleView
     },
     isGM
       ? {
-          name: 'edit-strongholds',
-          title: 'Manage Strongholds',
-          icon: 'fas fa-edit',
-          onClick: () => new StrongholdsManagementSvelteApp({ id: 'strongholds-mgmt', title: 'Strongholds Management', svelte: StrongholdsManagementApp } as SvelteAppOptions).render(true),
-          button: true
+          name: 'manage',
+          title: 'Manage',
+          icon: 'fas fa-cog',
+          button: true,
+          onClick: handleManage,
+          onChange: handleManage
         }
       : null
   ].filter(Boolean);
 
-  (controls as any).push({
+  const strongholdsControl = {
     name: 'strongholds',
     title: 'Strongholds',
     icon: 'fas fa-home',
-    layer: 'controls',
-    tools: strongholdsTools,
-    activeTool: null
-  });
+    layer: 'tokens',
+    tools: strongholdsTools
+  };
+
+  console.log('Strongholds | Adding control with tools:', strongholdsTools);
+  (controls as any).push(strongholdsControl);
 });
+
+
 
 if (import.meta.hot) {
   import.meta.hot.on('vite:afterUpdate', () => {
     console.log('Vite update applied');
   });
 }
-

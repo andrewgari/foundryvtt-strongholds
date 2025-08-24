@@ -13,5 +13,25 @@
   }
 };
 
-(globalThis as any).game = { user: { isGM: true } };
+(globalThis as any).game = {
+  user: { isGM: true },
+  settings: {
+    get: () => ({})
+  }
+};
+
+// Mock Foundry Application class
+(globalThis as any).Application = class MockApplication {
+  constructor(options: any) {
+    this.options = options;
+  }
+
+  render(force?: boolean) {
+    return this;
+  }
+
+  close() {
+    return Promise.resolve();
+  }
+};
 

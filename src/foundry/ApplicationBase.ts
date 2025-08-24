@@ -16,7 +16,7 @@ export class SvelteApplication<TOptions extends SvelteAppOptions = SvelteAppOpti
     const base = super.defaultOptions;
     return {
       ...base,
-      template: 'modules/strongholds/templates/svelte-app.html',
+      template: 'modules/strongholds-and-followers/templates/svelte-app.html',
       popOut: true,
       width: 600,
       height: 400

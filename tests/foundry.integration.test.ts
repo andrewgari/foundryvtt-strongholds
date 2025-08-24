@@ -63,14 +63,14 @@ describe('Foundry integration', () => {
     let controls = runGetSceneControls();
     let strongholds = controls.find((c: any) => c.name === 'strongholds');
     expect(strongholds).toBeTruthy();
-    expect(strongholds.tools.some((t: any) => t?.name === 'edit-strongholds')).toBe(false);
+    expect(strongholds.tools.some((t: any) => t?.name === 'manage')).toBe(false);
 
     // Act: GM
     (globalThis as any).game.user.isGM = true;
     controls = runGetSceneControls();
     strongholds = controls.find((c: any) => c.name === 'strongholds');
     expect(strongholds).toBeTruthy();
-    expect(strongholds.tools.some((t: any) => t?.name === 'edit-strongholds')).toBe(true);
+    expect(strongholds.tools.some((t: any) => t?.name === 'manage')).toBe(true);
   });
 
   it('Applications instantiate without error', async () => {
@@ -81,8 +81,8 @@ describe('Foundry integration', () => {
     expect(strongholds).toBeTruthy();
 
     // Act
-    const view = strongholds.tools.find((t: any) => t.name === 'view-strongholds');
-    const edit = strongholds.tools.find((t: any) => t.name === 'edit-strongholds') || { onClick: () => {} };
+    const view = strongholds.tools.find((t: any) => t.name === 'view');
+    const edit = strongholds.tools.find((t: any) => t.name === 'manage') || { onClick: () => {} };
 
     // Assert (no throws)
     expect(() => view.onClick()).not.toThrow();
