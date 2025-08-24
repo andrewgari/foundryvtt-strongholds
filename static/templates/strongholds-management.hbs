@@ -1,11 +1,31 @@
 <section class="strongholds-management">
   <header class="viewer-header">
     <h2><i class="fas fa-cog"></i> Strongholds Management</h2>
-    {{#if isGM}}
-    <button type="button" data-action="reload" title="Reload all clients"><i class="fas fa-bolt"></i></button>
-    {{/if}}
+    <div class="actions">
+      <button type="button" data-action="open-viewer" title="Open Viewer"><i class="fas fa-eye"></i></button>
+      {{#if isGM}}
+      <button type="button" data-action="reload" title="Reload all clients"><i class="fas fa-bolt"></i></button>
+      {{/if}}
+    </div>
   </header>
 
-  <p>Manage Strongholds settings here (placeholder).</p>
+  {{#if items.length}}
+  <table class="sg-table">
+    <thead><tr><th>Name</th><th>Type</th><th>Level</th><th>Active</th><th></th></tr></thead>
+    <tbody>
+      {{#each items}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td>{{this.type}}</td>
+        <td class="cell-num">{{this.level}}</td>
+        <td>{{#if this.active}}<i class="fas fa-check-circle" title="Active"></i>{{else}}—{{/if}}</td>
+        <td><button type="button" data-action="toggle-active" data-id="{{this.id}}">Toggle</button></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+    <p class="no-strongholds">No Strongholds configured yet.</p>
+  {{/if}}
 </section>
 

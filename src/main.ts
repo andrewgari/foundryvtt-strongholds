@@ -4,89 +4,67 @@ import { openStrongholdViewer } from './apps/StrongholdViewerApp';
 
 
 
+// Register module settings so apps can read/write strongholds data
 Hooks.once('init', () => {
-  console.log('Strongholds | init');
+  const g: any = (globalThis as any).game;
+  try {
+    const settings = g?.settings;
+    if (settings) {
+      if (!settings.settings.has('strongholds-and-followers.strongholds')) {
+      
+        settings.register('strongholds-and-followers', 'strongholds', {
+          scope: 'world',
+          config: false,
+          type: Object,
+          default: {}
+        });
+      }
+    }
+  } catch {}
+
 });
+
+
 
 Hooks.once('ready', () => {
-  console.log('Strongholds | ready');
+  try {
+    if (!(globalThis as any).__strongholdsDomBound) {
+      (globalThis as any).__strongholdsDomBound = true;
+      const captureHandler = (ev: Event) => {
+        const tool = (ev.target as HTMLElement | null)?.closest?.('[data-tool]')?.getAttribute('data-tool');
+        if (tool === 'view') openStrongholdViewer();
+        else if (tool === 'manage') new StrongholdsManagementApp().render(true);
+      };
+      document.addEventListener('pointerdown', captureHandler, true);
+      document.addEventListener('click', captureHandler, true);
+    } else {
+      // already bound
+    }
+  } catch {}
+
 });
 
-Hooks.on('getSceneControlButtons', (controls: unknown[]) => {
-  console.log('Strongholds | getSceneControlButtons hook called');
-  const isGM = game.user?.isGM;
-  console.log('Strongholds | User is GM:', isGM);
-
-  const handleViewClick = (event?: unknown) => {
-    console.log('Strongholds | View tool click', event);
-    if (!(event instanceof MouseEvent)) return;
-    const target = event.currentTarget as HTMLElement | null;
-    if (target?.dataset?.tool !== 'view') return;
-    try {
-      const app = openStrongholdViewer();
-      console.log('Strongholds | Viewer app created:', app);
-      return app;
-    } catch (error) {
-      console.error('Strongholds | Error opening viewer:', error);
-      (globalThis as any).ui?.notifications?.error?.('Failed to open Stronghold Viewer');
-    }
-  };
-
-  const handleManageClick = (event?: unknown) => {
-    console.log('Strongholds | Manage tool click', event);
-    if (!(event instanceof MouseEvent)) return;
-    const target = event.currentTarget as HTMLElement | null;
-    if (target?.dataset?.tool !== 'manage') return;
-    try {
-      const app = new StrongholdsManagementApp();
-      app.render(true);
-      console.log('Strongholds | Management app created:', app);
-      return app;
-    } catch (error) {
-      console.error('Strongholds | Error opening management:', error);
-      (globalThis as any).ui?.notifications?.error?.('Failed to open Strongholds Management');
-    }
-  };
-
+function buildStrongholdsControl() {
+  const isGM = (globalThis as any).game?.user?.isGM;
+  const handleViewClick = () => openStrongholdViewer();
+  const handleViewChange = () => handleViewClick();
+  const handleManageClick = () => new StrongholdsManagementApp().render(true);
+  const handleManageChange = () => handleManageClick();
   const strongholdsTools = [
-    {
-      name: 'view',
-      title: 'View',
-      icon: 'fas fa-eye',
-      button: true,
-      visible: true,
-      toggle: false,
-      onClick: handleViewClick
-    },
-    isGM
-      ? {
-          name: 'manage',
-          title: 'Manage',
-          icon: 'fas fa-cog',
-          button: true,
-          visible: true,
-          toggle: false,
-          onClick: handleManageClick
-        }
-      : null
+    { name: 'view', title: 'View', icon: 'fas fa-eye', button: true, visible: true, toggle: false, onClick: handleViewClick, onChange: handleViewChange },
+    isGM ? { name: 'manage', title: 'Manage', icon: 'fas fa-cog', button: true, visible: true, toggle: false, onClick: handleManageClick, onChange: handleManageChange } : null
   ].filter(Boolean);
-
-  const strongholdsControl = {
-    name: 'strongholds',
-    title: 'Strongholds',
-    icon: 'fas fa-home',
-    layer: 'tokens',
-    tools: strongholdsTools
-  };
-
-  console.log('Strongholds | Adding control with tools:', strongholdsTools);
-  (controls as any).push(strongholdsControl);
-});
-
-
-
-if (import.meta.hot) {
-  import.meta.hot.on('vite:afterUpdate', () => {
-    console.log('Vite update applied');
-  });
+  return { name: 'strongholds', title: 'Strongholds', icon: 'fas fa-home', tools: strongholdsTools };
 }
+
+Hooks.on('getSceneControlButtons', (controls: any) => {
+  const ctl = buildStrongholdsControl();
+  if (Array.isArray(controls)) {
+    controls.push(ctl);
+  } else if (controls?.controls && Array.isArray(controls.controls)) {
+    controls.controls.push(ctl);
+  } else if (controls && typeof controls === 'object') {
+    (controls as any)[ctl.name] = ctl;
+  }
+
+});
