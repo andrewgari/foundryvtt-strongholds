@@ -26,23 +26,6 @@ Hooks.once('init', () => {
 
 
 
-Hooks.once('ready', () => {
-  try {
-    if (!(globalThis as any).__strongholdsDomBound) {
-      (globalThis as any).__strongholdsDomBound = true;
-      const captureHandler = (ev: Event) => {
-        const tool = (ev.target as HTMLElement | null)?.closest?.('[data-tool]')?.getAttribute('data-tool');
-        if (tool === 'view') openStrongholdViewer();
-        else if (tool === 'manage') new StrongholdsManagementApp().render(true);
-      };
-      document.addEventListener('pointerdown', captureHandler, true);
-      document.addEventListener('click', captureHandler, true);
-    } else {
-      // already bound
-    }
-  } catch {}
-
-});
 
 function buildStrongholdsControl() {
   const isGM = (globalThis as any).game?.user?.isGM;
