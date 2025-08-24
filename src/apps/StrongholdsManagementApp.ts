@@ -5,7 +5,9 @@ const AppV2: any = api?.ApplicationV2;
 const HBAM: any = api?.HandlebarsApplicationMixin;
 import { openStrongholdViewer } from './StrongholdViewerApp';
 
-const Base: any = (HBAM && AppV2) ? HBAM(AppV2) : fvtt().Application;
+const Base: any = (HBAM && AppV2)
+  ? HBAM(AppV2)
+  : (fvtt().Application ?? class { render() { return this; } });
 
 export class StrongholdsManagementApp extends Base {
   static override DEFAULT_OPTIONS = {
@@ -54,11 +56,27 @@ export class StrongholdsManagementApp extends Base {
       const id = (ev.currentTarget as HTMLElement)?.dataset?.id;
       if (!id) return;
       const g = fvtt().game;
-      const dict = structuredClone(g?.settings?.get('strongholds-and-followers', 'strongholds') ?? {});
+      if (!g?.user?.isGM) {
+        return fvtt().ui?.notifications?.warn?.(
+          g?.i18n?.localize?.('SAF.OnlyGMCanModify') ?? 'Only the GM can modify strongholds'
+        );
+      }
+      const deepClone =
+        fvtt().foundry?.utils?.deepClone ??
+        fvtt().foundry?.utils?.duplicate ??
+        ((x: any) => (typeof structuredClone === 'function' ? structuredClone(x) : JSON.parse(JSON.stringify(x))));
+      const dict = deepClone(g?.settings?.get('strongholds-and-followers', 'strongholds') ?? {});
       if (!dict[id]) return;
       dict[id].active = !dict[id].active;
-      await g?.settings?.set('strongholds-and-followers', 'strongholds', dict);
-      this.render(true);
+      try {
+        await g?.settings?.set('strongholds-and-followers', 'strongholds', dict);
+        this.render?.();
+      } catch (err) {
+        fvtt().ui?.notifications?.error?.(
+          g?.i18n?.localize?.('SAF.UpdateFailed') ?? 'Failed to update stronghold state'
+        );
+        console.error(err);
+      }
     });
   }
 }

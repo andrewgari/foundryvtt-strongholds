@@ -4,8 +4,10 @@ const api = fvtt().foundry?.applications?.api;
 const AppV2: any = api?.ApplicationV2;
 const HBAM: any = api?.HandlebarsApplicationMixin;
 
-// Compose a base class that renders Handlebars in V2, or falls back to V1 Application
-const Base: any = (HBAM && AppV2) ? HBAM(AppV2) : fvtt().Application;
+// Compose a base class that renders Handlebars in V2, or falls back safely for non-Foundry contexts
+const Base: any = (HBAM && AppV2)
+  ? HBAM(AppV2)
+  : (fvtt().Application ?? class { render() { return this; } });
 
 export class StrongholdViewerApp extends Base {
   // V2 API

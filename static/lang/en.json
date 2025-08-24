@@ -1,5 +1,19 @@
 {
   "STRONGHOLDS.View": "View Strongholds",
-  "STRONGHOLDS.Manage": "Manage Strongholds"
+  "STRONGHOLDS.Manage": "Manage Strongholds",
+  "STRONGHOLDS.PartyStrongholds": "Party Strongholds",
+  "STRONGHOLDS.ReloadAllClients": "Reload all clients",
+  "STRONGHOLDS.Character": "Character:",
+  "STRONGHOLDS.Name": "Name",
+  "STRONGHOLDS.Type": "Type",
+  "STRONGHOLDS.Level": "Level",
+  "STRONGHOLDS.NoActiveStrongholds": "No Active Strongholds",
+  "STRONGHOLDS.ManagementTitle": "Strongholds Management",
+  "STRONGHOLDS.OpenViewer": "Open Viewer",
+  "STRONGHOLDS.Active": "Active",
+  "STRONGHOLDS.Toggle": "Toggle",
+  "STRONGHOLDS.ToggleActive": "Toggle Active",
+  "SAF.OnlyGMCanModify": "Only the GM can modify strongholds",
+  "SAF.UpdateFailed": "Failed to update stronghold state"
 }
 
