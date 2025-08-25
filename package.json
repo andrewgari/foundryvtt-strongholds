@@ -1,44 +1,57 @@
 {
-  "name": "strongholds-and-followers",
-  "version": "0.1.7",
-  "description": "FoundryVTT module for managing strongholds and their bonuses from the Strongholds & Followers supplement",
-  "main": "scripts/main.js",
+  "name": "strongholds",
+  "version": "0.1.8",
+  "description": "A Foundry VTT module for managing strongholds and settlements",
+  "type": "module",
+  "directories": {
+    "doc": "docs"
+  },
+  "private": true,
+  "dependencies": {},
   "scripts": {
-    "lint": "eslint scripts/**/*.js",
-    "test": "echo \"No tests specified yet\" && exit 0",
-    "build": "./scripts/build-local.sh",
-    "version": "echo \"Version managed by GitHub Actions\" && exit 0",
-    "deploy": "./scripts/build-local.sh",
-    "deploy:local": "./scripts/build-local.sh",
-    "foundry:setup": "./scripts/setup-foundry.sh",
-    "foundry:deploy": "./scripts/build-local.sh",
-    "dev": "./scripts/build-local.sh && node ./scripts/dev-reload-watch.js"
+    "clean": "rm -rf dist coverage .vite",
+    "dev": "vite build --watch & chokidar \"dist/**/*\" --ignore \"dist/module.json\" --debounce 300 --await-write-finish -c \"npm run reload\"",
+    "dev:full": "npm run link && npm run dev",
+    "build": "vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "validate": "npm run clean && npm run typecheck && npm run test && npm run build",
+    "link": "[ -z \"$FOUNDRY_DATA\" ] && echo 'Set FOUNDRY_DATA to your Foundry Data path' && exit 1 || (mkdir -p \"$FOUNDRY_DATA/Data/modules\" && ln -sfn \"$PWD/dist\" \"$FOUNDRY_DATA/Data/modules/strongholds-and-followers\")",
+    "reload": "node scripts/reload-foundry.js",
+    "deploy": "npm run build && mkdir -p releases && cd dist && zip -r ../releases/strongholds-and-followers-v$npm_package_version.zip . -x dev-reload.json && cp module.json ../releases/module.json",
+    "release": "BUMP=${BUMP:-patch} && npm run validate && npm version $BUMP -m 'chore: release v%s' && git push && git push --tags && npm run deploy",
+    "release:patch": "BUMP=patch npm run release",
+    "release:minor": "BUMP=minor npm run release",
+    "release:major": "BUMP=major npm run release"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/andrewgari/foundryvtt-strongholds.git"
+    "url": "git+https://github.com/andrewgari/foundryvtt-strongholds.git"
   },
   "keywords": [
     "foundryvtt",
     "dnd5e",
-    "strongholds",
-    "followers",
-    "mcdm",
-    "tabletop",
-    "rpg"
+    "strongholds"
   ],
-  "author": "Andrew Gari",
+  "author": "andrewgari",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/andrewgari/foundryvtt-strongholds/issues"
   },
   "homepage": "https://github.com/andrewgari/foundryvtt-strongholds#readme",
-  "foundry": {
-    "id": "strongholds-and-followers",
-    "title": "Strongholds & Followers",
-    "compatibility": {
-      "minimum": "11",
-      "verified": "12"
-    }
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.8.0",
+    "@types/node": "^24.3.0",
+    "chokidar-cli": "^3.0.0",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.3.3",
+    "sass": "^1.90.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.3",
+    "vitest": "^3.2.4"
   }
 }

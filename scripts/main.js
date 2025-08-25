@@ -207,7 +207,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
                 title: 'Strongholds',
                 icon: 'fas fa-home',
                 visible: true,
-                activeTool: 'view',
+                // Do not set activeTool for button tools; let the control expand/collapse normally
                 tools: {
                     view: {
                         name: 'view',
@@ -215,7 +215,10 @@ Hooks.on('getSceneControlButtons', (controls) => {
                         icon: 'fas fa-eye',
                         button: true,
                         visible: true,
-                        onClick: () => new StrongholdViewer().render(true)
+                        onClick: () => {
+                            console.log('Strongholds & Followers | View clicked');
+                            new StrongholdViewer().render(true);
+                        }
                     },
                     manage: {
                         name: 'manage',
@@ -223,7 +226,10 @@ Hooks.on('getSceneControlButtons', (controls) => {
                         icon: 'fas fa-cog',
                         button: true,
                         visible: game.user.isGM,
-                        onClick: () => new StrongholdManager().render(true)
+                        onClick: () => {
+                            console.log('Strongholds & Followers | Manage clicked');
+                            new StrongholdManager().render(true);
+                        }
                     }
                 }
             };
@@ -243,6 +249,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
                         button: true,
                         visible: true,
                         onClick: () => {
+                            console.log('Strongholds & Followers | View clicked');
                             new StrongholdViewer().render(true);
                         }
                     },
@@ -253,6 +260,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
                         button: true,
                         visible: game.user.isGM,
                         onClick: () => {
+                            console.log('Strongholds & Followers | Manage clicked');
                             new StrongholdManager().render(true);
                         }
                     }

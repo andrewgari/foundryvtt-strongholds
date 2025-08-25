@@ -1,0 +1,51 @@
+<section class="strongholds-management">
+  <header class="viewer-header">
+    <h2><i class="fas fa-cog" aria-hidden="true"></i> {{localize "STRONGHOLDS.ManagementTitle"}}</h2>
+    <div class="actions">
+      <button type="button" data-action="open-viewer" aria-label="{{localize 'STRONGHOLDS.OpenViewer'}}" title="{{localize 'STRONGHOLDS.OpenViewer'}}"><i class="fas fa-eye" aria-hidden="true"></i></button>
+      {{#if isGM}}
+      <button type="button" data-action="reload" aria-label="{{localize 'STRONGHOLDS.ReloadAllClients'}}" title="{{localize 'STRONGHOLDS.ReloadAllClients'}}"><i class="fas fa-bolt" aria-hidden="true"></i></button>
+      {{/if}}
+    </div>
+  </header>
+
+  {{#if items.length}}
+  <table class="sg-table">
+    <thead>
+      <tr>
+        <th>{{localize "STRONGHOLDS.Name"}}</th>
+        <th>{{localize "STRONGHOLDS.Type"}}</th>
+        <th>{{localize "STRONGHOLDS.Level"}}</th>
+        <th>{{localize "STRONGHOLDS.Active"}}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each items}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td>{{this.type}}</td>
+        <td class="cell-num">{{this.level}}</td>
+        <td>
+          {{#if this.active}}
+            <i class="fas fa-check-circle" aria-label="{{localize 'STRONGHOLDS.Active'}}" title="{{localize 'STRONGHOLDS.Active'}}"></i>
+          {{else}}—{{/if}}
+        </td>
+        <td>
+          <button type="button"
+                  data-action="toggle-active"
+                  data-id="{{this.id}}"
+                  aria-pressed="{{this.active}}"
+                  title="{{localize 'STRONGHOLDS.ToggleActive'}}">
+            {{localize "STRONGHOLDS.Toggle"}}
+          </button>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+    <p class="no-strongholds">{{localize "STRONGHOLDS.NoneConfigured"}}</p>
+  {{/if}}
+</section>
+
