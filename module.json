@@ -25,12 +25,8 @@
       }
     ]
   },
-  "esmodules": [
-    "main.js"
-  ],
-  "styles": [
-    "styles.css"
-  ],
+  "esmodules": ["main.js"],
+  "styles": ["styles.css"],
   "languages": [
     {
       "lang": "en",

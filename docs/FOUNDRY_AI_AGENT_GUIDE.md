@@ -5,11 +5,13 @@
 ## 📚 **API Reference & Authority**
 
 ### **Primary Sources**
+
 - **Official API**: https://foundryvtt.com/api/ (Version 13+)
 - **Community Wiki**: https://foundryvtt.wiki/en/development/api
 - **Local API**: `yourFoundryInstallPath/resources/app/client/` (Source code reference)
 
 ### **API Visibility Annotations**
+
 Always respect these annotations when using Foundry methods:
 
 - **`@public`**: ✅ Safe to use externally, deprecation notices provided
@@ -18,6 +20,7 @@ Always respect these annotations when using Foundry methods:
 - **`@internal`**: ❌ Core framework only, never use
 
 ### **Naming Convention Rules**
+
 - Methods starting with `_` are typically private
 - Methods starting with `#` are truly private (JavaScript enforcement)
 - Always check annotations, not just naming patterns
@@ -29,65 +32,67 @@ Always respect these annotations when using Foundry methods:
 ### **Modern Application Classes (v12+)**
 
 #### **ApplicationV2** (Recommended for New Development)
+
 ```javascript
 // ✅ CORRECT: Modern ApplicationV2 pattern
 export class MyApplication extends foundry.applications.api.ApplicationV2 {
-    static DEFAULT_OPTIONS = {
-        id: 'my-application',
-        tag: 'div',
-        window: {
-            title: 'My Application',
-            width: 600,
-            height: 400
-        },
-        form: {
-            handler: MyApplication.formHandler,
-            submitOnChange: true
-        }
-    };
+  static DEFAULT_OPTIONS = {
+    id: 'my-application',
+    tag: 'div',
+    window: {
+      title: 'My Application',
+      width: 600,
+      height: 400,
+    },
+    form: {
+      handler: MyApplication.formHandler,
+      submitOnChange: true,
+    },
+  };
 
-    static PARTS = {
-        main: {
-            template: 'modules/my-module/templates/main.hbs'
-        }
-    };
+  static PARTS = {
+    main: {
+      template: 'modules/my-module/templates/main.hbs',
+    },
+  };
 
-    // No need for super.mergeObject - automatic inheritance
-    async _prepareContext(options) {
-        const context = {};
-        // Prepare your context
-        return context;
-    }
+  // No need for super.mergeObject - automatic inheritance
+  async _prepareContext(options) {
+    const context = {};
+    // Prepare your context
+    return context;
+  }
 
-    static async formHandler(event, form, formData) {
-        // Modern form handling
-    }
+  static async formHandler(event, form, formData) {
+    // Modern form handling
+  }
 }
 ```
 
 #### **Legacy Application** (Backward Compatibility)
+
 ```javascript
 // ⚠️ LEGACY: Still supported until v16, but avoid for new development
 export class LegacyApplication extends Application {
-    static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
-            id: 'legacy-application',
-            title: 'Legacy Application',
-            template: 'modules/my-module/templates/legacy.hbs',
-            width: 600,
-            height: 400
-        });
-    }
+  static get defaultOptions() {
+    return mergeObject(super.defaultOptions, {
+      id: 'legacy-application',
+      title: 'Legacy Application',
+      template: 'modules/my-module/templates/legacy.hbs',
+      width: 600,
+      height: 400,
+    });
+  }
 
-    async getData() {
-        // Legacy pattern
-        return {};
-    }
+  async getData() {
+    // Legacy pattern
+    return {};
+  }
 
-    activateListeners(html) {
-        super.activateListeners(html);
-        // jQuery-based event handling
-    }
+  activateListeners(html) {
+    super.activateListeners(html);
+    // jQuery-based event handling
+  }
 }
 ```
 
@@ -103,22 +108,23 @@ export class LegacyApplication extends Application {
 ## 🎣 **Hooks System Best Practices**
 
 ### **Common Hook Patterns**
+
 ```javascript
 // ✅ CORRECT: Hook registration in init
 Hooks.once('init', () => {
-    console.log('Module initializing...');
-    // Register settings, classes, etc.
+  console.log('Module initializing...');
+  // Register settings, classes, etc.
 });
 
 Hooks.once('ready', () => {
-    console.log('Module ready');
-    // Post-initialization setup
+  console.log('Module ready');
+  // Post-initialization setup
 });
 
 // ✅ CORRECT: Conditional hook execution
 Hooks.on('updateActor', (actor, updateData, options, userId) => {
-    if (!game.user.isGM) return; // Early exit pattern
-    // Process update
+  if (!game.user.isGM) return; // Early exit pattern
+  // Process update
 });
 
 // ✅ CORRECT: Hook cleanup
@@ -126,6 +132,7 @@ Hooks.off('renderApplication', hookId);
 ```
 
 ### **Hook Categories**
+
 - **Init Hooks**: `init`, `ready`, `setup`
 - **Document Hooks**: `create*`, `update*`, `delete*`
 - **Render Hooks**: `render*`, `close*`
@@ -137,19 +144,20 @@ Hooks.off('renderApplication', hookId);
 ## ⚙️ **Settings Management**
 
 ### **Setting Registration Patterns**
+
 ```javascript
 // ✅ CORRECT: Comprehensive settings registration
 game.settings.register('module-name', 'setting-key', {
-    name: 'Setting Display Name',
-    hint: 'Helpful description for users',
-    scope: 'world',      // 'world', 'client', or 'user'
-    config: true,        // Show in settings UI
-    type: Boolean,       // String, Number, Boolean, Object, Array
-    default: false,
-    requiresReload: true, // If changing requires reload
-    onChange: value => {
-        // React to setting changes
-    }
+  name: 'Setting Display Name',
+  hint: 'Helpful description for users',
+  scope: 'world', // 'world', 'client', or 'user'
+  config: true, // Show in settings UI
+  type: Boolean, // String, Number, Boolean, Object, Array
+  default: false,
+  requiresReload: true, // If changing requires reload
+  onChange: (value) => {
+    // React to setting changes
+  },
 });
 
 // ✅ CORRECT: Setting usage
@@ -158,6 +166,7 @@ await game.settings.set('module-name', 'setting-key', newValue);
 ```
 
 ### **Setting Scopes**
+
 - **`world`**: Shared across all users in the world (GM-controlled)
 - **`client`**: Local to the current client installation
 - **`user`**: Per-user settings within the world
@@ -167,6 +176,7 @@ await game.settings.set('module-name', 'setting-key', newValue);
 ## 📄 **Template & UI Patterns**
 
 ### **Template Organization**
+
 ```
 module-folder/
 ├── templates/
@@ -181,25 +191,28 @@ module-folder/
 ```
 
 ### **Handlebars Best Practices**
+
 ```handlebars
-{{!-- ✅ CORRECT: Conditional rendering --}}
+{{! ✅ CORRECT: Conditional rendering }}
 {{#if hasPermission}}
-    <button class="action-button" data-action="perform">Action</button>
+  <button class='action-button' data-action='perform'>Action</button>
 {{/if}}
 
-{{!-- ✅ CORRECT: Safe property access --}}
+{{! ✅ CORRECT: Safe property access }}
 {{#each items}}
-    <li data-id="{{id}}">
-        {{name}} ({{#if description}}{{description}}{{else}}No description{{/if}})
-    </li>
+  <li data-id='{{id}}'>
+    {{name}}
+    ({{#if description}}{{description}}{{else}}No description{{/if}})
+  </li>
 {{/each}}
 
-{{!-- ✅ CORRECT: Helper usage --}}
-{{localize "MODULE.SettingName"}}
+{{! ✅ CORRECT: Helper usage }}
+{{localize 'MODULE.SettingName'}}
 {{numberFormat value decimals=2}}
 ```
 
 ### **Event Handling (Modern)**
+
 ```javascript
 // ✅ CORRECT: Modern DOM event handling (ApplicationV2)
 _attachEventListeners() {
@@ -225,13 +238,14 @@ activateListeners(html) {
 ## 📦 **Module Structure & Manifest**
 
 ### **Modern Module.json (v13+)**
+
 ```json
 {
   "id": "module-name",
   "title": "Module Title",
   "description": "Module description",
   "version": "1.0.0",
-  "authors": [{"name": "Author Name", "email": "email@example.com"}],
+  "authors": [{ "name": "Author Name", "email": "email@example.com" }],
   "compatibility": {
     "minimum": "11",
     "verified": "13"
@@ -253,6 +267,7 @@ activateListeners(html) {
 ```
 
 ### **File Structure Best Practices**
+
 ```
 module-name/
 ├── module.json
@@ -274,19 +289,20 @@ module-name/
 ## 🔒 **Security & Performance Best Practices**
 
 ### **Security Patterns**
+
 ```javascript
 // ✅ CORRECT: Permission checks
 if (!game.user.isGM) {
-    ui.notifications.error('Insufficient permissions');
-    return;
+  ui.notifications.error('Insufficient permissions');
+  return;
 }
 
 // ✅ CORRECT: Data validation
 function validateInput(data) {
-    if (typeof data.name !== 'string' || data.name.length === 0) {
-        throw new Error('Invalid name provided');
-    }
-    return data;
+  if (typeof data.name !== 'string' || data.name.length === 0) {
+    throw new Error('Invalid name provided');
+  }
+  return data;
 }
 
 // ✅ CORRECT: Safe HTML insertion
@@ -294,6 +310,7 @@ const safeHtml = $('<div>').text(userInput).html();
 ```
 
 ### **Performance Patterns**
+
 ```javascript
 // ✅ CORRECT: Debouncing user input
 const debouncedHandler = foundry.utils.debounce(this._handleInput.bind(this), 300);
@@ -302,7 +319,7 @@ const debouncedHandler = foundry.utils.debounce(this._handleInput.bind(this), 30
 const elements = this.element.querySelectorAll('.target-class');
 
 // ✅ CORRECT: Batch operations
-const updates = actors.map(actor => ({_id: actor.id, 'system.health.value': newValue}));
+const updates = actors.map((actor) => ({ _id: actor.id, 'system.health.value': newValue }));
 await Actor.updateDocuments(updates);
 ```
 
@@ -311,6 +328,7 @@ await Actor.updateDocuments(updates);
 ## ❌ **Common Anti-Patterns to Avoid**
 
 ### **What NOT to Do**
+
 ```javascript
 // ❌ WRONG: Direct DOM manipulation without Foundry patterns
 document.getElementById('some-id').innerHTML = userContent;
@@ -338,6 +356,7 @@ ui.notifications.info('Action completed successfully');
 ```
 
 ### **What TO Do Instead**
+
 ```javascript
 // ✅ CORRECT: Proper async handling
 await game.settings.set('module', 'key', value);
@@ -363,11 +382,12 @@ ui.notifications.info(game.i18n.localize('MODULE.ActionComplete'));
 ## 🎯 **System Integration Patterns**
 
 ### **D&D 5e System Integration**
+
 ```javascript
 // ✅ CORRECT: System detection
 if (game.system.id !== 'dnd5e') {
-    ui.notifications.warn('This module requires the D&D 5e system');
-    return;
+  ui.notifications.warn('This module requires the D&D 5e system');
+  return;
 }
 
 // ✅ CORRECT: Accessing D&D 5e data
@@ -377,13 +397,14 @@ const level = actor.system.details.level;
 
 // ✅ CORRECT: D&D 5e hooks
 Hooks.on('dnd5e.restCompleted', (actor, data) => {
-    if (data.longRest) {
-        // Handle long rest
-    }
+  if (data.longRest) {
+    // Handle long rest
+  }
 });
 ```
 
 ### **Universal System Patterns**
+
 ```javascript
 // ✅ CORRECT: System-agnostic approach
 const actor = game.actors.get(actorId);
@@ -391,12 +412,12 @@ const actorData = actor.system; // Generic system data access
 
 // ✅ CORRECT: Conditional system features
 switch (game.system.id) {
-    case 'dnd5e':
-        return actor.system.details.level;
-    case 'pf2e':
-        return actor.system.details.level.value;
-    default:
-        return actor.system.level || 1;
+  case 'dnd5e':
+    return actor.system.details.level;
+  case 'pf2e':
+    return actor.system.details.level.value;
+  default:
+    return actor.system.level || 1;
 }
 ```
 
@@ -405,6 +426,7 @@ switch (game.system.id) {
 ## 🧪 **Testing & Debugging**
 
 ### **Debug Patterns**
+
 ```javascript
 // ✅ CORRECT: Conditional logging
 const DEBUG = game.modules.get('module-name')?.active && game.settings.get('module-name', 'debug');
@@ -412,18 +434,18 @@ if (DEBUG) console.log('Debug info:', data);
 
 // ✅ CORRECT: Error handling
 try {
-    await riskyOperation();
+  await riskyOperation();
 } catch (error) {
-    console.error('Module Error:', error);
-    ui.notifications.error('Operation failed. Check console for details.');
+  console.error('Module Error:', error);
+  ui.notifications.error('Operation failed. Check console for details.');
 }
 
 // ✅ CORRECT: Development helpers
 if (game.modules.get('module-name')?.active && game.user.isGM) {
-    window.MyModule = {
-        api: MyModuleAPI,
-        debug: true
-    };
+  window.MyModule = {
+    api: MyModuleAPI,
+    debug: true,
+  };
 }
 ```
 
@@ -432,6 +454,7 @@ if (game.modules.get('module-name')?.active && game.user.isGM) {
 ## 📋 **Development Checklist**
 
 ### **Before Release**
+
 - [ ] All methods use `@public` API only
 - [ ] No direct access to `_private` methods
 - [ ] Proper error handling and user feedback
@@ -444,6 +467,7 @@ if (game.modules.get('module-name')?.active && game.user.isGM) {
 - [ ] Version compatibility verified
 
 ### **Code Quality**
+
 - [ ] ES6+ modules used consistently
 - [ ] Modern JavaScript features (async/await, destructuring)
 - [ ] Clear variable and function naming
@@ -456,6 +480,7 @@ if (game.modules.get('module-name')?.active && game.user.isGM) {
 ## 🔄 **Migration Guidelines**
 
 ### **ApplicationV2 Migration**
+
 When migrating from legacy Application to ApplicationV2:
 
 1. **Replace `defaultOptions`** with `DEFAULT_OPTIONS`
@@ -466,6 +491,7 @@ When migrating from legacy Application to ApplicationV2:
 6. **Test thoroughly** - behavior may differ
 
 ### **Version Compatibility**
+
 - **Target v11+** for broad compatibility
 - **Use v13 features** for modern development
 - **Plan deprecation** for private API usage
@@ -484,4 +510,4 @@ When migrating from legacy Application to ApplicationV2:
 
 > **Remember**: Always prioritize using the **public API** and following **official patterns**. When in doubt, consult the official documentation or ask on the FoundryVTT Discord developer channels.
 
-*This guide is maintained for AI agents developing FoundryVTT content. Last updated: 2025*
+_This guide is maintained for AI agents developing FoundryVTT content. Last updated: 2025_

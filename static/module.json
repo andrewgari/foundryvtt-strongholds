@@ -15,12 +15,7 @@
   "esmodules": ["main.js"],
   "styles": ["styles.css"],
   "packs": [],
-  "languages": [
-    { "lang": "en", "name": "English", "path": "lang/en.json" }
-  ],
+  "languages": [{ "lang": "en", "name": "English", "path": "lang/en.json" }],
   "flags": {},
-  "media": [
-    { "type": "icon", "url": "assets/icon.png" }
-  ]
+  "media": [{ "type": "icon", "url": "assets/icon.png" }]
 }
-

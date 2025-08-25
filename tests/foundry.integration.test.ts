@@ -2,9 +2,13 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 // Arrange common mocks
 class MockApp<T = any> {
-  static get defaultOptions() { return {}; }
+  static get defaultOptions() {
+    return {};
+  }
   options: any = {};
-  render() { return this as any; }
+  render() {
+    return this as any;
+  }
 }
 
 beforeEach(() => {
@@ -13,15 +17,15 @@ beforeEach(() => {
   (globalThis as any).Hooks = {
     _events: new Map<string, Function[]>(),
     on: (name: string, fn: Function) => {
-      const arr = (Hooks._events.get(name) ?? []);
+      const arr = Hooks._events.get(name) ?? [];
       arr.push(fn);
       Hooks._events.set(name, arr);
     },
     once: (name: string, fn: Function) => {
-      const arr = (Hooks._events.get(name) ?? []);
+      const arr = Hooks._events.get(name) ?? [];
       arr.push(fn);
       Hooks._events.set(name, arr);
-    }
+    },
   };
   (globalThis as any).game = { user: { isGM: false } };
 });
@@ -89,4 +93,3 @@ describe('Foundry integration', () => {
     expect(() => edit.onClick()).not.toThrow();
   });
 });
-

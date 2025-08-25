@@ -2,22 +2,22 @@
 (globalThis as any).Hooks = {
   _events: new Map<string, Function[]>(),
   once: (name: string, fn: Function) => {
-    const arr = (Hooks._events.get(name) ?? []);
+    const arr = Hooks._events.get(name) ?? [];
     arr.push(fn);
     Hooks._events.set(name, arr);
   },
   on: (name: string, fn: Function) => {
-    const arr = (Hooks._events.get(name) ?? []);
+    const arr = Hooks._events.get(name) ?? [];
     arr.push(fn);
     Hooks._events.set(name, arr);
-  }
+  },
 };
 
 (globalThis as any).game = {
   user: { isGM: true },
   settings: {
-    get: () => ({})
-  }
+    get: () => ({}),
+  },
 };
 
 // Mock Foundry Application class
@@ -34,4 +34,3 @@
     return Promise.resolve();
   }
 };
-

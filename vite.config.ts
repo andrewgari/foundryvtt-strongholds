@@ -5,8 +5,8 @@ export default defineConfig(({ mode }) => ({
   plugins: [],
   resolve: {
     alias: {
-      '@apps': path.resolve(__dirname, 'src/apps')
-    }
+      '@apps': path.resolve(__dirname, 'src/apps'),
+    },
   },
   build: {
     outDir: 'dist',
@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => ({
     lib: {
       entry: path.resolve(__dirname, 'src/main.ts'),
       formats: ['es'],
-      fileName: () => 'main.js'
+      fileName: () => 'main.js',
     },
     rollupOptions: {
       output: {
@@ -22,11 +22,10 @@ export default defineConfig(({ mode }) => ({
           if (assetInfo.name && assetInfo.name.endsWith('.css')) return 'styles.css';
           if (assetInfo.name === 'module.json') return 'module.json';
           return 'assets/[name][extname]';
-        }
-      }
-    }
+        },
+      },
+    },
   },
   publicDir: 'static',
-  base: './'
+  base: './',
 }));
-

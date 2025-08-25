@@ -15,7 +15,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: read
-      
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
           BASE_VERSION=$(jq -r '.version' module.json)
           COMMIT_HASH=$(git rev-parse --short HEAD)
           TIMESTAMP=$(date +"%Y%m%d%H%M")
-          
+
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             PR_NUMBER="${{ github.event.number }}"
             SNAPSHOT_VERSION="${BASE_VERSION}-pr${PR_NUMBER}.${TIMESTAMP}.${COMMIT_HASH}"
@@ -46,7 +46,7 @@ jobs:
             echo "build_type=branch" >> $GITHUB_OUTPUT
             echo "branch_name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
           fi
-          
+
           echo "snapshot_version=${SNAPSHOT_VERSION}" >> $GITHUB_OUTPUT
           echo "commit_hash=${COMMIT_HASH}" >> $GITHUB_OUTPUT
           echo "timestamp=${TIMESTAMP}" >> $GITHUB_OUTPUT
@@ -55,21 +55,21 @@ jobs:
       - name: Update version files for snapshot
         run: |
           SNAPSHOT_VERSION="${{ steps.snapshot_version.outputs.snapshot_version }}"
-          
+
           # Update module.json with snapshot version
           jq --arg version "$SNAPSHOT_VERSION" '.version = $version' module.json > tmp.json && mv tmp.json module.json
-          
+
           # Update package.json
           jq --arg version "$SNAPSHOT_VERSION" '.version = $version' package.json > tmp.json && mv tmp.json package.json
 
       - name: Create snapshot package
         run: |
           SNAPSHOT_VERSION="${{ steps.snapshot_version.outputs.snapshot_version }}"
-          
+
           # Update download URL for snapshot
           DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/snapshot/strongholds-and-followers-v${SNAPSHOT_VERSION}.zip"
           jq --arg download "$DOWNLOAD_URL" '.download = $download' module.json > tmp.json && mv tmp.json module.json
-          
+
           # Create snapshot package (exclude dev files)
           zip -r "strongholds-and-followers-v${SNAPSHOT_VERSION}.zip" . \
             -x "*.git*" "*.github*" "test-module.html" "*.pdf" "GITHUB_SETUP.md" "VERSIONING.md" "*.md"
@@ -79,51 +79,51 @@ jobs:
           SNAPSHOT_VERSION="${{ steps.snapshot_version.outputs.snapshot_version }}"
           BUILD_TYPE="${{ steps.snapshot_version.outputs.build_type }}"
           COMMIT_HASH="${{ steps.snapshot_version.outputs.commit_hash }}"
-          
+
           # Create snapshot release notes
           cat > snapshot_notes.md << EOF
           ⚡ **Snapshot Release** - Development Build
-          
+
           Version: \`${SNAPSHOT_VERSION}\`
           Commit: \`${COMMIT_HASH}\`
           Built: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          
+
           EOF
-          
+
           if [[ "$BUILD_TYPE" == "pr" ]]; then
             PR_NUMBER="${{ steps.snapshot_version.outputs.pr_number }}"
             cat >> snapshot_notes.md << EOF
           **Pull Request #${PR_NUMBER}**
           Branch: \`${{ github.head_ref }}\`
-          
+
           ⚠️ **Development Only** - This is a pre-release build from an active pull request.
           EOF
           else
             BRANCH_NAME="${{ steps.snapshot_version.outputs.branch_name }}"
             cat >> snapshot_notes.md << EOF
           **Feature Branch: \`${BRANCH_NAME}\`**
-          
+
           ⚠️ **Development Only** - This is a pre-release build from a development branch.
           EOF
           fi
-          
+
           cat >> snapshot_notes.md << EOF
-          
+
           ## Installation
           **Snapshot Channel (Bleeding Edge):**
           \`https://github.com/${{ github.repository }}/releases/download/snapshot/module.json\`
-          
+
           **⚠️ Warning:** Snapshot builds are unstable and for development/testing only!
-          
+
           ## Other Channels
           - **Latest:** \`https://github.com/${{ github.repository }}/releases/latest/download/module.json\`
           - **Stable:** \`https://github.com/${{ github.repository }}/releases/download/stable/module.json\`
           EOF
-          
+
           # Delete existing snapshot and create new one
           echo "Cleaning up previous snapshot..."
           gh release delete "snapshot" --yes || echo "No previous snapshot to delete"
-          
+
           # Create new snapshot release
           gh release create "snapshot" \
             --title "Snapshot Build (${SNAPSHOT_VERSION})" \

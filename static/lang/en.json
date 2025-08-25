@@ -6,7 +6,12 @@
   "STRONGHOLDS.Character": "Character:",
   "STRONGHOLDS.Name": "Name",
   "STRONGHOLDS.Type": "Type",
+  "STRONGHOLDS.Subtype": "Class Benefit",
   "STRONGHOLDS.Level": "Level",
+  "STRONGHOLDS.Actions": "Actions",
+  "STRONGHOLDS.Edit": "Edit",
+  "STRONGHOLDS.CreateStronghold": "Create Stronghold",
+  "STRONGHOLDS.NoneConfigured": "No strongholds configured yet",
   "STRONGHOLDS.NoActiveStrongholds": "No Active Strongholds",
   "STRONGHOLDS.ManagementTitle": "Strongholds Management",
   "STRONGHOLDS.OpenViewer": "Open Viewer",
@@ -16,4 +21,3 @@
   "SAF.OnlyGMCanModify": "Only the GM can modify strongholds",
   "SAF.UpdateFailed": "Failed to update stronghold state"
 }
-

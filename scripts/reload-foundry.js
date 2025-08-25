@@ -14,4 +14,3 @@ try {
 } catch (e) {
   console.warn('Could not touch module.json; ensure you built once and linked to Foundry.', e);
 }
-
