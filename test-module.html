@@ -1,74 +1,100 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Strongholds Module Test</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .test-result { padding: 10px; margin: 10px 0; border-radius: 4px; }
-        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .test-result {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+      }
+      .success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Strongholds & Followers Module Test</h1>
-    
+
     <div id="test-results">
-        <div class="test-result success">
-            <strong>✓ HTML Structure:</strong> Basic page loaded successfully
-        </div>
+      <div class="test-result success">
+        <strong>✓ HTML Structure:</strong> Basic page loaded successfully
+      </div>
     </div>
 
     <h2>Module Files Structure</h2>
     <ul>
-        <li>module.json - Module manifest</li>
-        <li>scripts/main.js - Main module initialization</li>
-        <li>scripts/stronghold-data.js - Data models and costs</li>
-        <li>scripts/stronghold-manager.js - GM interface</li>
-        <li>scripts/stronghold-viewer.js - Player interface</li>
-        <li>templates/ - Handlebars templates</li>
-        <li>styles/ - CSS styling</li>
-        <li>lang/ - Localization files</li>
+      <li>module.json - Module manifest</li>
+      <li>scripts/main.js - Main module initialization</li>
+      <li>scripts/stronghold-data.js - Data models and costs</li>
+      <li>scripts/stronghold-manager.js - GM interface</li>
+      <li>scripts/stronghold-viewer.js - Player interface</li>
+      <li>templates/ - Handlebars templates</li>
+      <li>styles/ - CSS styling</li>
+      <li>lang/ - Localization files</li>
     </ul>
 
     <h2>Key Features</h2>
     <ul>
-        <li>✓ Stronghold types: Temple, Keep, Tower, Establishment</li>
-        <li>✓ Level system: 1-5 with upgrade costs</li>
-        <li>✓ Gold cost tracking for building and upgrades</li>
-        <li>✓ Custom bonus system (ready for PDF content)</li>
-        <li>✓ GM management interface</li>
-        <li>✓ Player viewing interface</li>
-        <li>✓ Persistent data storage</li>
+      <li>✓ Stronghold types: Temple, Keep, Tower, Establishment</li>
+      <li>✓ Level system: 1-5 with upgrade costs</li>
+      <li>✓ Gold cost tracking for building and upgrades</li>
+      <li>✓ Custom bonus system (ready for PDF content)</li>
+      <li>✓ GM management interface</li>
+      <li>✓ Player viewing interface</li>
+      <li>✓ Persistent data storage</li>
     </ul>
 
     <h2>Installation Instructions for FoundryVTT</h2>
     <ol>
-        <li>Copy the entire <code>strongholds-and-followers</code> folder to your FoundryVTT <code>Data/modules/</code> directory</li>
-        <li>Restart FoundryVTT</li>
-        <li>Enable the module in your world's module settings</li>
-        <li>GM: Look for the castle icon in scene controls</li>
-        <li>Players: Look for "Strongholds" button in player list</li>
+      <li>
+        Copy the entire <code>strongholds-and-followers</code> folder to your FoundryVTT
+        <code>Data/modules/</code> directory
+      </li>
+      <li>Restart FoundryVTT</li>
+      <li>Enable the module in your world's module settings</li>
+      <li>GM: Look for the castle icon in scene controls</li>
+      <li>Players: Look for "Strongholds" button in player list</li>
     </ol>
 
     <h2>Usage</h2>
     <h3>For GMs:</h3>
     <ul>
-        <li>Click the castle icon in scene controls to open Stronghold Manager</li>
-        <li>Create new strongholds with descriptions</li>
-        <li>Upgrade strongholds (costs gold)</li>
-        <li>Add custom bonuses from the PDF</li>
+      <li>Click the castle icon in scene controls to open Stronghold Manager</li>
+      <li>Create new strongholds with descriptions</li>
+      <li>Upgrade strongholds (costs gold)</li>
+      <li>Add custom bonuses from the PDF</li>
     </ul>
 
     <h3>For Players:</h3>
     <ul>
-        <li>Click "Strongholds" button in player list to view active strongholds</li>
-        <li>See stronghold levels, costs, and bonuses</li>
-        <li>Bonuses will appear in chat during extended rests (if enabled)</li>
+      <li>Click "Strongholds" button in player list to view active strongholds</li>
+      <li>See stronghold levels, costs, and bonuses</li>
+      <li>Bonuses will appear in chat during extended rests (if enabled)</li>
     </ul>
 
     <div class="test-result success">
-        <strong>Status:</strong> Module structure complete and ready for FoundryVTT installation!
+      <strong>Status:</strong> Module structure complete and ready for FoundryVTT installation!
     </div>
-</body>
+  </body>
 </html>

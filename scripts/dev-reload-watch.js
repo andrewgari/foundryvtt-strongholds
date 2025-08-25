@@ -16,16 +16,16 @@ const HOME = process.env.HOME || require('os').homedir();
 const MODULE_ID = 'strongholds-and-followers';
 const DEFAULT_DATA_DIR = path.join(HOME, '.local', 'share', 'FoundryVTT');
 const FOUNDRY_DATA_DIR = process.env.FOUNDRY_DATA_DIR || DEFAULT_DATA_DIR;
-const SERVED_OUTPUT_FILE = path.join(FOUNDRY_DATA_DIR, 'Data', 'modules', MODULE_ID, 'dev-reload.json');
+const SERVED_OUTPUT_FILE = path.join(
+  FOUNDRY_DATA_DIR,
+  'Data',
+  'modules',
+  MODULE_ID,
+  'dev-reload.json',
+);
 
 // Directories/files to watch for changes
-const WATCH_TARGETS = [
-  'scripts',
-  'templates',
-  'styles',
-  'lang',
-  'module.json'
-];
+const WATCH_TARGETS = ['scripts', 'templates', 'styles', 'lang', 'module.json'];
 
 const EXCLUDE_DIRS = new Set(['.git', 'node_modules', '.idea', '.vscode']);
 const EXCLUDE_FILES = new Set(['package-lock.json']);
@@ -48,7 +48,11 @@ function listFilesRec(targetPath) {
   while (stack.length) {
     const current = stack.pop();
     let entries;
-    try { entries = fs.readdirSync(current, { withFileTypes: true }); } catch { continue; }
+    try {
+      entries = fs.readdirSync(current, { withFileTypes: true });
+    } catch {
+      continue;
+    }
     for (const ent of entries) {
       const full = path.join(current, ent.name);
       if (isExcluded(full)) continue;
@@ -112,4 +116,3 @@ setInterval(() => {
     last = now;
   }
 }, 1000);
-

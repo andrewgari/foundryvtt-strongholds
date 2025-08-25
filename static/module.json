@@ -1,0 +1,21 @@
+{
+  "id": "strongholds-and-followers",
+  "title": "Strongholds & Followers",
+  "description": "A comprehensive module for managing strongholds and their bonuses from the Strongholds & Followers supplement. Allows GMs to create and manage strongholds while players can view their benefits and automatically apply bonuses during extended rests.",
+  "version": "0.1.8",
+  "authors": [{ "name": "Andrew Gari" }],
+  "license": "MIT",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13.3"
+  },
+  "url": "https://github.com/andrewgari/foundryvtt-strongholds",
+  "manifest": "https://raw.githubusercontent.com/andrewgari/foundryvtt-strongholds/main/module.json",
+  "download": "https://github.com/andrewgari/foundryvtt-strongholds/releases/download/v0.1.8/strongholds-and-followers-v0.1.8.zip",
+  "esmodules": ["main.js"],
+  "styles": ["styles.css"],
+  "packs": [],
+  "languages": [{ "lang": "en", "name": "English", "path": "lang/en.json" }],
+  "flags": {},
+  "media": [{ "type": "icon", "url": "assets/icon.png" }]
+}

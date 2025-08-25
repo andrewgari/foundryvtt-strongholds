@@ -16,30 +16,38 @@ A comprehensive FoundryVTT module for managing strongholds and their bonuses fro
 Choose your preferred release channel:
 
 ### 🚀 Latest Channel (Recommended)
-*Most recent release with all features and fixes*
+
+_Most recent release with all features and fixes_
+
 ```
 https://github.com/andrewgari/foundryvtt-strongholds/releases/latest/download/module.json
 ```
 
-### 🎯 Stable Channel (Production)  
-*Major.minor.0 versions only (1.0.0, 1.1.0, 2.0.0, etc.) - excludes patches*
+### 🎯 Stable Channel (Production)
+
+_Major.minor.0 versions only (1.0.0, 1.1.0, 2.0.0, etc.) - excludes patches_
+
 ```
 https://github.com/andrewgari/foundryvtt-strongholds/releases/download/stable/module.json
 ```
 
 ### ⚡ Snapshot Channel (Development)
-*Bleeding edge builds from PRs and feature branches - ⚠️ Unstable!*
+
+_Bleeding edge builds from PRs and feature branches - ⚠️ Unstable!_
+
 ```
 https://github.com/andrewgari/foundryvtt-strongholds/releases/download/snapshot/module.json
 ```
 
 ### Installation Steps
+
 1. In FoundryVTT, go to "Add-on Modules"
-2. Click "Install Module"  
+2. Click "Install Module"
 3. Paste your chosen manifest URL above
 4. Click "Install" and enable in your world
 
 ### Manual Installation
+
 1. Download the latest release from [GitHub Releases](https://github.com/andrewgari/foundryvtt-strongholds/releases)
 2. Extract to your FoundryVTT `Data/modules/` directory
 3. Enable the module in your world's module settings
@@ -47,6 +55,7 @@ https://github.com/andrewgari/foundryvtt-strongholds/releases/download/snapshot/
 ## Usage
 
 ### For Game Masters
+
 1. Click the castle icon in the scene controls to open the Stronghold Manager
 2. Create new strongholds by specifying:
    - Name (e.g., "Sacred Grove Temple")
@@ -57,6 +66,7 @@ https://github.com/andrewgari/foundryvtt-strongholds/releases/download/snapshot/
 4. View all available bonuses for each stronghold
 
 ### For Players
+
 1. Click the "Strongholds" button in the player list to view active strongholds
 2. See which bonuses apply to your character
 3. Bonuses are automatically applied when taking extended rests (if enabled)
@@ -64,24 +74,29 @@ https://github.com/andrewgari/foundryvtt-strongholds/releases/download/snapshot/
 ## Stronghold Types & Bonuses
 
 ### Temple
+
 - **Base Bonuses**: Sacred ground advantages, divine protection, blessed recovery
 - **Class Bonuses**: Extra benefits for Clerics and Paladins
 
 ### Keep
+
 - **Base Bonuses**: Combat training, strategic advantages, fortified rest
 - **Class Bonuses**: Extra benefits for Fighters and Paladins
 
 ### Tower
+
 - **Base Bonuses**: Arcane studies, magical insight, spell focus
 - **Class Bonuses**: Extra benefits for Wizards, Sorcerers, and Warlocks
 
 ### Establishment
+
 - **Base Bonuses**: Social networks, trade connections, information gathering
 - **Class Bonuses**: Extra benefits for Rogues and Bards
 
 ## Configuration
 
 The module includes the following settings:
+
 - **Automatically Apply Bonuses**: When enabled, players receive chat messages with applicable bonuses after extended rests
 
 ## Compatibility
@@ -100,7 +115,7 @@ The module exposes the following API under `game.strongholds`:
 
 ```javascript
 // Access stronghold data models
-game.strongholds.StrongholdData
+game.strongholds.StrongholdData;
 
 // Open manager (GM only)
 new game.strongholds.StrongholdManager().render(true);
@@ -111,10 +126,27 @@ new game.strongholds.StrongholdViewer().render(true);
 
 ## Development
 
+### Tech Stack
+
+- Language: TypeScript. The benefits are too significant to ignore for any non-trivial project.
+- UI Framework: Foundry ApplicationV2 + Handlebars templates
+- Build Tool: Vite (bundles TypeScript and copies static templates/assets)
+- Styling: CSS/SASS for Foundry’s dark theme
+
 ### Building
-This module uses ES6 modules and modern JavaScript features. No build process is required.
+
+This module uses Vite to build a TypeScript codebase and serve Handlebars templates.
+
+Quickstart:
+
+- npm install
+- npm run build (one-time build)
+- export FOUNDRY_DATA=/path/to/FoundryVTT/Data
+- npm run link
+- npm run dev (build watch + touch module.json for reload)
 
 ### Contributing
+
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
@@ -138,18 +170,22 @@ For issues and feature requests, please use the GitHub issue tracker.
 ## Development
 
 ### Versioning
+
 This project uses [Semantic Versioning](https://semver.org/):
+
 - **Major** (x.0.0): Breaking changes, major releases
-- **Minor** (0.x.0): New features, backwards compatible  
+- **Minor** (0.x.0): New features, backwards compatible
 - **Patch** (0.0.x): Bug fixes, minor improvements
 
 ### Automatic Versioning Workflow
+
 - **Push to main branch**: Patch version auto-bump (0.0.1 → 0.0.2)
-- **Create `bump-minor` tag**: Minor version update (0.1.0 → 0.2.0) 
+- **Create `bump-minor` tag**: Minor version update (0.1.0 → 0.2.0)
 - **Create `bump-major` tag**: Major version update (1.0.0 → 2.0.0)
 - **Feature branches**: Development versions with commit hash (0.1.0-dev.abc123)
 
 ### Release Process
+
 1. **Patch Updates**: Merge PR to main → auto-bump patch version (0.0.1 → 0.0.2)
 2. **Minor Updates**: `git tag bump-minor && git push origin bump-minor`
 3. **Major Updates**: `git tag bump-major && git push origin bump-major`
@@ -158,6 +194,7 @@ This project uses [Semantic Versioning](https://semver.org/):
 ## Changelog
 
 ### Version 0.1.7
+
 - Initial development release
 - Core stronghold management system (Temple, Keep, Tower, Establishment)
 - Level progression system (1-5) with upgrade costs

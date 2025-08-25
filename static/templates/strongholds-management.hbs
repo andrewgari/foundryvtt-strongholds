@@ -1,0 +1,65 @@
+<section class="strongholds-management" data-app-id="{{appId}}">
+  <header class="viewer-header">
+    <h2><i class="fas fa-cog" aria-hidden="true"></i> {{localize "STRONGHOLDS.ManagementTitle"}}</h2>
+    <div class="actions"><!-- intentionally empty: removed cluttered header controls --></div>
+  </header>
+
+  {{#if items.length}}
+  <div class="table-container mgmt-scroll">
+  <table class="sg-table sg-table-compact">
+    <thead>
+      <tr>
+        <th class="cell-actions-min"></th>
+        <th>{{localize "STRONGHOLDS.Name"}}</th>
+        <th>{{localize "STRONGHOLDS.Type"}}</th>
+        <th>{{localize "STRONGHOLDS.Subtype"}}</th>
+        <th class="cell-num">{{localize "STRONGHOLDS.Level"}}</th>
+        <th class="cell-num">Next Upgrade</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each items}}
+      <tr>
+        <td class="row-menu">
+          {{#if ../isGM}}
+          <button type="button" class="menu-trigger" data-action="row-menu" data-menu-id="menu-{{this.id}}" aria-haspopup="true" aria-expanded="false" title="More actions">
+            <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
+          </button>
+          <div class="context-menu" id="menu-{{this.id}}" data-app-id="{{../appId}}" hidden>
+            <button type="button" data-action="edit" data-id="{{this.id}}">{{localize 'STRONGHOLDS.Edit'}}</button>
+            <button type="button" data-action="upgrade" data-id="{{this.id}}">Upgrade</button>
+            <button type="button" data-action="toggle-active" data-id="{{this.id}}">{{localize 'STRONGHOLDS.Toggle'}}</button>
+            <button type="button" data-action="delete" data-id="{{this.id}}">Delete</button>
+          </div>
+          {{/if}}
+        </td>
+        <td>{{this.name}}</td>
+        <td class="text-capitalize">{{this.typeDisplay}}</td>
+        <td>{{this.subtypeDisplay}}</td>
+        <td class="cell-num">{{this.level}}</td>
+        <td class="cell-num">{{#if this.nextUpgradeCostDisplay}}{{this.nextUpgradeCostDisplay}}{{else}}—{{/if}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  </div>
+  {{#if isGM}}
+  <div class="mgmt-toolbar mgmt-toolbar-bottom">
+      <button type="button" class="btn btn-primary" data-action="create">
+        <i class="fas fa-plus" aria-hidden="true"></i> {{localize "STRONGHOLDS.CreateStronghold"}}
+      </button>
+  </div>
+  {{/if}}
+  {{else}}
+    <p class="no-strongholds">{{localize "STRONGHOLDS.NoneConfigured"}}</p>
+    {{#if isGM}}
+    <div class="mgmt-toolbar mgmt-toolbar-bottom">
+      <button type="button" class="btn btn-primary" data-action="create">
+        <i class="fas fa-plus" aria-hidden="true"></i> {{localize "STRONGHOLDS.CreateStronghold"}}
+      </button>
+    </div>
+    {{/if}}
+  {{/if}}
+</section>
+
+

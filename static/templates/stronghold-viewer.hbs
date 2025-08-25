@@ -1,0 +1,105 @@
+<section class='stronghold-viewer'>
+  <header class='viewer-header'>
+    <h2><i class='fas fa-castle' aria-hidden='true'></i>
+      {{localize 'STRONGHOLDS.PartyStrongholds'}}</h2>
+    {{#if isGM}}
+      <button
+        type='button'
+        data-action='reload'
+        aria-label='{{localize "STRONGHOLDS.ReloadAllClients"}}'
+        title='{{localize "STRONGHOLDS.ReloadAllClients"}}'
+      ><i class='fas fa-bolt' aria-hidden='true'></i></button>
+    {{/if}}
+  </header>
+
+  {{#if hasStrongholds}}
+    <div class='viewer-scroll'>
+      {{#if characterName}}
+        <p class='muted'><strong>{{localize 'STRONGHOLDS.Character'}}</strong> {{characterName}}</p>
+      {{/if}}
+
+      <ul class='sg-cards' role='list'>
+        {{#each strongholds}}
+          <li class='sg-card' data-id='{{this.id}}' role='listitem'>
+            <div class='sg-card-header'>
+              <div class='sg-title'>
+                <strong>{{this.name}}</strong>
+                <span class='sg-type'>{{this.typeDisplay}}</span>
+                {{#if this.subtypeDisplay}}<span class='sg-subtype'>—
+                    {{this.subtypeDisplay}}</span>{{/if}}
+              </div>
+              <div class='sg-level'>
+                <span title='Level'>L{{this.level}}</span>
+              </div>
+            </div>
+            <div class='sg-card-body'>
+              <div class='sg-row'>
+                <span class='muted'>Built Cost:</span>
+                <span>{{this.buildingCostDisplay}}</span>
+              </div>
+              <div class='sg-row'>
+                <span class='muted'>Total Paid:</span>
+                <span>{{this.totalCostPaidDisplay}}</span>
+              </div>
+              <div class='sg-row'>
+                <span class='muted'>Next Upgrade:</span>
+                {{#if this.nextUpgradeCost}}
+                  <span>L{{this.nextLevel}} ({{this.nextUpgradeCostDisplay}})</span>
+                {{else}}
+                  <span>Max level reached</span>
+                {{/if}}
+              </div>
+
+              {{#if this.flavorDescription}}
+                <p class='sg-flavor'>{{this.flavorDescription}}</p>
+              {{/if}}
+
+              <details class='sg-details'>
+                <summary>Bonuses</summary>
+                {{#if this.bonuses.length}}
+                  <ul class='sg-bonuses' role='list'>
+                    {{#each this.bonuses}}
+                      <li>
+                        <strong>{{this.name}}</strong>
+                        {{#if this.description}}<span class='muted'>—
+                            {{this.description}}</span>{{/if}}
+                      </li>
+                    {{/each}}
+                  </ul>
+                {{else}}
+                  <p class='muted'>No bonuses yet.</p>
+                {{/if}}
+              </details>
+
+              <details class='sg-details'>
+                <summary>Functions</summary>
+                {{#with this.mechanics}}
+                  {{#if demesne.length}}
+                    <h4>Demesne Effects</h4>
+                    <ul role='list'>
+                      {{#each demesne}}<li>{{this}}</li>{{/each}}
+                    </ul>
+                  {{/if}}
+                  {{#if actions.length}}
+                    <h4>Actions</h4>
+                    <ul role='list'>
+                      {{#each actions}}<li>{{this}}</li>{{/each}}
+                    </ul>
+                  {{/if}}
+                  {{#if notes.length}}
+                    <h4>Notes</h4>
+                    <ul role='list'>
+                      {{#each notes}}<li>{{this}}</li>{{/each}}
+                    </ul>
+                  {{/if}}
+                {{/with}}
+              </details>
+            </div>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  {{else}}
+    <p class='no-strongholds'>{{localize 'STRONGHOLDS.NoActiveStrongholds'}}</p>
+  {{/if}}
+</section>

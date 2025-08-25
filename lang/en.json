@@ -2,11 +2,11 @@
   "strongholds-and-followers": {
     "title": "Strongholds & Followers",
     "description": "A comprehensive module for managing strongholds and their bonuses",
-    
+
     "stronghold": {
       "types": {
         "temple": "Temple",
-        "keep": "Keep", 
+        "keep": "Keep",
         "tower": "Tower",
         "establishment": "Establishment"
       },
@@ -25,7 +25,7 @@
         "wizard": "Wizard"
       }
     },
-    
+
     "ui": {
       "manager": {
         "title": "Stronghold Manager",
@@ -53,7 +53,7 @@
         "cancel": "Cancel"
       }
     },
-    
+
     "bonuses": {
       "party-wide": "Party-wide",
       "class-specific": "Class-specific",
@@ -61,7 +61,7 @@
       "current-bonuses": "Current Bonuses",
       "all-bonuses": "All Available Bonuses"
     },
-    
+
     "notifications": {
       "created": "Created stronghold: {name}",
       "updated": "Updated stronghold: {name}",

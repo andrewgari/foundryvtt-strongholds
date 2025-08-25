@@ -14,11 +14,13 @@ Thank you for your interest in contributing to the Strongholds & Followers Found
 ## Versioning
 
 We use Semantic Versioning (SemVer):
+
 - **Major** (x.0.0): Breaking changes, major new features
 - **Minor** (0.x.0): New features, backwards compatible
 - **Patch** (0.0.x): Bug fixes, minor improvements
 
 ### Automatic Versioning
+
 - **Push to main**: Minor version bump (0.1.0 → 0.2.0)
 - **Create release tag**: Major version (v1.0.0)
 - **Feature branches**: Dev version with commit hash (0.1.0-dev.abc123)
@@ -58,6 +60,7 @@ When adding bonuses from the official Strongholds & Followers PDF:
 ## Reporting Issues
 
 When reporting bugs:
+
 - Include FoundryVTT version
 - Include D&D 5e system version
 - Include module version
