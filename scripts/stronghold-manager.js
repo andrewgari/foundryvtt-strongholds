@@ -2,7 +2,7 @@ import { StrongholdData } from './stronghold-data.js';
 
 export class StrongholdManager extends Application {
     static get defaultOptions() {
-        return foundry.utils.mergeObject(super.defaultOptions, {
+        return mergeObject(super.defaultOptions, {
             id: 'stronghold-manager',
             title: 'Stronghold Manager',
             template: 'modules/strongholds-and-followers/templates/stronghold-manager.hbs',

@@ -2,7 +2,7 @@ import { StrongholdData } from './stronghold-data.js';
 
 export class StrongholdViewer extends Application {
     static get defaultOptions() {
-        return foundry.utils.mergeObject(super.defaultOptions, {
+        return mergeObject(super.defaultOptions, {
             id: 'stronghold-viewer',
             title: 'Party Strongholds',
             template: 'modules/strongholds-and-followers/templates/stronghold-viewer.hbs',
