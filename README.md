@@ -111,21 +111,8 @@ new game.strongholds.StrongholdViewer().render(true);
 
 ## Development
 
-### Tech Stack
-- Language: TypeScript. The benefits are too significant to ignore for any non-trivial project.
-- UI Framework: Svelte. It's the community favorite because it integrates beautifully with Foundry's native UI system. (React/Vue are also possible but more complex to set up).
-- Build Tool: Vite. It's incredibly fast and simplifies the entire development process, from compiling your code to seeing changes live.
-- Styling: SASS/SCSS. A more powerful and organized way to write your CSS.
-
 ### Building
-This module uses Vite to build a TypeScript + Svelte codebase.
-
-Quickstart:
-- npm install
-- npm run build (one-time build)
-- export FOUNDRY_DATA=/path/to/FoundryVTT/Data
-- npm run link
-- npm run dev (build watch + touch module.json for reload)
+This module uses ES6 modules and modern JavaScript features. No build process is required.
 
 ### Contributing
 1. Fork the repository
