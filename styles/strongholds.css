@@ -424,6 +424,10 @@
 .stronghold-manager .price-section { background: var(--color-bg-option); border: 1px solid var(--color-border-light); border-radius: 6px; padding: .5rem .75rem; }
 .stronghold-manager .price-section h4 { margin: 0 0 .25rem 0; }
 .stronghold-manager .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+/* Compact variant for prices */
+.stronghold-manager .price-table .grid-2 input[type=number],
+.stronghold-manager .price-table .grid-4 input[type=number] { padding: .15rem .35rem; font-size: .85rem; }
+
 .stronghold-manager .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
 .stronghold-manager .price-section label { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
 .stronghold-manager .price-section input[type=number] { width: 9rem; }

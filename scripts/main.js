@@ -102,6 +102,17 @@ Hooks.once('init', async function() {
         default: {}
     });
 
+
+    // Universal class upgrade costs (overrides): per-level, applied to class-flavored strongholds
+    game.settings.register('strongholds-and-followers', 'classUpgradeCosts', {
+        name: 'Class Upgrade Costs (Overrides)',
+        hint: 'GM: Optional universal per-level upgrade costs for class-flavored strongholds (levels 2..5). Leave empty to use defaults (0).',
+        scope: 'world',
+        config: false,
+        type: Object,
+        default: {}
+    });
+
     // Add a Configure Settings menu button in the header to open Strongholds (GM or Player view)
     game.settings.registerMenu('strongholds-and-followers', 'manageStrongholds', {
         name: 'Manage Strongholds',
