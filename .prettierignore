@@ -1,0 +1,19 @@
+# Output and caches
+node_modules/
+dist/
+.vite/
+coverage/
+releases/
+
+# Build artifacts
+*.zip
+
+# Generated files
+static/templates/*.html
+ 
+# Exclude Handlebars templates (Glimmer/Handlebars syntax unsupported by default)
+templates/**/*.hbs
+static/templates/**/*.hbs
+
+# Exclude demo UI script with placeholder syntax
+scripts/ui/strongholds-menu.js

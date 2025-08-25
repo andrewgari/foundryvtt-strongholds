@@ -9,8 +9,14 @@ declare class Application<TOptions = any> {
 }
 
 declare namespace Application {
-  interface Options { id?: string; title?: string; [key: string]: unknown }
-  interface RenderOptions { [key: string]: unknown }
+  interface Options {
+    id?: string;
+    title?: string;
+    [key: string]: unknown;
+  }
+  interface RenderOptions {
+    [key: string]: unknown;
+  }
 }
 
 declare const Hooks: {
@@ -22,3 +28,11 @@ declare const game: { user?: { isGM?: boolean } };
 
 declare function mergeObject<T>(original: T, other: Partial<T>, options?: any): T;
 
+// Minimal UI shim
+declare const ui: {
+  notifications?: {
+    info?: (message: string) => void;
+    warn?: (message: string) => void;
+    error?: (message: string) => void;
+  };
+};
